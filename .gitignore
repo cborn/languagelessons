@@ -1,0 +1,12 @@
+# Add any directories, files, or patterns you don't want to be tracked by version control
+.classpath
+.project
+.settings
+bin/
+build/
+.DS_Store
+.gradle/
+/.nb-gradle/
+.asscache
+*.db
+.idea
