@@ -1,0 +1,332 @@
+.side-menu-bar {
+    border-right-color: #000;
+    border-right-style: solid;
+    border-right-width: 2px;
+    height: 100%;
+}
+
+.feedback-ratings {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+tr :hover{
+    
+    cursor: pointer;
+    
+}
+
+select[multiple] {
+	
+	height:400px;
+	
+	
+}
+
+
+
+
+td {
+    
+    text-align: left;
+    
+}
+
+th a {
+    color: #fff;
+}
+
+.app-dates-cols {
+    min-width: 100px;
+}
+
+.admin-pg-btn {
+    margin-top: 20px;
+}
+
+.menuButton {
+    font-size: 120%;
+    padding: 10px;
+}
+
+.panel-sir-boxes {
+    min-height: 240px;
+}
+
+.panel-oe-boxes {
+    min-height: 100px;
+}
+
+#noscript-warning {
+    width: 100%;
+    font-size: 120%;
+    text-align: center;
+    color: #fff;
+    background-color: #ae0000;
+    z-index: 101;
+}
+
+#student-payment-title {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.user-col {
+    width: 100px;
+}
+
+.app-form-btn {
+    min-width: 100px;
+}
+
+.payment-table {
+    font-size: 15px;
+}
+
+th {
+    vertical-align: middle !important;
+}
+
+td {
+    vertical-align: middle !important;
+}
+
+.btn-masking-as-tab {
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+    background: none!important;
+    border:none; 
+    padding:0!important;
+    font: inherit;
+    /*border is optional*/
+    cursor: pointer;
+}
+
+.ifr-home-tab {
+    background-image: linear-gradient(rgb(179, 205, 113), rgb(103, 143, 0));
+    background-repeat: repeat-x;
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.0470588) 0px 1px 2px 0px;
+    color: rgb(255, 255, 255) !important;
+    text-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px;
+}
+
+.ifr-save-tab {
+    background-image: linear-gradient(rgb(66, 139, 202), rgb(46, 97, 141));
+    background-repeat: repeat-x;
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.0470588) 0px 1px 2px 0px;
+    color: rgb(255, 255, 255) !important;
+    text-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px;
+}
+
+.ifr-delete-tab {
+    background-image: linear-gradient(rgb(217, 83, 79), rgb(151, 58, 55));
+    background-repeat: repeat-x;
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.0470588) 0px 1px 2px 0px;
+    color: rgb(255, 255, 255) !important;
+    text-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px;
+}
+
+#menu-bar {
+    border-radius: 0px;
+}
+
+h1 {
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.form-body {
+    margin: 0 auto;
+    max-width: 1100px;
+}
+
+.bg-ifr-danger {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #f00;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.bg-ifr-warning {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: orange;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.bg-ifr-success {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #8CB942;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.admin-panel {
+    min-height: 150px;
+}
+
+.sir-panel {
+    min-height: 400px;
+}
+
+.payment-panel {
+    min-height: 280px;
+}
+
+.search-pod {
+    min-height: 220px;
+}
+
+.photo-empty {
+    height: 200px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 2px dashed #999;
+}
+
+#profilePicture {
+    max-height: 300px;
+    max-width: 300px;
+}
+
+.site-separator-outer {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.site-separator {
+    color: #fff;
+}
+
+.panel-enrollment-summary {
+    min-height: 500px;
+}
+
+.panel-field-schools {
+    min-height: 116px;
+}
+
+/* 
+ * The pagination controls, modded from original Grails CSS
+ */ 
+.paginateButtons {
+    border-top: 0;
+    color: #333;
+    font-size: 15px;
+    overflow: hidden;
+    padding: 10px 3px;
+}
+.paginateButtons a {
+    color: #666;
+    margin: 0 3px;
+    padding: 2px 6px;
+}
+.paginateButtons span {
+    padding: 2px 3px;
+}
+
+/* fixes the spacing in the dt/dd info on the student homepage */
+@media all and (min-width: 768px) {
+    .student-info-wide > dt {
+        width: 100px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    .student-info-wide > dd {
+        margin-left: 42%;
+        width: 160px;
+    }
+    .student-info > dt {
+        width: 80px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    .student-info > dd {
+        margin-left: 35%;
+        width: 160px;
+    }
+}
+
+/* CHANGE TO 1PX TO EASILY SHOW DIVS IN BOOTSTRAP GRID :) */
+div {
+    border: solid red 0px;
+}
+
+/* This is the style for the beta button. */
+.btn-custom
+{
+    color: #fff;
+    /* EXPERIMENTAL */
+    -webkit-transition: background-color 1500ms linear;
+    -moz-transition: background-color 1500ms linear;
+    -o-transition: background-color 1500ms linear;
+    -ms-transition: background-color 1500ms linear;
+    transition: background-color 1500ms linear;
+}
+        
+
+
+
+.th-green {
+    color: #fff;
+    background-color: #8CB942;
+    border-color: #8CB942;
+}
+
+.panel-green {
+    color: #3c763d;
+    background-color: #bddc8a;
+    border-color: #8CB942;
+}
+
+.panel-green-border {
+    border-color: #8CB942!important;
+}
+
+.submit-button-green {
+    background-color: rgb(110, 120, 84);
+    background-image: linear-gradient(rgb(179, 205, 113), rgb(103, 143, 0));
+    background-repeat: repeat-x;
+    border-bottom-color: rgba(0, 0, 0, 0.247059);
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: rgba(0, 0, 0, 0.0980392);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: rgba(0, 0, 0, 0.0980392);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: rgba(0, 0, 0, 0.0980392);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.0470588) 0px 1px 2px 0px;
+    color: rgb(255, 255, 255);
+    text-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px;
+}
+
+.submit-button-green:hover, .submit-button-green:active, .submit-button-green.active, .submit-button-green.disabled, .submit-button-green[disabled] {
+    color: #fff;
+    background-color: #678f00;
+}
+
+/* this css makes the navbar links centre but doesnt work with the search bar
+@media (min-width: 768px) {
+    .navbar .navbar-nav {
+        display: inline-block;
+        float: none;
+        vertical-align: top;
+    }
+    .navbar .navbar-collapse {
+        text-align: center;
+    }
+}*/
+

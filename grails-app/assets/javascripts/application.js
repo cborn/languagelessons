@@ -7,6 +7,8 @@
 //
 //= require jquery-2.2.0.min
 //= require bootstrap
+//= require jquery.validate.js
+//= require bootstrap-formhelpers.js
 //= require_tree .
 //= require_self
 
