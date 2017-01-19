@@ -21,3 +21,19 @@ if (typeof jQuery !== 'undefined') {
         });
     })(jQuery);
 }
+
+// generate a random colour for the beta button.	
+//get the button. 
+$(document).ready(function()
+{
+    var colours = ["#BFB044","#90BF44","#44BF59","#44BFA8","#4497BF","#446ABF","#4448BF","#7944BF","#B244BF","#BF4460"];
+
+    $("#beta-button").css("background-color",colours[Math.floor(Math.random()*colours.length)]);	
+    function doColourChanges()
+    {
+            $("#beta-button").css("background-color",colours[Math.floor(Math.random()*colours.length)]);	
+            setTimeout(doColourChanges, 3000);
+    }
+
+    setTimeout(doColourChanges, 3000);	
+});

@@ -7,7 +7,7 @@
 	<title><g:layoutTitle default="IFR"/></title>
         <asset:stylesheet src="bootstrap-datetimepicker.min.css"/>
         <asset:stylesheet src="application.css"/>
-        <asset:stylesheet src="ifr.css"/>
+        <asset:stylesheet src="ll.css"/>
        
        <style rel="stylesheet">
 
@@ -239,7 +239,7 @@ var shouldDoSearch = false;
     </head>
     <body>
         <noscript id="noscript-warning" class="col-md-12">
-            The IFR Student Information System works best with JavaScript enabled 
+            Lanague Lessons works best with JavaScript enabled 
         </noscript>
         <div id="sessionNotice" style="display:none;position: fixed;width: 100%;top: 6%;height: 100%;z-index: 9;background-color: rgba(0, 0, 0, 0.22);">
             <div id="sessionDied" style="position: fixed;top: 50%;left: 38%;z-index: 10;">
@@ -376,7 +376,7 @@ var shouldDoSearch = false;
                             <form class="navbar-form" role="search">
                                 <a href="#" id="beta-button" class="btn btn-sm btn-custom disabled">
 
-                                    <i class="glyphicon glyphicon-wrench"></i> v3.5
+                                    <i class="glyphicon glyphicon-wrench"></i> v0.1
 
                                 </a>
                             </form>
@@ -389,7 +389,7 @@ var shouldDoSearch = false;
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
                                         <li>
-                                            <sec:access expression="hasRole('ROLE_STANDARD')">
+                                            <sec:access expression="hasRole('ROLE_STUDENT')">
                                                 <g:link controller="student" action="index">Homepage</g:link>
                                             </sec:access>
                                             <sec:access expression="hasRole('ROLE_FACULTY')">
@@ -445,7 +445,7 @@ var shouldDoSearch = false;
         <%--</sec:ifNotGranted>--%>
         <!-- inlcude these here to make sure they run after page loaded --> 
         <asset:javascript src="validation.js"/>
-        <asset:javascript src="tablesorter.js"/>
+<!--        <asset:javascript src="tablesorter.js"/>-->
 
     </body>
 </html>
