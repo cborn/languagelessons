@@ -6,9 +6,8 @@
     	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<title><g:layoutTitle default="IFR"/></title>
         <asset:stylesheet src="bootstrap-datetimepicker.min.css"/>
-        <asset:stylesheet src="application.css"/>
+         <asset:stylesheet src="application.css"/>
         <asset:stylesheet src="ifr.css"/>
-       
        <style rel="stylesheet">
 
            #results { 
@@ -16,7 +15,7 @@
                 height: 250px;
                 background-color: #F5F5F5;
                 position: absolute;
-                left: 70px;
+                left: 516px;
                 top: 47px;
                 z-index: 1;
            
@@ -74,54 +73,12 @@
         <!-- these include the others, hence we had duplicate loading before -->
         <asset:javascript src="application.js"/>
         <asset:stylesheet src="application.css"/>
-        <asset:javascript src="jquery.validate.js"/>
+       <asset:javascript src="jquery.validate.js"/>
         <asset:javascript src="validation.js"/>
-        
-        
         
         <script>
             
-            
-            
-            
-            function checkSession()
-            {
-            
-            res = $.ajax({
-              url: window.location.href,
-               
-              complete: function(xhr, textStatus) {
-                    
-                       
-                     if(xhr.status == 401)
-                    {
-                         $("#sessionNotice").show();
-                    }
-                    else
-                    {
-                     $("#sessionNotice").hide();
-                     }
-               } 
-              
-              
-              });
-                
-                 
-                
-                
-                
-                  setTimeout(checkSession,15000);
-                
-            }
-            
-            
 $(window).load(function(){
- $("#sessionNotice").hide();
-
- setTimeout(checkSession,1000);
-
-var isLoading = false;
-var shouldDoSearch = false;
 
         
  $('#results').hide();
@@ -138,21 +95,11 @@ var shouldDoSearch = false;
 
 
 
-        $('#search').keyup(search);
-        
-        
-        function search(){
+        $('#search').keyup(function(){
         
             var searchField = $('#search').val();
-            
-            
-            if(searchField.length > 0 && !isLoading)
+            if(searchField.length > 0)
             {
-                
-                
-                isLoading = true;
-                
-                
                 
         
              $('#results').show();
@@ -163,20 +110,18 @@ var shouldDoSearch = false;
              var count = 1;
              var output = "";
             $.getJSON(searchUrl(searchField), function(data) {
-            
-            $.each(data, function(key, val){
+              $.each(data, function(key, val){
                 
                 
-               
-                if(val.title != undefined)
-                {
+                
+                
                   output += "<div class='search-row'>";                    
                        output += "<a href='"+window.location.origin + val.url+"'>";
                             output += "<h6>"+val.title+"</h6>";
                             output += "<span>"+val.subtitle+"</span>";
                        output += "</a>";
                   output +="</div>";
-                }
+                
                 
                 
                 
@@ -185,40 +130,19 @@ var shouldDoSearch = false;
                 
               });
               $('#results').html(output);
-              
-              
-                isLoading = false;
-              
-              
-              if(shouldDoSearch)
-              {
-              shouldDoSearch = false;
-              search();
-              
-              }
-              
-              
             });
 
             }
-            else if(isLoading)
-            {
-            	shouldDoSearch = true;
-            
-            
-            }else
+            else
             {
             
         
  $('#results').hide();
 }
-        }
-        
-        
-        
+        });
       });
 
-            <g:tabSave />
+            
             </script>
         
 
@@ -233,7 +157,6 @@ var shouldDoSearch = false;
         <!-- CSS not loading; might be ok in production -->
         <asset:stylesheet src="ifr.css"/>
         <asset:stylesheet src="bootstrap-datetimepicker.min.css"/>
-        
 
         <g:layoutHead/>
     </head>
@@ -241,18 +164,6 @@ var shouldDoSearch = false;
         <noscript id="noscript-warning" class="col-md-12">
             The IFR Student Information System works best with JavaScript enabled 
         </noscript>
-        <div id="sessionNotice" style="display:none;position: fixed;width: 100%;top: 6%;height: 100%;z-index: 9;background-color: rgba(0, 0, 0, 0.22);">
-            <div id="sessionDied" style="position: fixed;top: 50%;left: 38%;z-index: 10;">
-                <div class="alert alert-danger alert-dismissible" role="alert" style="display: block; margin-top: 5px;">
-
-                        <h1>Your session has expired</h1>
-
-                </div>
-
-            </div>
-        </div>
-        
-        
         <nav class="navbar navbar-inverse" id="menu-bar">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -279,7 +190,7 @@ var shouldDoSearch = false;
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <div class="center-block">
-                        <ul class="nav navbar-nav"><%--
+                        <ul class="nav navbar-nav">
                             <li> 
                                 <sec:access expression="hasRole('ROLE_STANDARD')">
                                     <g:link controller="student" action="index">Home</g:link>
@@ -290,7 +201,7 @@ var shouldDoSearch = false;
                                 <sec:access expression="hasRole('ROLE_ADMIN')">
                                     <g:link controller="admin" action="index">Home</g:link>
                                 </sec:access>
-                            </li>
+                            </li><%--
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Programs <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
@@ -334,49 +245,36 @@ var shouldDoSearch = false;
                                     </li>
                                 </ul>
                             </li>
-                            
-                            
-                            
-                            --%>
-                            
-                               <sec:access expression="hasRole('ROLE_ADMIN')">
-                            
-                        <g:form class="navbar-form navbar-left" role="search" action="searchResults" controller="User">
-                            <div class="form-group">
-                              
-                                <input type="text" class="form-control" name="query" id="search" placeholder="Search" autocomplete="off"/>
-                                    <div id="results">
-            
-                                    </div>
-                                    
-                           
-                            </div>
-                        </g:form>
-                         </sec:access>
-                            <li>
+                            --%><li>
                                 <sec:ifNotLoggedIn><g:link controller="user" action="index">Apply Now</g:link></sec:ifNotLoggedIn>
                                 <sec:ifLoggedIn><g:link controller="studentApplication" action="index">Apply Now</g:link></sec:ifLoggedIn>
                             </li>
                             <li>
                                 <g:link uri="/faq">FAQs</g:link>
                             </li>
-                            <li>
-	                            <sec:ifSwitched> 
-	    							<a href='${request.contextPath}/logout/impersonate'> 
-	        							Resume as <sec:switchedUserOriginalUsername/> 
-	    							</a> 
-								</sec:ifSwitched>
-                            </li>
                         </ul>
                         
-                     
+                        <sec:access expression="hasRole('ROLE_ADMIN')">
+                            
+                        <form class="navbar-form navbar-left" role="search">
+                            <div class="form-group">
+                              
+                                <input type="email" class="form-control" id="search" placeholder="Search" autocomplete="off">
+                                    <div id="results">
+            
+                                    </div>
+                                    
+                           
+                            </div>
+                        </form>
+                         </sec:access>
         
                        
                         <ul class="nav navbar-nav navbar-right">
                             <form class="navbar-form" role="search">
                                 <a href="#" id="beta-button" class="btn btn-sm btn-custom disabled">
 
-                                    <i class="glyphicon glyphicon-wrench"></i> v3.5
+                                    <i class="glyphicon glyphicon-wrench"></i> Beta v3.3.9
 
                                 </a>
                             </form>

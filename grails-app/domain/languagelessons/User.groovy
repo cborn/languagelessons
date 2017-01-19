@@ -19,8 +19,12 @@ class User implements Serializable {
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
+        Student student
+        Faculty faculty
+	boolean isStudent = true;
+	boolean isFaculty = false;
         
-            // Added some methods for easy name retrieval - just ask the SecUser!
+        // Added some methods for easy name retrieval - just ask the SecUser!
 	// user.getFullName() 
 	String getFullName() {
             if(isStudent) {
@@ -71,7 +75,7 @@ class User implements Serializable {
 
 	@Override
 	boolean equals(other) {
-		is(other) || (other instanceof SecUser && other.username == username)
+		is(other) || (other instanceof User && other.username == username)
 	}
 
 	@Override
@@ -100,8 +104,12 @@ class User implements Serializable {
 	static transients = ['springSecurityService']
 
 	static constraints = {
-		password blank: false, password: true
 		username blank: false, unique: true
+		password blank: false
+		student nullable:true, unique: true
+                faculty nullable:true, unique: true
+                k nullable: true
+                rK nullable: true
 	}
 
 	static mapping = {

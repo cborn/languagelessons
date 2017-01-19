@@ -8,12 +8,12 @@
 		padding: 0px;
 		text-align: center;
 	}
-
 	#login .inner {
 		width: 340px;
 		padding-bottom: 6px;
 		margin: 60px auto;
 		text-align: left;
+                border-radius: 11px;
 		border: 1px solid #aab;
 		background-color: #f0f0fa;
 		-moz-box-shadow: 2px 2px 2px #eee;
@@ -21,7 +21,6 @@
 		-khtml-box-shadow: 2px 2px 2px #eee;
 		box-shadow: 2px 2px 2px #eee;
 	}
-
 	#login .inner .fheader {
 		padding: 18px 26px 14px 26px;
 		background-color: #f7f7ff;
@@ -30,7 +29,14 @@
 		font-size: 18px;
 		font-weight: bold;
 	}
-
+        
+        #login .inner .imgHeader {
+		border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+		width:100%;
+	}
+        
+        
 	#login .inner .cssform p {
 		clear: left;
 		margin: 0;
@@ -39,11 +45,9 @@
 		margin-bottom: 20px;
 		height: 1%;
 	}
-
 	#login .inner .cssform input[type="text"] {
 		width: 120px;
 	}
-
 	#login .inner .cssform label {
 		font-weight: bold;
 		float: left;
@@ -53,31 +57,25 @@
 		padding-top: 3px;
 		padding-right: 10px;
 	}
-
 	#login #remember_me_holder {
 		padding-left: 120px;
 	}
-
 	#login #submit {
 		margin-left: 15px;
 	}
-
 	#login #remember_me_holder label {
 		float: none;
 		margin-left: 0;
 		text-align: left;
 		width: 200px
 	}
-
 	#login .inner .login_message {
 		padding: 6px 25px 20px 25px;
 		color: #c33;
 	}
-
 	#login .inner .text_ {
 		width: 120px;
 	}
-
 	#login .inner .chk {
 		height: 12px;
 	}
@@ -87,21 +85,24 @@
 <body>
 <div id="login">
 	<div class="inner">
+            
+             <img src="http://ifrglobal.us/images/Emails/images/Header.jpg" class="imgHeader"/>
+            
 		<div class="fheader"><g:message code='springSecurity.login.header'/></div>
 
 		<g:if test='${flash.message}'>
 			<div class="login_message">${flash.message}</div>
 		</g:if>
 
-		<form action="${postUrl ?: '/login/authenticate'}" method="POST" id="loginForm" class="cssform" autocomplete="off">
+		<form action="${postUrl ?: '/login/authenticate'}" method="POST" id="loginForm" class="cssform form" autocomplete="off">
 			<p>
 				<label for="username"><g:message code='springSecurity.login.username.label'/>:</label>
-				<input type="text" class="text_" name="${usernameParameter ?: 'username'}" id="username"/>
+				<input type="text" class="text_ form-control" style="width:80%;" name="${usernameParameter ?: 'username'}" id="username"/>
 			</p>
 
 			<p>
 				<label for="password"><g:message code='springSecurity.login.password.label'/>:</label>
-				<input type="password" class="text_" name="${passwordParameter ?: 'password'}" id="password"/>
+				<input type="password" class="text_ form-control" style="width:80%;" name="${passwordParameter ?: 'password'}" id="password"/>
 			</p>
 
 			<p id="remember_me_holder">
@@ -110,7 +111,7 @@
 			</p>
 
 			<p>
-				<input type="submit" id="submit" value="${message(code: 'springSecurity.login.button')}"/>
+				<input type="submit" id="submit" class="btn btn-success" value="${message(code: 'springSecurity.login.button')}"/>
 			</p>
 		</form>
 	</div>
