@@ -7,112 +7,55 @@ import groovy.transform.ToString
 @ToString(includes='username', includeNames=true, includePackage=false)
 class User implements Serializable {
 
-	private static final long serialVersionUID = 1
+   private static final long serialVersionUID = 1
 
-	transient springSecurityService
+   transient springSecurityService
 
-        String rK;
-        String k;
-	String username
-	String password
-	boolean enabled = true
-	boolean accountExpired
-	boolean accountLocked
-	boolean passwordExpired
-        Student student
-        Faculty faculty
-	boolean isStudent = true;
-	boolean isFaculty = false;
-        
-        // Added some methods for easy name retrieval - just ask the SecUser!
-	// user.getFullName() 
-	String getFullName() {
-            if(isStudent) {
-                student?.firstName + " " + student?.surname ?: "-"
-            }
-            else if(isFaculty) {
-                faculty?.firstName + " " + faculty?.surname ?: "-"
-            }
-            else {
-                "-"
-            }
-        }
-        // user.getFirstName()
-        String getFirstName() {
-            if(isStudent) {
-                student?.firstName ?: "-"
-            }
-            else if(isFaculty) {
-                faculty?.firstName ?: "-"
-            }
-            else {
-                "-"
-            }
-        }
-        // user.getSurname()
-        String getSurname() {
-            if(isStudent) {
-                student?.surname ?: "-"
-            }
-            else if(isFaculty) {
-                faculty?.surname ?: "-"
-            }
-            else {
-                "-"
-            }
-        }
+    String resetKey;
+    String k;
+    String username
+    String password
+    boolean enabled = true   // Change this before going to production
+    boolean accountExpired
+    boolean accountLocked
+    boolean passwordExpired
+    Student student
+    Faculty faculty
+    boolean isStudent = true;
+    boolean isFaculty = false;
 
-	User(String username, String password) {
-		this()
-		this.username = username
-		this.password = password
-	}
+   Set<Role> getAuthorities() {
+      UserRole.findAllByUser(this)*.role
+   }
 
-	@Override
-	int hashCode() {
-		username?.hashCode() ?: 0
-	}
+   def beforeInsert() {
+      encodePassword()
+   }
 
-	@Override
-	boolean equals(other) {
-		is(other) || (other instanceof User && other.username == username)
-	}
+   def beforeUpdate() {
+      if (isDirty('password')) {
+         encodePassword()
+      }
+   }
 
-	@Override
-	String toString() {
-		username
-	}
+   protected void encodePassword() {
+      password = springSecurityService?.passwordEncoder ?
+            springSecurityService.encodePassword(password) :
+            password
+   }
 
-	Set<Role> getAuthorities() {
-		UserRole.findAllByUser(this)*.role
-	}
+   static transients = ['springSecurityService']
 
-	def beforeInsert() {
-		encodePassword()
-	}
+   static constraints = {
+        password blank: false, password: true
+        username blank: false, unique: true
+        student nullable:true, unique: true
+        faculty nullable:true, unique: true
+        k nullable: true
+        resetKey nullable: true
+   }
 
-	def beforeUpdate() {
-		if (isDirty('password')) {
-			encodePassword()
-		}
-	}
-
-	protected void encodePassword() {
-		password = springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
-	}
-
-	static transients = ['springSecurityService']
-
-	static constraints = {
-		username blank: false, unique: true
-		password blank: false
-		student nullable:true, unique: true
-                faculty nullable:true, unique: true
-                k nullable: true
-                rK nullable: true
-	}
-
-	static mapping = {
-		password column: '`password`'
-	}
+   static mapping = {
+      password column: '`password`'
+   }
 }
