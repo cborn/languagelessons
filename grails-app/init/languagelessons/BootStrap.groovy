@@ -1,9 +1,21 @@
 package languagelessons
 
+import grails.util.Environment
+
 
 class BootStrap { 
+    
 
-    def init = {
+    def init = { servletContext ->
+        
+// Config service add when booting system        
+//        if(AppConfiguration.findAll().size() == 0)
+//        {
+//            AppConfiguration.createAndInsertFor("Language Lessons","The job application system",true);
+//        }
+//        else{
+//            AppConfiguration.instance = AppConfiguration.findAll().get(0);
+//        }
         
         def adminRole = new Role(authority: 'ROLE_ADMIN').save()
         def facultyRole = new Role(authority: 'ROLE_FACULTY').save()

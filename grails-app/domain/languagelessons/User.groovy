@@ -19,11 +19,32 @@ class User implements Serializable {
     boolean accountExpired
     boolean accountLocked
     boolean passwordExpired
-    Student student
-    Faculty faculty
-    boolean isStudent = true;
-    boolean isFaculty = false;
+    UserInfo userInfo
 
+    
+    
+    User(String username, String password) {
+            this()
+            this.username = username
+            this.password = password
+    }
+
+    @Override
+    int hashCode() {
+            username?.hashCode() ?: 0
+    }
+
+    @Override
+    boolean equals(other) {
+            is(other) || (other instanceof User && other.username == username)
+    }
+
+    @Override
+    String toString() {
+            username
+    }
+    
+    
    Set<Role> getAuthorities() {
       UserRole.findAllByUser(this)*.role
    }
@@ -49,8 +70,7 @@ class User implements Serializable {
    static constraints = {
         password blank: false, password: true
         username blank: false, unique: true
-        student nullable:true, unique: true
-        faculty nullable:true, unique: true
+        userInfo nullable:true, unique: true
         k nullable: true
         resetKey nullable: true
    }
