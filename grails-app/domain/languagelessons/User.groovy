@@ -19,7 +19,8 @@ class User implements Serializable {
     boolean accountExpired
     boolean accountLocked
     boolean passwordExpired
-    UserInfo userInfo
+    Faculty faculty
+    Student student
 
     
     
@@ -70,7 +71,8 @@ class User implements Serializable {
    static constraints = {
         password blank: false, password: true
         username blank: false, unique: true
-        userInfo nullable:true, unique: true
+        faculty nullable:true, unique: true
+        student nullable:true, unique: true
         k nullable: true
         resetKey nullable: true
    }
