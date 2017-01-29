@@ -11,37 +11,44 @@ function playB() {
 // get the audio data
 function getData() {
 	// set up audio context, handles multiple browsers
-	var audioCTX = new (window.AudioContext || window.webkitAudioContext)();
 	
-	var source = audioCTX.createBufferSource();
-	var request = new XMLHttpRequest();
+	return new Promise(function(resolve, reject) {
+		var audioCTX = new (window.AudioContext || window.webkitAudioContext)();
 	
-	// if running this script on a local computer, you must create a local server for this line to work 
-	//(based on the way the open function works work)
-	// http://localhost:8000/RollingStone.mp3
-	request.open('GET', 'audio/files/RollingStone.mp3',true);
-	request.responseType = 'arraybuffer';
-	
-	request.onload = function() {
-		var audioData = request.response;
+		var source = audioCTX.createBufferSource();
+		var request = new XMLHttpRequest();
 		
-		audioCTX.decodeAudioData(audioData).then(function(decodedData) {
-			var channelNum = decodedData.numberOfChannels;
-			var dataArray = decodedData.getChannelData(0);
+		var dataArray = [];
+		
+		// if running this script on a local computer, you must create a local server for this line to work 
+		//(based on the way the open function works work)
+		// http://localhost:8000/RollingStone.mp3
+		request.open('GET', 'audio/files/RollingStone.mp3');
+		request.responseType = 'arraybuffer';
+		
+		request.onload = function() {
+			var audioData = request.response;
 			
-			// adds the channels to each other to get an overall volume
-			// may not be the right way to find volume at a given time
-			for(var i = 1; i < channelNum; i++) {
-				for(var j = 0; j < decodedData.length; j++) {
-					var addChannel = decodedData.getChannelData(i);
-					dataArray[j] += addChannel[j];
-				}
-			}
+			audioCTX.decodeAudioData(audioData).then(function(decodedData) {
+				var channelNum = decodedData.numberOfChannels;
+				dataArray = decodedData.getChannelData(0);
+				
+				// adds the channels to each other to get an overall volume
+				// may not be the right way to find volume at a given time
+				/*for(var i = 1; i < channelNum; i++) {
+					for(var j = 0; j < decodedData.length; j++) {
+						var addChannel = decodedData.getChannelData(i);
+						dataArray[j] += addChannel[j];
+					}
+				})*/
+				
+			});
 			
-		});
-	}
-	
-	request.send();
+			resolve(dataArray);
+		}
+		
+		request.send();
+	});
 }
 
 document.body.onload = function() {
@@ -53,11 +60,20 @@ document.body.onload = function() {
 	var canvas = document.querySelector('.visualizer');
 	var canvasCTX = canvas.getContext("2d");
 	
-	getData();
+	//var dataArray = [];
+	
+	alert("1st");
+	
+	getData().then(function(dataArray) {
+		alert(dataArray.length + "aaa");
+	}, function(error) {
+		throw error;
+	});
+	
+	alert("2nd");
 
 	// Create fake audio data for visualizer
 	var data = [];
-	var arrayO = "";
 	for(var i = 1; i < 11; i++) {
 		for(var j = 1; j < 11; j++) {
 			data.push(j);
