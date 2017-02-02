@@ -86,7 +86,7 @@
 <div id="login">
 	<div class="inner">
             
-             <img src="http://ifrglobal.us/images/Emails/images/Header.jpg" class="imgHeader"/>
+             <img src="***" class="imgHeader"/>
             
 		<div class="fheader"><g:message code='springSecurity.login.header'/></div>
 
