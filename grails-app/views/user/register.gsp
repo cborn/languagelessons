@@ -35,7 +35,7 @@
                                     <g:textField class="form-control required email" name="email" placeholder="Email Address" />
                                 </div>
                             </div>
-                            <div class="col-xs-6 form-group">
+<!--                            <div class="col-xs-6 form-group">
                                 <label for="dob">Date of Birth:</label>
                                 <div id="dob">
                                     <div class="form-group">
@@ -57,7 +57,7 @@
                                         });
                                     </script>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="col-xs-6">
                                 <label for="password">Password</label>
                                 <div id="password">
@@ -74,7 +74,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+<!--                            <div class="row">
                                 <recaptcha:ifDisabled>
                                     <div class="col-xs-6 col-xs-offset-3" style="height: 80px; border: solid black 1px;">
                                         <br />
@@ -86,7 +86,7 @@
                                         <recaptcha:recaptcha theme="light"/>
                                     </div>
                                 </recaptcha:ifEnabled>
-                            </div>
+                            </div>-->
                             <div class="form-group col-md-12">
                                 <br />
                                 <g:actionSubmit class="btn btn-default btn-lg center-block submit-button-green" value="Submit" action="processRegistration" />
