@@ -1,7 +1,12 @@
 package languagelessons
 
 import grails.util.Environment
-
+import grails.plugin.springsecurity.SpringSecurityUtils
+import grails.plugin.springsecurity.annotation.Secured
+import org.hibernate.criterion.CriteriaSpecification
+import grails.web.mapping.LinkGenerator
+import java.text.SimpleDateFormat
+import grails.converters.JSON
 
 class BootStrap { 
     
@@ -24,17 +29,17 @@ class BootStrap {
         
         
         // Test Admin User  %%%%%%%%%%%%%%%%%//
-           def adminUser = new User(username: 'andrew@test.com', password: 'password').save()
+           def adminUser = new User(username: 'andrew@test.com', password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true').save()
            UserRole.create adminUser, adminRole
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
         // Test Faculty User  %%%%%%%%%%%%%%%%%//
-           def facultyUser = new User(username: 'lee@test.com', password: 'password').save()
+           def facultyUser = new User(username: 'lee@test.com', password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true').save()
            UserRole.create facultyUser, facultyRole
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
         // Test Student User  %%%%%%%%%%%%%%%%%//
-           def studentUser = new User(username: 'joe@test.com', password: 'password').save()
+           def studentUser = new User(username: 'joe@test.com', password: 'password', enabled: 'true').save()
            UserRole.create studentUser, studentRole
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
@@ -49,8 +54,7 @@ class BootStrap {
             def French = new Course(name: 'French', syllabusId: '3333', applicantCap: 25, startDate: start, endDate: end).save(failOnError: true)
         
             
- 
- UserRole.withSession {
+UserRole.withSession {
          it.flush()
          it.clear()
       }

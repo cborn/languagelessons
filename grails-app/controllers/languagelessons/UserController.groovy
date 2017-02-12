@@ -1,5 +1,12 @@
 package languagelessons
 
+import grails.plugin.springsecurity.SpringSecurityUtils
+import grails.plugin.springsecurity.annotation.Secured
+import org.hibernate.criterion.CriteriaSpecification
+import grails.web.mapping.LinkGenerator
+import java.text.SimpleDateFormat
+import grails.converters.JSON
+
 class UserController {
 
     def index() { 
@@ -50,16 +57,21 @@ class UserController {
             // Creates a unlock key
             def link = grailsLinkGenerator.serverBaseURL+"/User/unlockAccount?key="+key;
             // create a new user here
-            User userInfo = new User();
-            userInfo.setK(key);
-            userInfo.setUsername(params.email);
-            userInfo.setPassword(params.password);
-            userInfo.isManager = false;
-            userInfo.isApplicant = true;
-            userInfo.save(failOnError:true);
-            Role applicantRole = Role.findByAuthority("ROLE_STUDENT");
-            UserRole.create(userInfo,applicantRole);
+            User userInfo = new User(k: key, username: params.email, password: params.password).save(flush: true, failOnError:true);
+//            userInfo.setK(key);
             
+//            userInfo.setUsername(params.email);
+//            userInfo.setPassword(params.password);
+//            userInfo.isFaculty = false;
+//            userInfo.isStudent = true;
+//            userInfo.save(failOnError:true);
+            Role applicantRole = Role.findByAuthority('ROLE_STUDENT');
+            
+            
+            println applicantRole;
+            UserRole.create userInfo, applicantRole;
+            
+
             // Email Applicant needs seting up
 //            mailService.sendMail {
 //            async true
@@ -76,6 +88,10 @@ class UserController {
         else {
             render(view:"register")
         }
+    }
+    
+    def resetPassword(){
+         render(view:"resetPassword")
     }
     
 }

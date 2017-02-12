@@ -9,6 +9,10 @@ class Feedback {
     String description;
     User author;
     
+    // Time frame for comment
+    Float startTime;
+    Float endTime;
+    
     boolean removedEvent = false;
     
     static belongsTo = Student;
