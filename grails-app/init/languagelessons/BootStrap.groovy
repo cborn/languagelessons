@@ -38,6 +38,16 @@ class BootStrap {
            UserRole.create studentUser, studentRole
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
+        // Create Test Courses
+            Date start = new Date();
+            start.parse("yyyy-MM-dd", "2016-01-01");
+            Date end = new Date();
+            end.parse("yyyy-MM-dd", "2017-01-01");
+            
+            def Arabic = new Course(name: 'Arabic', syllabusId: '1111', applicantCap: 15, startDate: start, endDate: end).save(failOnError: true)
+            def Chinese = new Course(name: 'Chinese', syllabusId: '2222', applicantCap: 20, startDate: start, endDate: end).save(failOnError: true)
+            def French = new Course(name: 'French', syllabusId: '3333', applicantCap: 25, startDate: start, endDate: end).save(failOnError: true)
+        
             
  
  UserRole.withSession {

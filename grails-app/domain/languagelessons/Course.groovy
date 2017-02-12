@@ -17,7 +17,8 @@ class Course {
 
 	
     static hasMany = [lessons:Lesson,
-                        faculty:Faculty]
+                        faculty:Faculty,
+                        students: Student]
                     
     static belongsTo = Faculty;
                     
@@ -26,6 +27,7 @@ class Course {
             lessons nullable: true
             students nullable: true
             faculty nullable: true
+            syllabusId unique:true
     }
     
     // Easy method to get formatted course names as liked by the customer...
@@ -34,7 +36,7 @@ class Course {
         name + ", " + startDate[Calendar.YEAR]
     }
     
-    int getTearm() {
+    int getTerm() {
         // calculate the season the course belongs to
         // season goes from 1st October - 30th September
 
