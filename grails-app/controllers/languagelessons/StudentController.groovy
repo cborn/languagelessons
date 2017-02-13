@@ -7,7 +7,6 @@ class StudentController {
 
 @Secured(["ROLE_ADMIN"])
     def index() { 
-        //def courses = Courses.list()
         //  render 'you have ROLE_ADMIN';
     }
 }
