@@ -8,7 +8,6 @@ class Student {
 
         static hasMany = [courses:Course]
        
-        
 	static belongsTo = User;
         
         static constraints = {
@@ -19,4 +18,9 @@ class Student {
     String getName() {
         firstName + " " + surname ?: "-"
     }
+    
+    /*boolean addToCourse(String courseName) {
+        def course = Course.findByName(courseName)
+        course.addToStudents(this).save()
+    }*/
 }

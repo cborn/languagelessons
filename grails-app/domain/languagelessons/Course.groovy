@@ -17,7 +17,7 @@ class Course {
 
 	
     static hasMany = [lessons:Lesson,
-                        faculty:Faculty]
+                        faculty:Faculty,]
                     
     static belongsTo = Faculty;
                     
