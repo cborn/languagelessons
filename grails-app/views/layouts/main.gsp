@@ -225,13 +225,13 @@ var shouldDoSearch = false;
 <!--        <asset:stylesheet src="bootstrap-datetimepicker.min.css"/>
         <asset:javascript src="jquery.validate.js"/>
         <asset:stylesheet src="application.css"/>
-        <asset:stylesheet src="ifr.css"/>
+        <asset:stylesheet src="ll.css"/>
         <asset:javascript src="jquery.tablesorter.min.js" />
         <asset:javascript src="jquery.tablesorter.staticrow.min.js" />
         <asset:javascript src="jquery.tablesorter.pager.min.js" />
         <asset:javascript src="jquery.tablesorter.widgets.js" />-->
         <!-- CSS not loading; might be ok in production -->
-        <asset:stylesheet src="ifr.css"/>
+        <asset:stylesheet src="ll.css"/>
         <asset:stylesheet src="bootstrap-datetimepicker.min.css"/>
         
 
@@ -264,13 +264,13 @@ var shouldDoSearch = false;
                         <span class="icon-bar"></span>
                     </button>
                      <sec:access expression="hasRole('ROLE_STANDARD')">
-                                    <g:link  class="navbar-brand" controller="student" action="index">IFR</g:link>
+                                    <g:link  class="navbar-brand" controller="student" action="index">LL</g:link>
                                 </sec:access>
                                 <sec:access expression="hasRole('ROLE_FACULTY')">
-                                    <g:link  class="navbar-brand" controller="admin" action="index">IFR</g:link>
+                                    <g:link  class="navbar-brand" controller="admin" action="index">LL</g:link>
                                 </sec:access>
                                 <sec:access expression="hasRole('ROLE_ADMIN')">
-                                    <g:link  class="navbar-brand" controller="admin" action="index">IFR</g:link>
+                                    <g:link  class="navbar-brand" controller="admin" action="index">LL</g:link>
                                 </sec:access>
                     
                     
