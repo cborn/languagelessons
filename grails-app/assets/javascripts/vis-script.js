@@ -89,6 +89,12 @@ function visualize(data) {
 	draw();
 }
 
+document.body.onload = function() {
+	var audioS = document.querySelector('#audioE');
+	
+	getData();
+};
+
 // commented out to prevent script from trying to load on every page
 /*document.body.onload = function() {
 	var audioS = document.querySelector('#audioE');
