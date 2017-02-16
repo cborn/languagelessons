@@ -1,3 +1,25 @@
+
+environments { 
+	development { 
+             grails.mail.disabled = true //Remove emails 
+             println("Emails are turned off")
+	}
+	production {
+		grails {
+			mail {
+			  host = "smtp.localhost"
+			  port = 25
+			  username = "noreply@carleton.edu"
+			  props = ["mail.smtp.auth":"false",
+					   "mail.smtp.socketFactory.port":"25",
+					   "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+					   "mail.smtp.socketFactory.fallback":"false"]
+                }
+	 } 
+    }	
+}
+
+
 grails.resources.adhoc.includes = ['/images/**', '/css/**', '/js/**', '/plugins/**', '/fonts/**']
 grails.resources.adhoc.patterns = ['/images/*', '/css/*', '/js/*', '/plugins/*', '/fonts/*']
 

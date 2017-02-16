@@ -8,6 +8,9 @@ import java.text.SimpleDateFormat
 import grails.converters.JSON
 
 class UserController {
+    
+    transient mailService
+    transient springSecurityService
 
     def index() { 
         render(view:"register")
@@ -56,30 +59,23 @@ class UserController {
             
             // Creates a unlock key
             def link = grailsLinkGenerator.serverBaseURL+"/User/unlockAccount?key="+key;
+            
             // create a new user here
             User userInfo = new User(k: key, username: params.email, password: params.password).save(flush: true, failOnError:true);
-//            userInfo.setK(key);
             
-//            userInfo.setUsername(params.email);
-//            userInfo.setPassword(params.password);
-//            userInfo.isFaculty = false;
-//            userInfo.isStudent = true;
-//            userInfo.save(failOnError:true);
             Role applicantRole = Role.findByAuthority('ROLE_STUDENT');
+            applicantRole.save(flush: true, failOnError:true);
             
-            
-            println applicantRole;
             UserRole.create userInfo, applicantRole;
-            
 
             // Email Applicant needs seting up
-//            mailService.sendMail {
-//            async true
-//                to params.email;
-//                from "****" //This needs changing to a setting
-//                subject "Welcome " + params.email +". Thank you for registering on the Language Lessons";
-//                html g.render(template: "/templates/registration", model:[email:params.email,link:link,key:key])
-//            }
+            mailService.sendMail {
+            async true
+                to params.email;
+                from "****" //This needs changing to a setting
+                subject "Welcome " + params.email +". Thank you for registering on the Language Lessons";
+                html g.render(template: "/templates/registration", model:[email:params.email,link:link,key:key])
+            }
             
 //            recaptchaService.cleanUp(session);
             
