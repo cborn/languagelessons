@@ -19,8 +19,7 @@ class Student {
         firstName + " " + surname ?: "-"
     }
     
-    /*boolean addToCourse(String courseName) {
-        def course = Course.findByName(courseName)
-        course.addToStudents(this).save()
-    }*/
+    boolean addToCourse(String courseName) {
+        courses.findByName(courseName).addToStudents(this).save()
+    }
 }

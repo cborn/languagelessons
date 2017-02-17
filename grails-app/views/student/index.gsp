@@ -62,7 +62,7 @@
                 whatever content you may choose. Below is a list of controllers that are currently deployed in
                 this application, click on each to execute its default action:
             </p>
-
+            
             <div id="controllers" role="navigation">
                 <h2>Available Controllers:</h2>
                 <ul>
@@ -73,6 +73,18 @@
                     </g:each>
                 </ul>
             </div>
+            
+            <p>
+                Below is a list of all available courses. Click on one to sign up for it.
+            </p>
+            
+            <ul>
+                <g:each var="c" in="${courses}">
+                        <li>
+                            <g:link action="addCourse" params="[course: 'arabic']">${c.name}</g:link>
+                        </li>
+                </g:each>
+            </ul>
         </section>
     </div>
     </sec:access>

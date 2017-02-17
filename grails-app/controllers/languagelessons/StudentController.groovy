@@ -7,7 +7,15 @@ class StudentController {
 
 @Secured(["ROLE_ADMIN"])
     def index() { 
-        //def courses = Courses.list()
         //  render 'you have ROLE_ADMIN';
+        
+        [courses:Course.listOrderByName()]
+    }
+    
+    def addCourse(String course) {
+        System.out.println("name: " + course);
+        
+        Student stu = springSecurityService.getCurrentUser()
+        stu.addToCourse(course);
     }
 }

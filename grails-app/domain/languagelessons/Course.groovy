@@ -17,14 +17,15 @@ class Course {
 
 	
     static hasMany = [lessons:Lesson,
-                        faculty:Faculty,]
+                        faculty:Faculty,
+                        students:Student]
                     
-    static belongsTo = Faculty;
+    static belongsTo = [Student, Faculty];
                     
     static constraints = {
             description maxSize: 1000, nullable: true
             lessons nullable: true
-            //students nullable: true
+            students nullable: true
             faculty nullable: true
             syllabusId unique:true
     }
