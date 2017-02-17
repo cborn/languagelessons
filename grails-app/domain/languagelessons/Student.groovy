@@ -8,7 +8,7 @@ class Student {
 
         static hasMany = [courses:Course]
        
-	static belongsTo = User;
+	static belongsTo = SecUser;
         
         static constraints = {
             middleName nullable: true

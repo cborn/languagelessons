@@ -5,7 +5,7 @@ import groovy.transform.ToString
 
 @EqualsAndHashCode(includes='username')
 @ToString(includes='username', includeNames=true, includePackage=false)
-class User implements Serializable {
+class SecUser implements Serializable {
 
    private static final long serialVersionUID = 1
 
@@ -62,7 +62,7 @@ class User implements Serializable {
             }
         }
     
-    User(String username, String password) {
+    SecUser(String username, String password) {
             this()
             this.username = username
             this.password = password
@@ -75,7 +75,7 @@ class User implements Serializable {
 
     @Override
     boolean equals(other) {
-            is(other) || (other instanceof User && other.username == username)
+            is(other) || (other instanceof SecUser && other.username == username)
     }
 
     @Override

@@ -20,7 +20,7 @@ class UserController {
     def processRegistration() {
         
         // check details
-        def allUsers = User.findAll();
+        def allUsers = SecUser.findAll();
         def detailsOk = true;
 //        def recaptchaOk = true;
         
@@ -61,7 +61,7 @@ class UserController {
             def link = grailsLinkGenerator.serverBaseURL+"/User/unlockAccount?key="+key;
             
             // create a new user here
-            User userInfo = new User(k: key, username: params.email, password: params.password).save(flush: true, failOnError:true);
+            SecUser userInfo = new SecUser(k: key, username: params.email, password: params.password).save(flush: true, failOnError:true);
             
             Role applicantRole = Role.findByAuthority('ROLE_STUDENT');
             applicantRole.save(flush: true, failOnError:true);
@@ -88,6 +88,33 @@ class UserController {
     
     def resetPassword(){
          render(view:"resetPassword")
+    }
+    
+        def unlockAccount()
+    {
+        SecUser u = SecUser.findByK(params.key);
+        
+        if(!u)
+        {
+            flash.error = "This link has already been used to activated this account. Please try and login"
+            redirect(uri: "/");
+            return
+        }
+        
+        u.enabled = true;
+        u.k = null;
+        
+        if(!u.save(flush:true))
+        {
+            render "We are experiencing problems at the moment, please try again later."
+            return
+        }
+        else
+        {
+            flash.error = "Success, your account has now been activated. Please login."
+            redirect(uri: "/");
+            return
+        }
     }
     
 }

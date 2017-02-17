@@ -8,7 +8,7 @@ class Faculty {
         
         static hasMany = [courses:Course]
     
-	static belongsTo = User;
+	static belongsTo = SecUser;
 		
         static constraints = {
             courses nullable: true

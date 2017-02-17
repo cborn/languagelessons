@@ -450,7 +450,7 @@
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateHeader">
                                         <tr>
                                             <td valign="top" class="headerContent">
-                                            	<img src="http://ifrglobal.us/images/Emails/images/Header.jpg" style="max-width:600px;" id="headerImage" mc:label="header_image" mc:edit="header_image" mc:allowdesigner mc:allowtext />
+                                            	<img src=" " style="max-width:600px;" id="headerImage" mc:label="header_image" mc:edit="header_image" mc:allowdesigner mc:allowtext />
                                             </td>
                                         </tr>
                                     </table>
@@ -463,7 +463,7 @@
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateBody">
                                         <tr>
                                             <td valign="top" class="bodyContent" mc:edit="body_content">
-                                                <h1>Welcome to the IFR</h1>
+                                                <h1>Welcome to Language Lessons</h1>
                                                 <h3>Dear ${email},</h3>
                                                 Security is paramount to our system. To activate your account click the button below:
                                                 <br />
@@ -474,7 +474,7 @@
                                                 <h4><small>(If button didn't work, cut and paste the following link into your browser:<br /> ${link}</small></h4>
                                                 Thank you,
                                                 <br />
-                                                IFR Admissions
+                                                Admissions
                                             </td>
                                         </tr>
                                     </table>
@@ -487,22 +487,8 @@
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter">
                                         <tr>
                                             <td valign="top" class="footerContent" mc:edit="footer_content00">
-                                                <a href="https://twitter.com/IFR_global">Follow on Twitter</a>&nbsp;&nbsp;&nbsp;<a href="https://www.facebook.com/IFRglobal">Friend on Facebook</a>&nbsp;
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td valign="top" class="footerContent" style="padding-top:0;" mc:edit="footer_content01">
-                                                <em>Copyright &copy; 2015, All rights reserved.</em>
-                                                <br />
-                                                <br />
-                                                <strong>Our mailing address is:</strong>
-                                                <br />
-                                                2999 Overland Ave. #103 <br />
-                                                Los Angeles, California 90064 <br />
-                                                Toll Free:+1 (877) 839-4374 <br />
-                                                Direct:+1 (424) 209-1173
-                                            </td>
-                                        </tr>
+                                                <a href="***">Follow on Twitter</a>&nbsp;&nbsp;&nbsp;<a href="***">Friend on Facebook</a>&nbsp;
+                                            </td> 
                                         <tr>
                                             <td valign="top" class="footerContent" style="padding-top:0; padding-bottom:40px;" mc:edit="footer_content02">
                                             </td>

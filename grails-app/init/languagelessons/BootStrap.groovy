@@ -29,19 +29,19 @@ class BootStrap {
         
         
         // Test Admin User  %%%%%%%%%%%%%%%%%//
-           def adminUser = new User(username: 'andrew@test.com', password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true').save()
+           def adminUser = new SecUser(username: 'andrew@test.com', password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true').save()
            UserRole.create adminUser, adminRole
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
-        // Test Faculty User  %%%%%%%%%%%%%%%%%//
-           def facultyUser = new User(username: 'lee@test.com', password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true').save()
+//        // Test Faculty User  %%%%%%%%%%%%%%%%%//
+           def facultyUser = new SecUser(username: 'lee@test.com', password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true').save()
            UserRole.create facultyUser, facultyRole
-        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
+//        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
-        // Test Student User  %%%%%%%%%%%%%%%%%//
-           def studentUser = new User(username: 'joe@test.com', password: 'password', enabled: 'true').save()
+//        // Test Student User  %%%%%%%%%%%%%%%%%//
+           def studentUser = new SecUser(username: 'joe@test.com', password: 'password', enabled: 'true').save()
            UserRole.create studentUser, studentRole
-        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
+//        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
         // Create Test Courses
             Date start = new Date();

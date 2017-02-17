@@ -7,7 +7,7 @@ class Feedback {
     
     Date date;
     String description;
-    User author;
+    SecUser author;
     
     // Time frame for comment
     Float startTime;

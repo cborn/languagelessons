@@ -10,53 +10,53 @@ class UserRole implements Serializable {
 
 	private static final long serialVersionUID = 1
 
-	User user
+	SecUser secUser
 	Role role
 
 	@Override
 	boolean equals(other) {
 		if (other instanceof UserRole) {
-			other.userId == user?.id && other.roleId == role?.id
+			other.secUserId == secUser?.id && other.roleId == role?.id
 		}
 	}
 
 	@Override
 	int hashCode() {
 		def builder = new HashCodeBuilder()
-		if (user) builder.append(user.id)
+		if (secUser) builder.append(secUser.id)
 		if (role) builder.append(role.id)
 		builder.toHashCode()
 	}
 
-	static UserRole get(long userId, long roleId) {
-		criteriaFor(userId, roleId).get()
+	static UserRole get(long secUserId, long roleId) {
+		criteriaFor(secUserId, roleId).get()
 	}
 
-	static boolean exists(long userId, long roleId) {
-		criteriaFor(userId, roleId).count()
+	static boolean exists(long secUserId, long roleId) {
+		criteriaFor(secUserId, roleId).count()
 	}
 
-	private static DetachedCriteria criteriaFor(long userId, long roleId) {
+	private static DetachedCriteria criteriaFor(long secUserId, long roleId) {
 		UserRole.where {
-			user == User.load(userId) &&
+			secUser == SecUser.load(secUserId) &&
 			role == Role.load(roleId)
 		}
 	}
 
-	static UserRole create(User user, Role role) {
-		def instance = new UserRole(user: user, role: role)
+	static UserRole create(SecUser secUser, Role role) {
+		def instance = new UserRole(secUser: secUser, role: role)
 		instance.save()
 		instance
 	}
 
-	static boolean remove(User u, Role r) {
+	static boolean remove(SecUser u, Role r) {
 		if (u != null && r != null) {
-			UserRole.where { user == u && role == r }.deleteAll()
+			UserRole.where { secUser == u && role == r }.deleteAll()
 		}
 	}
 
-	static int removeAll(User u) {
-		u == null ? 0 : UserRole.where { user == u }.deleteAll()
+	static int removeAll(SecUser u) {
+		u == null ? 0 : UserRole.where { secUser == u }.deleteAll()
 	}
 
 	static int removeAll(Role r) {
@@ -65,9 +65,9 @@ class UserRole implements Serializable {
 
 	static constraints = {
 		role validator: { Role r, UserRole ur ->
-			if (ur.user?.id) {
+			if (ur.secUser?.id) {
 				UserRole.withNewSession {
-					if (UserRole.exists(ur.user.id, r.id)) {
+					if (UserRole.exists(ur.secUser.id, r.id)) {
 						return ['userRole.exists']
 					}
 				}
@@ -76,7 +76,7 @@ class UserRole implements Serializable {
 	}
 
 	static mapping = {
-		id composite: ['user', 'role']
+		id composite: ['secUser', 'role']
 		version false
 	}
 }
