@@ -72,6 +72,15 @@
                         </li>
                     </g:each>
                 </ul>
+                
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Installed Plugins <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <g:findAll in="${courses}" expr="true">
+                            <li><a href="#">${it.name}</a></li>
+                        </g:findAll>
+                    </ul>
+        </li>
             </div>
             
             <p>
