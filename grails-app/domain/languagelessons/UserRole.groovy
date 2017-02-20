@@ -43,8 +43,8 @@ class UserRole implements Serializable {
 		}
 	}
 
-	static UserRole create(SecUser secUser, Role role) {
-		def instance = new UserRole(SecUser: secUser, Role: role)
+	static UserRole create(SecUser user, Role role) {
+		def instance = new UserRole(user: user, role: role)
 		instance.save()
 		instance
 	}
