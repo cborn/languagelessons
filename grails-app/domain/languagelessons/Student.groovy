@@ -5,22 +5,21 @@ class Student {
         String firstName;
         String middleName;
         String surname;
+        String university;
 
-        static hasMany = [courses:Course]
+//        static hasMany = [courses:Course]
        
 	static belongsTo = SecUser;
         
         static constraints = {
             middleName nullable: true
-            courses nullable: true
+ //           courses nullable: true
+            university nullable: true
         }
         
     String getName() {
         firstName + " " + surname ?: "-"
     }
     
-    /*boolean addToCourse(String courseName) {
-        def course = Course.findByName(courseName)
-        course.addToStudents(this).save()
-    }*/
+
 }

@@ -20,7 +20,6 @@ class Feedback {
     static constraints = {
         description maxSize: 1000
         description nullable:true
-        application nullable: true
     }
 	
     static mapping = {

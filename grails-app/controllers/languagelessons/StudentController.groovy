@@ -9,9 +9,10 @@ class StudentController {
     def courseList() {
         [courses:Course.listOrderByName()]
     }
-    
-    def index() { 
-        //def courses = Courses.list()
-        //  render 'you have ROLE_ADMIN';
+
+@Secured(["ROLE_ADMIN"])
+    def index() {
+        SecUser userInfo = SecUser.findById(springSecurityService.principal.id);
+        redirect(controller:"admin", action:"index") // This need changing
     }
 }

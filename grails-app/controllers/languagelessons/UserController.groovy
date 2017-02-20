@@ -90,13 +90,13 @@ class UserController {
          render(view:"resetPassword")
     }
     
-        def unlockAccount()
+    def unlockAccount()
     {
         SecUser u = SecUser.findByK(params.key);
         
         if(!u)
         {
-            flash.error = "This link has already been used to activated this account. Please try and login"
+            flash.success = "This link has already been used to activated this account. Please try and login"
             redirect(uri: "/");
             return
         }
@@ -115,6 +115,5 @@ class UserController {
             redirect(uri: "/");
             return
         }
-    }
-    
+    }  
 }

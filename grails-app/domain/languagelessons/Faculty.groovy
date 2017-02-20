@@ -5,6 +5,7 @@ class Faculty {
         String title;
         String firstName;
         String surname;
+        String university;
         
         static hasMany = [courses:Course]
     
@@ -12,6 +13,7 @@ class Faculty {
 		
         static constraints = {
             courses nullable: true
+            university nullable: true
         }
         
     String getName() {
