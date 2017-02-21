@@ -31,6 +31,8 @@ class BootStrap {
         // Test Admin User  %%%%%%%%%%%%%%%%%//
            def adminUser = new SecUser(username: 'andrew@test.com', password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true').save()
            UserRole.create adminUser, adminRole
+           Faculty a1 = new Faculty(username:"andrew@test.com",title:"Dr",firstName:"Andrew",surname:"Wilson",university:"Liverpool University").save(failOnError:true);
+           adminUser.faculty = a1;
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
 //        // Test Faculty User  %%%%%%%%%%%%%%%%%//
@@ -71,13 +73,14 @@ class BootStrap {
             French.addToFaculty(f2);
         
 
-                    
 UserRole.withSession {
          it.flush()
          it.clear()
       }
+      
+
     }
-    
+ 
     //TODO: Need to write a Bootstrap test, to see if data has been added correctly.
 
     def destroy = {

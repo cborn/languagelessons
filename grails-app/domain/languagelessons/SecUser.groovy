@@ -19,8 +19,8 @@ class SecUser implements Serializable {
     boolean accountExpired
     boolean accountLocked
     boolean passwordExpired
-    Faculty faculty
     Student student
+    Faculty faculty
     boolean isStudent = true;
     boolean isFaculty = false;
 

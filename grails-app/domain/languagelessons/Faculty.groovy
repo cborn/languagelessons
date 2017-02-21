@@ -9,11 +9,12 @@ class Faculty {
         
         static hasMany = [courses:Course]
     
-	static belongsTo = SecUser;
+        static belongsTo = SecUser;
+        
+//        SecUser secUser;
 		
         static constraints = {
             courses nullable: true
-            university nullable: true
         }
         
     String getName() {

@@ -4,6 +4,9 @@ import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.annotation.Secured
 
 class StudentController {
+    
+    transient springSecurityService
+    
 
 @Secured(["ROLE_ADMIN"])
     def courseList() {
@@ -12,7 +15,11 @@ class StudentController {
 
 @Secured(["ROLE_ADMIN"])
     def index() {
-        SecUser userInfo = SecUser.findById(springSecurityService.principal.id);
-        redirect(controller:"admin", action:"index") // This need changing
+        
+       if (isLoggedIn()) {
+         SecUser userInfo = SecUser.findById(springSecurityService.principal.id);
+                 println(userInfo.faculty);
+      }        
+        // redirect(controller:"admin", action:"index") // This need changing
     }
 }

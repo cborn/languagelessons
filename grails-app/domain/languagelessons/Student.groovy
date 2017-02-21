@@ -7,8 +7,6 @@ class Student {
         String surname;
         String university;
 
-//        static hasMany = [courses:Course]
-       
 	static belongsTo = SecUser;
         
         static constraints = {

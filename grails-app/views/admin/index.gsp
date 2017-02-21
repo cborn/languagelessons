@@ -60,10 +60,10 @@
     <body>
         <div class="col-xs-12 text-center">
             <sec:access expression="hasRole('ROLE_ADMIN')">
-                <h1>Administrator Homepage: ${userInfo.manager.name}</h1>
+                <h1>Administrator Homepage: ${userInfo.faculty.name}</h1>
             </sec:access>
-            <sec:access expression="hasRole('ROLE_MANAGER')">
-                <h1>Manager Homepage: ${userInfo.manager.title} ${userInfo.manager.name}</h1>
+            <sec:access expression="hasRole('ROLE_FACULTY')">
+                <h1>Faculty Homepage: ${userInfo.faculty.title} ${userInfo.faculty.name}</h1>
             </sec:access>
         </div>
         <ul class="nav nav-tabs">
@@ -84,7 +84,7 @@
                 
                 
                 </sec:ifAnyGranted>
-                  <sec:ifAnyGranted roles="ROLE_MANAGER">
+                  <sec:ifAnyGranted roles="ROLE_FACULTY">
                 
                        <g:if test="${hasScholarship}">
                            <g:if test="${seasonScholarshipApplications.totalCount > 0}">
@@ -125,13 +125,13 @@
                 <br />
                 <div class="row">
                     <div class="col-md-10">
-                        <sec:access expression="hasRole('ROLE_MANAGER')"    >
+                        <sec:access expression="hasRole('ROLE_FACULTY')"    >
                             <div class="col-md-12">
-                                <g:if test="${userInfo.manager.title == 'None'}">
+                                <g:if test="${userInfo.faculty.title == 'None'}">
                                     <p>Welcome,</p>
                                 </g:if>
-                                <g:elseif test="${userInfo.manager.title != 'None'}">
-                                       <p>Welcome ${userInfo.manager.title} ${userInfo.manager.surname},</p> 
+                                <g:elseif test="${userInfo.faculty.title != 'None'}">
+                                       <p>Welcome ${userInfo.faculty.title} ${userInfo.faculty.surname},</p> 
                                 </g:elseif>
                                 <p>You can look up enrollment data for the ${config.getInstance().courseNamePlural} you are currently assigned to as an instructor here. You will only be able to access the data for applicants applying to or currently enrolled in your program.</p>
                                 <p>If you have any questions or concerns, contact us by email <a href="mailto:***">***</a>, or by phone at +1 424.226.6130.</p>
@@ -225,7 +225,7 @@
                         <sec:access expression="hasRole('ROLE_ADMIN')">
                             <%-- <div class="col-md-12">
                                 TODO: add a welcome message? 
-                                <p>Welcome ${userInfo.manager.title} ${userInfo.manager.surname}.</p>
+                                <p>Welcome ${userInfo.faculty.title} ${userInfo.faculty.surname}.</p>
                                 <br />
                             </div>--%>
                             <div class="col-md-12">
@@ -289,9 +289,9 @@
                                 <div class="col-md-4">
                                     <div class="panel panel-green-border admin-panel">
                                         <div class="panel-body text-center">
-                                            <h4>All Manager:</h4>
-                                            <h3>${allManager.size()}</h3>
-                                            <g:link controller="manager" action="index">
+                                            <h4>All Faculty:</h4>
+                                            <h3>${allFaculty.size()}</h3>
+                                            <g:link controller="faculty" action="index">
                                                 Show all &raquo;
                                             </g:link>
                                         </div>
@@ -691,7 +691,7 @@
                             });
                     </script>
                 </sec:access>
-                <sec:access expression="hasRole('ROLE_MANAGER')">
+                <sec:access expression="hasRole('ROLE_FACULTY')">
                     <div class="col-md-12">
                         <h3>Pending Applications <span class="badge">${pendingApplications.totalCount}</span></h3>
                         <div class="panel panel-green-border">
@@ -953,7 +953,7 @@
                     </div>
                 </sec:access>
                 <sec:access expression="hasRole('ROLE_ADMIN')"><div class="col-md-12"></sec:access>
-                <sec:access expression="hasRole('ROLE_MANAGER')"><div class="col-md-8"></sec:access>
+                <sec:access expression="hasRole('ROLE_FACULTY')"><div class="col-md-8"></sec:access>
                     <h3>Overall Enrollment</h3>
                     <div class="panel panel-green-border">
                         <div class="panel-body">
@@ -1024,7 +1024,7 @@
                                                 <g:actionSubmit class="btn btn-default submit-button-green pull-left admin-pg-btn" name="submitGenerateOverallEnrollment" value="Generate Report" action="overallEnrollment" />
                                             </div>
                                         </sec:access>
-                                        <sec:access expression="hasRole('ROLE_MANAGER')">
+                                        <sec:access expression="hasRole('ROLE_FACULTY')">
                                             <div class="col-md-12 form-group text-center">
                                                 <g:actionSubmit class="btn btn-default submit-button-green admin-pg-btn" name="submitGenerateOverallEnrollment" value="Generate Report" action="overallEnrollment" />
                                             </div>
@@ -1034,7 +1034,7 @@
                             </div>
                         </div>
                     </div>
-                    <sec:access expression="hasRole('ROLE_MANAGER')">
+                    <sec:access expression="hasRole('ROLE_FACULTY')">
                         <h3>Your ${config.getInstance().courseNamePlural}</h3>
                         <div class="panel panel-green-border">
                             <div class="panel-body">
@@ -1066,7 +1066,7 @@
                         </div>
                     </sec:access>
                 </div>
-                <sec:access expression="hasRole('ROLE_MANAGER')">
+                <sec:access expression="hasRole('ROLE_FACULTY')">
                     <script>
                         // get all the data from the controller
                         var applied = ${esAppliedApplicants};
@@ -1244,7 +1244,7 @@
             </sec:access>
             
             <%-- Manager Scholarship  --%>
-            <sec:access expression="hasRole('ROLE_MANAGER')">
+            <sec:access expression="hasRole('ROLE_FACULTY')">
              
                 <div class="tab-pane fade" id="scholarships">
                    
