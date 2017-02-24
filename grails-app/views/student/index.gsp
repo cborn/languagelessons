@@ -7,7 +7,7 @@
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>
 <body>
-    <sec:access expression="hasRole('ROLE_ADMIN')">
+    <sec:access expression="hasAnyRole('ROLE_ADMIN', 'ROLE_FACULTY', 'ROLE_STUDENT')">
     <content tag="nav">
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Application Status <span class="caret"></span></a>
@@ -72,15 +72,6 @@
                         </li>
                     </g:each>
                 </ul>
-                
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Installed Plugins <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <g:findAll in="${courses}" expr="true">
-                            <li><a href="#">${it.name}</a></li>
-                        </g:findAll>
-                    </ul>
-        </li>
             </div>
             
             <p>
@@ -90,7 +81,7 @@
             <ul>
                 <g:each var="c" in="${courses}">
                         <li>
-                            <g:link action="addCourse" params="[course: 'arabic']">${c.name}</g:link>
+                            <g:link controller="student" action="addCourse" params="[courseName: c.name]">${c.name}</g:link>
                         </li>
                 </g:each>
             </ul>

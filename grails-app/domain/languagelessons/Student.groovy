@@ -18,8 +18,4 @@ class Student {
     String getName() {
         firstName + " " + surname ?: "-"
     }
-    
-    boolean addToCourse(String courseName) {
-        courses.findByName(courseName).addToStudents(this).save()
-    }
 }

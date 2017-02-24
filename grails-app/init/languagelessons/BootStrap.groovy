@@ -29,17 +29,26 @@ class BootStrap {
         
         
         // Test Admin User  %%%%%%%%%%%%%%%%%//
-           def adminUser = new User(username: 'andrew@test.com', password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true').save()
+           def admin = new Faculty(title: 'admin', firstName: 'Andrew', surname: 'Smith').save()
+           def adminUser = new User(username: 'andrew@test.com', password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true')
+           adminUser.faculty = admin
+           adminUser.save()
            UserRole.create adminUser, adminRole
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
         // Test Faculty User  %%%%%%%%%%%%%%%%%//
-           def facultyUser = new User(username: 'lee@test.com', password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true').save()
+           def faculty = new Faculty(title: 'prof', firstName: 'Lee', surname: 'Smith').save()
+           def facultyUser = new User(username: 'lee@test.com', password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true')
+           facultyUser.faculty = faculty
+           facultyUser.save()
            UserRole.create facultyUser, facultyRole
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
         // Test Student User  %%%%%%%%%%%%%%%%%//
-           def studentUser = new User(username: 'joe@test.com', password: 'password', enabled: 'true').save()
+           def student = new Student(firstName: 'Joe', surname: 'Smith').save()
+           def studentUser = new User(username: 'joe@test.com', password: 'password', enabled: 'true')
+           studentUser.student = student
+           studentUser.save()
            UserRole.create studentUser, studentRole
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
@@ -52,6 +61,8 @@ class BootStrap {
             def Arabic = new Course(name: 'Arabic', syllabusId: '1111', applicantCap: 15, startDate: start, endDate: end).save(failOnError: true)
             def Chinese = new Course(name: 'Chinese', syllabusId: '2222', applicantCap: 20, startDate: start, endDate: end).save(failOnError: true)
             def French = new Course(name: 'French', syllabusId: '3333', applicantCap: 25, startDate: start, endDate: end).save(failOnError: true)
+            
+            //Arabic.addToStudents(student).save()
         
 
                     

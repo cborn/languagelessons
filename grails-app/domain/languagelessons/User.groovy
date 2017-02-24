@@ -27,11 +27,11 @@ class User implements Serializable {
         // Added some methods for easy name retrieval - just ask the User!
 	// user.getFullName() 
 	String getFullName() {
-            if(isApplicant) {
-                applicant?.firstName + " " + applicant?.surname ?: "-"
+            if(isStudent) {
+                student?.firstName + " " + student?.surname ?: "-"
             }
-            else if(isManager()) {
-                manager?.firstName + " " + manager?.surname ?: "-"
+            else if(isFaculty) {
+                faculty?.firstName + " " + faculty?.surname ?: "-"
             }
             else {
                 "-"
@@ -39,11 +39,11 @@ class User implements Serializable {
         }
         // user.getFirstName()
         String getFirstName() {
-            if(isApplicant) {
-                applicant?.firstName ?: "-"
+            if(isStudent) {
+                student?.firstName ?: "-"
             }
-            else if(isManager) {
-                manager?.firstName ?: "-"
+            else if(isFaculty) {
+                faculty?.firstName ?: "-"
             }
             else {
                 "-"
@@ -51,16 +51,27 @@ class User implements Serializable {
         }
         // user.getSurname()
         String getSurname() {
-            if(isApplicant) {
-                applicant?.surname ?: "-"
+            if(isStudent) {
+                student?.surname ?: "-"
             }
-            else if(isManager) {
-                manager?.surname ?: "-"
+            else if(isFaculty) {
+                faculty?.surname ?: "-"
             }
             else {
                 "-"
             }
         }
+        
+        boolean checkIfStudent () {
+            return isStudent;
+        }
+        
+        Student getStudent () {
+            return student;
+        }
+        
+        
+    
     
     User(String username, String password) {
             this()
