@@ -7,7 +7,7 @@ class Feedback {
     
     Date date;
     String description;
-    User author;
+    SecUser author;
     
     // Time frame for comment
     Float startTime;
@@ -20,7 +20,6 @@ class Feedback {
     static constraints = {
         description maxSize: 1000
         description nullable:true
-        application nullable: true
     }
 	
     static mapping = {

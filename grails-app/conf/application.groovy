@@ -1,3 +1,23 @@
+
+environments { 
+	development {
+                    grails {
+			mail {
+			  host = "localhost"
+			  port = 25
+			  username = "noreply@carleton.edu"
+//			  props = ["mail.smtp.auth":"false",
+//					   "mail.smtp.socketFactory.port":"25",
+//					   "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+//					   "mail.smtp.socketFactory.fallback":"true"]
+                }
+	 } 
+             grails.mail.disabled = false //Remove emails 
+             println("Emails are turned ON. To test emails you need to install a Fake SMTP server")
+	}	
+}
+
+
 grails.resources.adhoc.includes = ['/images/**', '/css/**', '/js/**', '/plugins/**', '/fonts/**']
 grails.resources.adhoc.patterns = ['/images/*', '/css/*', '/js/*', '/plugins/*', '/fonts/*']
 
@@ -7,7 +27,7 @@ grails.plugin.springsecurity.rejectIfNoRule = true
 
 
 // Added by the Spring Security Core plugin:
-grails.plugin.springsecurity.userLookup.userDomainClassName = 'languagelessons.User'
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'languagelessons.SecUser'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'languagelessons.UserRole'
 grails.plugin.springsecurity.authority.className = 'languagelessons.Role'
 grails.plugin.springsecurity.securityConfigType = "Annotation"

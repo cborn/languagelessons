@@ -5,14 +5,14 @@ class Student {
         String firstName;
         String middleName;
         String surname;
+        String university;
 
-        static hasMany = [courses:Course]
-       
-	static belongsTo = User;
+	static belongsTo = SecUser;
         
         static constraints = {
             middleName nullable: true
-            courses nullable: true
+ //           courses nullable: true
+            university nullable: true
         }
         
     String getName() {

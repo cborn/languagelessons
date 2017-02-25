@@ -10,13 +10,13 @@ class UserRole implements Serializable {
 
 	private static final long serialVersionUID = 1
 
-	User user
+	SecUser user
 	Role role
 
 	@Override
 	boolean equals(other) {
 		if (other instanceof UserRole) {
-			other.userId == user?.id && other.roleId == role?.id
+			other.secUserId == user?.id && other.roleId == role?.id
 		}
 	}
 
@@ -28,34 +28,34 @@ class UserRole implements Serializable {
 		builder.toHashCode()
 	}
 
-	static UserRole get(long userId, long roleId) {
-		criteriaFor(userId, roleId).get()
+	static UserRole get(long secUserId, long roleId) {
+		criteriaFor(secUserId, roleId).get()
 	}
 
-	static boolean exists(long userId, long roleId) {
-		criteriaFor(userId, roleId).count()
+	static boolean exists(long secUserId, long roleId) {
+		criteriaFor(secUserId, roleId).count()
 	}
 
-	private static DetachedCriteria criteriaFor(long userId, long roleId) {
+	private static DetachedCriteria criteriaFor(long secUserId, long roleId) {
 		UserRole.where {
-			user == User.load(userId) &&
+			user == SecUser.load(secUserId) &&
 			role == Role.load(roleId)
 		}
 	}
 
-	static UserRole create(User user, Role role) {
+	static UserRole create(SecUser user, Role role) {
 		def instance = new UserRole(user: user, role: role)
 		instance.save()
 		instance
 	}
 
-	static boolean remove(User u, Role r) {
+	static boolean remove(SecUser u, Role r) {
 		if (u != null && r != null) {
 			UserRole.where { user == u && role == r }.deleteAll()
 		}
 	}
 
-	static int removeAll(User u) {
+	static int removeAll(SecUser u) {
 		u == null ? 0 : UserRole.where { user == u }.deleteAll()
 	}
 

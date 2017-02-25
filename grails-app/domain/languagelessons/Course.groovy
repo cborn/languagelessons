@@ -26,7 +26,7 @@ class Course {
             description maxSize: 1000, nullable: true
             lessons nullable: true
             students nullable: true
-            faculty nullable: true
+            // faculty nullable: true
             syllabusId unique:true
     }
     

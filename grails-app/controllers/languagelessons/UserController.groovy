@@ -8,6 +8,9 @@ import java.text.SimpleDateFormat
 import grails.converters.JSON
 
 class UserController {
+    
+    transient mailService
+    transient springSecurityService
 
     def index() { 
         render(view:"register")
@@ -17,7 +20,7 @@ class UserController {
     def processRegistration() {
         
         // check details
-        def allUsers = User.findAll();
+        def allUsers = SecUser.findAll();
         def detailsOk = true;
 //        def recaptchaOk = true;
         
@@ -51,36 +54,33 @@ class UserController {
 //            detailsOk = false;
 //        }
         
-        if(detailsOk){ // Add && recaptchaOk if using recaptcha 
+        if(detailsOk){ // Add && recaptchaOk if using recaptcha
+
             String key = UUID.randomUUID().toString();
             
             // Creates a unlock key
             def link = grailsLinkGenerator.serverBaseURL+"/User/unlockAccount?key="+key;
+            
             // create a new user here
-            User userInfo = new User(k: key, username: params.email, password: params.password).save(flush: true, failOnError:true);
-//            userInfo.setK(key);
+            SecUser userInfo = new SecUser(k: key, username: params.email, password: params.password).save(flush: true, failOnError:true);
             
-//            userInfo.setUsername(params.email);
-//            userInfo.setPassword(params.password);
-//            userInfo.isFaculty = false;
-//            userInfo.isStudent = true;
-//            userInfo.save(failOnError:true);
             Role applicantRole = Role.findByAuthority('ROLE_STUDENT');
+            applicantRole.save(flush: true, failOnError:true);
             
-            
-            println applicantRole;
             UserRole.create userInfo, applicantRole;
-            
 
+            try {
             // Email Applicant needs seting up
-//            mailService.sendMail {
-//            async true
-//                to params.email;
-//                from "****" //This needs changing to a setting
-//                subject "Welcome " + params.email +". Thank you for registering on the Language Lessons";
-//                html g.render(template: "/templates/registration", model:[email:params.email,link:link,key:key])
-//            }
-            
+            mailService.sendMail {
+            async true
+                to params.email;
+                from "****" //This needs changing to a setting
+                subject "Welcome " + params.email +". Thank you for registering on the Language Lessons";
+                html g.render(template: "/templates/registration", model:[email:params.email,link:link,key:key])
+                }
+            } catch (Exception e) {
+            log.error("Failed to send email ${emailMessage}", e)
+            }
 //            recaptchaService.cleanUp(session);
             
             render(view:"completeRegistration")
@@ -94,4 +94,30 @@ class UserController {
          render(view:"resetPassword")
     }
     
+    def unlockAccount()
+    {
+        SecUser u = SecUser.findByK(params.key);
+        
+        if(!u)
+        {
+            flash.success = "This link has already been used to activated this account. Please try and login"
+            redirect(uri: "/");
+            return
+        }
+        
+        u.enabled = true;
+        u.k = null;
+        
+        if(!u.save(flush:true))
+        {
+            render "We are experiencing problems at the moment, please try again later."
+            return
+        }
+        else
+        {
+            flash.error = "Success, your account has now been activated. Please login."
+            redirect(uri: "/");
+            return
+        }
+    }  
 }
