@@ -6,6 +6,7 @@ class Faculty {
         String firstName;
         String surname;
         String university;
+        String email;
         
         static hasMany = [courses:Course]
     

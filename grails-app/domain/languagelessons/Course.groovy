@@ -97,4 +97,7 @@ class Course {
             return false;
         }
     }
+    String getCapacity() {
+        return students.size() + "/" + applicantCap
+    }
 }

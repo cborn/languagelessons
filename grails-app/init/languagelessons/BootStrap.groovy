@@ -61,8 +61,8 @@ class BootStrap {
         // Create Test Course and add faculty memeber
             def Arabic = new Course(name: 'Arabic', syllabusId: '1111', applicantCap: 15, startDate: start, endDate: end).save(failOnError: true)
             Arabic.addToFaculty(f1);
+            Arabic.addToFaculty(f2);
             Arabic.addToStudents(s1);
-        
             def Chinese = new Course(name: 'Chinese', syllabusId: '2222', applicantCap: 20, startDate: start, endDate: end).save(failOnError: true)
             Arabic.addToFaculty(f1);
             Chinese.addToFaculty(f2);

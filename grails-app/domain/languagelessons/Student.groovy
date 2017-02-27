@@ -6,7 +6,7 @@ class Student {
         String middleName;
         String surname;
         String university;
-
+        String email;
 //        static hasMany = [courses:Course]
        
 	static belongsTo = SecUser;
