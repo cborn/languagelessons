@@ -7,7 +7,7 @@
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>
 <body>
-    <sec:access expression="hasRole('ROLE_ADMIN')">
+    <sec:access expression="hasAnyRole('ROLE_ADMIN', 'ROLE_FACULTY', 'ROLE_STUDENT')">
     <content tag="nav">
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Application Status <span class="caret"></span></a>
@@ -62,7 +62,7 @@
                 whatever content you may choose. Below is a list of controllers that are currently deployed in
                 this application, click on each to execute its default action:
             </p>
-
+            
             <div id="controllers" role="navigation">
                 <h2>Available Controllers:</h2>
                 <ul>
@@ -72,16 +72,19 @@
                         </li>
                     </g:each>
                 </ul>
-                
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Installed Plugins <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <g:findAll in="${courses}" expr="true">
-                            <li><a href="#">${it.name}</a></li>
-                        </g:findAll>
-                    </ul>
-        </li>
             </div>
+            
+            <p>
+                Below is a list of all available courses. Click on one to sign up for it.
+            </p>
+            
+            <ul>
+                <g:each var="c" in="${courses}">
+                        <li>
+                            <g:link controller="student" action="addCourse" params="[courseName: c.name]">${c.name}</g:link>
+                        </li>
+                </g:each>
+            </ul>
         </section>
     </div>
     </sec:access>

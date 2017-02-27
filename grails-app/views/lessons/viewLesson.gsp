@@ -3,6 +3,11 @@
   To change this template file, choose Tools | Templates
   and open the template in the editor.
 -->
+<!--
+  To change this license header, choose License Headers in Project Properties.
+  To change this template file, choose Tools | Templates
+  and open the template in the editor.
+-->
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 
@@ -105,16 +110,9 @@
         <div class="col-xs-12">
             <div class="jumbotron">
                 <img src="" class="img-responsive"/>
-                <p>${course.name}<p>
-                <g:if test="${!course.lessons}">
-                    <h3>No lessons found at the moment, sorry!</h3>
-                </g:if>
-                <g:each in="${course.lessons}" var="lesson">
-                    <h3><a href="${createLink(controller: "lessons", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a></h3>
-                </g:each>
-                <g:if test="${access=="faculty"}">
-                    <g:link role="button" class="btn btn-primary btn-lg" controller="lessons" action="newLesson" params="[syllabusId: course.syllabusId]">New Assignment</g:link>
-                </g:if>
+                <p>${course.name}: ${lesson.name}</p>
+                <p>Due: ${lesson.dueDate}</p>
+                ${lesson.text}    
             </div>
         </div>
     </body>

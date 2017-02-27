@@ -54,7 +54,8 @@ class UserController {
 //            detailsOk = false;
 //        }
         
-        if(detailsOk){ // Add && recaptchaOk if using recaptcha 
+        if(detailsOk){ // Add && recaptchaOk if using recaptcha
+
             String key = UUID.randomUUID().toString();
             
             // Creates a unlock key
@@ -68,6 +69,7 @@ class UserController {
             
             UserRole.create userInfo, applicantRole;
 
+            try {
             // Email Applicant needs seting up
             mailService.sendMail {
             async true
@@ -75,8 +77,10 @@ class UserController {
                 from "****" //This needs changing to a setting
                 subject "Welcome " + params.email +". Thank you for registering on the Language Lessons";
                 html g.render(template: "/templates/registration", model:[email:params.email,link:link,key:key])
+                }
+            } catch (Exception e) {
+            log.error("Failed to send email ${emailMessage}", e)
             }
-            
 //            recaptchaService.cleanUp(session);
             
             render(view:"completeRegistration")

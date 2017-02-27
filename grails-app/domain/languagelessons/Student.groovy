@@ -6,20 +6,16 @@ class Student {
         String middleName;
         String surname;
         String university;
-        String email;
-//        static hasMany = [courses:Course]
-       
+        static hasMany = [courses: Course]
 	static belongsTo = SecUser;
         
         static constraints = {
             middleName nullable: true
- //           courses nullable: true
+            courses nullable: true
             university nullable: true
         }
         
     String getName() {
         firstName + " " + surname ?: "-"
     }
-    
-
 }

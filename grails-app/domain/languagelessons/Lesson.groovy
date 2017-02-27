@@ -6,7 +6,7 @@ class Lesson {
     String text;
     Date openDate;
     Date dueDate;
-    static belongsTo = Course;
+    Course course;
     static constraints = {
     }
 }
