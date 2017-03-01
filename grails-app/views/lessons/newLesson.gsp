@@ -118,8 +118,16 @@
                     <td><g:textField name="openDate"/></td>
                 </tr>
                 <tr>
+                    <td>Open Time: (Example: 08:36PM)</td>
+                    <td><g:textField name="openTime"/></td>
+                </tr>
+                <tr>
                     <td>Due Date (yyyy-MM-dd)</td>
                     <td><g:textField name="dueDate"/></td>
+                </tr>
+                <tr>
+                    <td>Due Time: (Example: 08:36PM)</td>
+                    <td><g:textField name="dueTime"/></td>
                 </tr>
             </table>
             <g:actionSubmit value="create"/>

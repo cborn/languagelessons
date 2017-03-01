@@ -69,6 +69,16 @@ class CourseController {
         } else {
             lessonsToDisplay = allLessons
         }
-        [course: course, access: access, lessons: lessonsToDisplay]
+        def days = [:]
+        for (lesson in lessonsToDisplay){
+            if (!(lesson.dueDate.format("dd-MM-yyyy") in days)) {
+                days[lesson.dueDate.format("dd-MM-yyyy")] = [lesson]
+            }
+            else {
+                days[lesson.dueDate.format("dd-MM-yyyy")].add(lesson)
+            }
+        }
+        
+        [course: course, access: access, days: days]
     }
 }

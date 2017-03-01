@@ -109,9 +109,17 @@
                 <g:if test="${!course.lessons}">
                     <h3>No lessons found at the moment, sorry!</h3>
                 </g:if>
-                <g:each in="${lessons}" var="lesson">
-                    <h3><a href="${createLink(controller: "lessons", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a></h3>
-                </g:each>
+                    <g:each in="${days}" var="day">
+                        <div class="img-responsive">
+                            ${day.key}
+                            <hr>
+                            <g:each in="${day.value}" var="lesson">
+                                ${lesson.dueDate.format("hh:MM:aa")}
+                                <a href="${createLink(controller: "lessons", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a>
+                            </g:each>
+                        </div>
+                    </g:each>
+                </table>
                 <g:if test="${access=="faculty"}">
                     <g:link role="button" class="btn btn-primary btn-lg" controller="lessons" action="newLesson" params="[syllabusId: course.syllabusId]">New Assignment</g:link>
                 </g:if>

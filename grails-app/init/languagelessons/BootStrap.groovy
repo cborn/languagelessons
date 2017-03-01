@@ -68,7 +68,7 @@ class BootStrap {
             Date end = Date.parse("yyyy-MM-dd", "2017-01-01");
             new Course(name: 'Arabic', syllabusId: '1111', applicantCap: 15, startDate: start, endDate: end)
                 .addToFaculty(f1)
-                .addToStudents(s1)
+                .addToStudents(s1) //addTo___ also supports creating the object inline
                 .addToLessons(name: "Read Chapter 5",openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
                 .save(failOnError: true)
 
