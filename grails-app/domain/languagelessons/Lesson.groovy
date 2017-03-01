@@ -8,5 +8,14 @@ class Lesson {
     Date dueDate;
     Course course;
     static constraints = {
+        text nullable: true
+    }
+    boolean isOpen() {
+        Date now = new Date()
+        return now.after(openDate)
+    }
+    boolean isDue() {
+        Date now = new Date()
+        return now.after(dueDate)
     }
 }

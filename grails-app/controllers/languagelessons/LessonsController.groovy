@@ -11,10 +11,9 @@ class LessonsController {
     def create() {
         String lessonName = params.lessonName
         String lessonText = params.lessonText
-        Date open = new Date()
-        open.parse("yyyy-MM-dd", params.openDate)
-        Date due = new Date()
-        due.parse("yyyy-MM-dd", params.dueDate)
+        def open = Date.parse("yyyy-MM-dd", params.openDate)
+        def due = Date.parse("yyyy-MM-dd", params.dueDate)
+        System.out.println(due)
         Course course = Course.findBySyllabusId(params.syllabusId)
         assert (course != null)
         assert (lessonName != null)

@@ -64,19 +64,21 @@ class BootStrap {
             
         
         // Create Test Course and add faculty memeber
-            Date start = new Date();
-            start.parse("yyyy-MM-dd", "2016-01-01");
-            Date end = new Date();
-            end.parse("yyyy-MM-dd", "2017-01-01");
+            Date start = Date.parse("yyyy-MM-dd", "2016-01-01");
+            Date end = Date.parse("yyyy-MM-dd", "2017-01-01");
+            new Course(name: 'Arabic', syllabusId: '1111', applicantCap: 15, startDate: start, endDate: end)
+                .addToFaculty(f1)
+                .addToStudents(s1)
+                .addToLessons(name: "Read Chapter 5",openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
+                .save(failOnError: true)
+
+            new Course(name: 'Chinese', syllabusId: '2222', applicantCap: 20, startDate: start, endDate: end)
+                .addToFaculty(f2)
+                .save(failOnError: true)
             
-            new Course(name: 'Arabic', syllabusId: '1111', applicantCap: 15, startDate: start, endDate: end).addToFaculty(f1).addToStudents(s1).save(failOnError: true)
-            
-            def Chinese = new Course(name: 'Chinese', syllabusId: '2222', applicantCap: 20, startDate: start, endDate: end).save(failOnError: true)
-            //Arabic.addToFaculty(f1);
-            Chinese.addToFaculty(f2);
-            
-            def French = new Course(name: 'French', syllabusId: '3333', applicantCap: 25, startDate: start, endDate: end).save(failOnError: true)
-            French.addToFaculty(f2);
+            new Course(name: 'French', syllabusId: '3333', applicantCap: 25, startDate: start, endDate: end)
+                .addToFaculty(f2)
+                .save(failOnError: true)
         
 
     UserRole.withSession {

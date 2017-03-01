@@ -109,7 +109,7 @@
                 <g:if test="${!course.lessons}">
                     <h3>No lessons found at the moment, sorry!</h3>
                 </g:if>
-                <g:each in="${course.lessons}" var="lesson">
+                <g:each in="${lessons}" var="lesson">
                     <h3><a href="${createLink(controller: "lessons", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a></h3>
                 </g:each>
                 <g:if test="${access=="faculty"}">

@@ -39,10 +39,8 @@ class CourseController {
             String courseName = params.courseName
             String syllabusId = params.syllabusId
             int applicantCap = Integer.parseInt(params.applicantCap)
-            Date start = new Date()
-            start.parse("yyyy-MM-dd", params.startDate)
-            Date end = new Date()
-            end.parse("yyyy-MM-dd", params.endDate)
+            Date start = Date.parse("yyyy-MM-dd", params.startDate)
+            Date end = Date.parse("yyyy-MM-dd", params.endDate)
             Course course = new Course(name: courseName, syllabusId: syllabusId, applicantCap: applicantCap, startDate: start, endDate: end)
             course.addToFaculty(faculty)
             course.save(failOnError: true, flush: true)
@@ -60,6 +58,17 @@ class CourseController {
             access = "student"
         }
         Course course = Course.findBySyllabusId(params.syllabusId)
-        [course: course, access: access]
+        def allLessons = course.lessons.sort {it.dueDate}
+        def lessonsToDisplay = []
+        if (access == "student") {
+            for (lesson in allLessons) {
+                if (lesson.isOpen()) {
+                    lessonsToDisplay.add(lesson)
+                }
+            }
+        } else {
+            lessonsToDisplay = allLessons
+        }
+        [course: course, access: access, lessons: lessonsToDisplay]
     }
 }

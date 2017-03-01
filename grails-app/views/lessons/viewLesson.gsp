@@ -111,7 +111,7 @@
             <div class="jumbotron">
                 <img src="" class="img-responsive"/>
                 <p>${course.name}: ${lesson.name}</p>
-                <p>Due: ${lesson.dueDate}</p>
+                <p>Due: <g:formatDate date="${lesson.dueDate}" type="datetime" style="SHORT"/></p>
                 ${lesson.text}    
             </div>
         </div>
