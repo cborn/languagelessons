@@ -9,35 +9,32 @@ import java.text.SimpleDateFormat
 
 class CourseController {
     def index() { }
+    
     @Secured(["ROLE_STUDENT"])
     def studentCourseView() {
-        SecUser userInfo = getAuthenticatedUser()
-        def courses = userInfo.student.courses
-        [courses:courses]
+        [courses:getAuthenticatedUser().student.courses]
     }
+    
     @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
     def facultyCourseView() {
-        SecUser userInfo = getAuthenticatedUser()
-        def courses = userInfo.faculty.courses
-        [courses:courses]
+        [courses:getAuthenticatedUser().faculty.courses]
     }
-     @Secured(["ROLE_FACULTY", "ROLE_ADMIN", "ROLE_STUDENT"])
-    def listCourses(Boolean enrollFail) {
+    
+    @Secured(["ROLE_FACULTY", "ROLE_ADMIN", "ROLE_STUDENT"])
+    def listCourses() {
         SecUser userInfo = getAuthenticatedUser()
         Faculty faculty = userInfo.faculty
         Student student = userInfo.student
         def courses = Course.list()
-        if (params.enrollFail) {
-            flash.message = "You have already enrolled in this course!"
-        }
+        
         [courses:courses, userInfo:userInfo, faculty:faculty, student:student]
     }
+    
     @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
     def newCourse() {
-        SecUser userInfo = getAuthenticatedUser()
-        def courses = userInfo.student.courses
-        [courses:courses]
+        
     }
+    
     @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
     def create() {
         SecUser userInfo = getAuthenticatedUser()

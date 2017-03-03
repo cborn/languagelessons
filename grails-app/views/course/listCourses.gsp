@@ -131,7 +131,7 @@
                     <td>${course.getCapacity()}</td>
                     <%-- Either fix or consider removing logic from GSP --%>
                     <g:if test="${student}">
-                        <g:if test="${!course.students.contains(student)}">
+                            <g:if test="${course.students.find { it.id ==  student.id } == null}">
                             <td><a href="${createLink(controller: "student", action: "enroll", params: [courseName: course.name] )}">Enroll</a></td>
                         </g:if>
                         <g:else>
