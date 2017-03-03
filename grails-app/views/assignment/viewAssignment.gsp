@@ -8,7 +8,7 @@
 
 <html>
     <head>
-        <title>Courses</title>
+        <title>${course.name}</title>
         <meta name="layout" content="main"/>
         <style type="text/css" media="screen">
             #status {
@@ -105,42 +105,12 @@
         <div class="col-xs-12">
             <div class="jumbotron">
                 <img src="" class="img-responsive"/>
-                <p>Courses</p>
-                <p>
-                    <table border="1">
-            <tr>
-                <th>Course Name</th>
-                <th>Faculty</th>
-                <th>Applicant Cap</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Term</th>
-                <th>Capacity</th>
-                <g:if test="${student}">
-                    <th>Enroll</th>
-                </g:if>
-            </tr>
-            <g:each in="${courses}" var="course">
-                <tr>
-                    <td>${course.name}</td>
-                    <td><g:each in="${course.faculty}"var="faculty">${faculty.getName()}<br> </g:each></td>
-                    <td>${course.applicantCap}</td>
-                    <td>${course.startDate.getDateString()}</td>
-                    <td>${course.endDate.getDateString()}</td>
-                    <td>${course.getTermFull()}</td>
-                    <td>${course.getCapacity()}</td>
-                    <%-- Either fix or consider removing logic from GSP --%>
-                    <g:if test="${student}">
-                        <g:if test="${!course.students.contains(student)}">
-                            <td><a href="${createLink(controller: "student", action: "enroll", params: [courseName: course.name] )}">Enroll</a></td>
-                        </g:if>
-                        <g:else>
-                            <td>Already Enrolled</td>
-                        </g:else>
-                    </g:if>
-                </tr>
-            </g:each>
-                </p>
+                <p>${course.name}: ${assignment.name}</p>
+                <p>Due: <g:formatDate date="${assignment.dueDate}" type="datetime" style="SHORT"/></p>
+                ${assignment.introText}
+                <g:each in="${assignment.questions}" var="question">
+                    <g:render template="question/${question.view}" model="${[question: question]}"/>
+                </g:each>
             </div>
         </div>
     </body>

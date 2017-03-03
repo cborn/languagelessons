@@ -77,7 +77,19 @@ class CourseController {
         } else {
             lessonsToDisplay = allLessons
         }
+        def allAssignments = course.assignments.sort {it.dueDate}
+        def assignmentsToDisplay = []
+        if (access == "student"){
+            for (assignment in allAssignments) {
+                if (assignment.isOpen()) {
+                    assignmentsToDisplay.add(assignment)
+                }
+            }
+        } else {
+            assignmentsToDisplay = allAssignments;
+        }
         def days = [:]
+        def dayKeys = []
         for (lesson in lessonsToDisplay){
             if (!(lesson.dueDate.format("dd-MM-yyyy") in days)) {
                 days[lesson.dueDate.format("dd-MM-yyyy")] = [lesson]
@@ -86,7 +98,14 @@ class CourseController {
                 days[lesson.dueDate.format("dd-MM-yyyy")].add(lesson)
             }
         }
-        
+        for (assignment in assignmentsToDisplay){
+            if (!(assignment.dueDate.format("dd-MM-yyyy") in days)) {
+                days[assignment.dueDate.format("dd-MM-yyyy")] = [assignment]
+            }
+            else {
+                days[assignment.dueDate.format("dd-MM-yyyy")].add(assignment)
+            }
+        }
         [course: course, access: access, days: days]
     }
 }

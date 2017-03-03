@@ -58,6 +58,23 @@ class BootStrap {
            UserRole.create studentUser, studentRole
            studentUser.student = s1
            studentUser.save()
+          //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
+          //Create Test Assignment
+          
+          def assign1 = new Assignment(name:"Quiz 1",
+                                       assignmentId: 12,
+                                       introText: "Please take this quiz for monday.",
+                                       openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), 
+                                       dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"),
+                                       maxAttempts: 4)
+          
+          def q1 = new MultipleChoiceQuestion(pointValue: 4,
+                                              question: "What is your name?",
+                                              view: "multipleChoice",
+                                              answers: ["Will", "Joe", "Todd"],
+                                              correctAnswer: 0)
+          assign1
+            .addToQuestions(q1)
 //        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
         // Create Test Courses
@@ -70,6 +87,7 @@ class BootStrap {
                 .addToFaculty(f1)
                 .addToStudents(s1) //addTo___ also supports creating the object inline
                 .addToLessons(name: "Read Chapter 5",openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
+                .addToAssignments(assign1)
                 .save(failOnError: true)
 
             new Course(name: 'Chinese', syllabusId: '2222', applicantCap: 20, startDate: start, endDate: end)
