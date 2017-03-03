@@ -8,18 +8,25 @@ import org.springframework.security.core.context.SecurityContextHolder
 class StudentService {
 
     def addToCourse(String courseName) {
+        def result = [:]
+        def fail = { Map m ->
+            result.error = [ code: m.code, args: [""] ]
+            return result
+        }
+        
         courseName = courseName.substring(0,1).toUpperCase() + courseName.substring(1);
         
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loginUsername = authentication.getName();
-        SecUser curUser = SecUser.findByUsername(loginUsername);
+        Student student = SecUser.findByUsername(loginUsername).student;
+        Course course = Course.findByName(courseName);
         
-        if(curUser.isStudent) {
-            def course = Course.findByName(courseName)
-            def stu = curUser.student
-            course.addToStudents(stu).save()
-            //System.out.println(stu);
-            //stu.addToCourses(course).save()
+        if (course.students.find { it.id ==  student.id} != null) {
+            return fail(code: "enrollFail");
+        } else {
+            course.addToStudents(student).save()
+            student.addToCourses(course).save()
         }
+        return result;
     }
 }

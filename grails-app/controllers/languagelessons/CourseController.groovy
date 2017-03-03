@@ -3,6 +3,10 @@ import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.annotation.Secured
 import java.text.SimpleDateFormat
 
+// This class should have as much code as possible removed from it
+// Business logic should be moved to services where possible
+// Do all of these pages belong in the course controller? 
+
 class CourseController {
     def index() { }
     @Secured(["ROLE_STUDENT"])
@@ -18,7 +22,7 @@ class CourseController {
         [courses:courses]
     }
      @Secured(["ROLE_FACULTY", "ROLE_ADMIN", "ROLE_STUDENT"])
-    def listCourses() {
+    def listCourses(Boolean enrollFail) {
         SecUser userInfo = getAuthenticatedUser()
         Faculty faculty = userInfo.faculty
         Student student = userInfo.student
@@ -29,7 +33,11 @@ class CourseController {
         [courses:courses, userInfo:userInfo, faculty:faculty, student:student]
     }
     @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
-    def newCourse() {  }
+    def newCourse() {
+        SecUser userInfo = getAuthenticatedUser()
+        def courses = userInfo.student.courses
+        [courses:courses]
+    }
     @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
     def create() {
         SecUser userInfo = getAuthenticatedUser()

@@ -21,21 +21,16 @@ class StudentController {
         [courses:Course.listOrderByName()]
     }
     
-    def addCourse(String courseName) {
-        studentService.addToCourse(courseName);
-        render("You have Successfully signed up for course: " + courseName);
-    }
 @Secured(["ROLE_STUDENT"])
-    def enroll() {
-        SecUser userInfo = getAuthenticatedUser()
-        Student student = userInfo.student
-        Course course = Course.findBySyllabusId(params.id)
-        if (course.students.contains(student)) {
-            redirect(controller: "course", action:"listCourses", params: [enrollFail: true])
-        } else {
-            course.addToStudents(student)
-            course.save(flush: true)
+    def enroll(String courseName) {
+        def result = studentService.addToCourse(courseName);
+        
+        if(!result.error) {
             redirect(controller:"course", action:"listCourses")
+            return;
         }
+
+        flash.message = g.message(code: result.error.code, args: result.error.args)
+        redirect(controller:"course", action:"listCourses")
     }
 }

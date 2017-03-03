@@ -129,9 +129,10 @@
                     <td>${course.endDate.getDateString()}</td>
                     <td>${course.getTermFull()}</td>
                     <td>${course.getCapacity()}</td>
+                    <%-- Either fix or consider removing logic from GSP --%>
                     <g:if test="${student}">
                         <g:if test="${!course.students.contains(student)}">
-                            <td><a href="${createLink(controller: "student", action: "enroll", id: "${course.syllabusId}")}">Enroll</a></td>
+                            <td><a href="${createLink(controller: "student", action: "enroll", params: [courseName: course.name] )}">Enroll</a></td>
                         </g:if>
                         <g:else>
                             <td>Already Enrolled</td>
