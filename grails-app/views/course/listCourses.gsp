@@ -108,38 +108,41 @@
                 <p>Courses</p>
                 <p>
                     <table border="1">
-            <tr>
-                <th>Course Name</th>
-                <th>Faculty</th>
-                <th>Applicant Cap</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Term</th>
-                <th>Capacity</th>
-                <g:if test="${student}">
-                    <th>Enroll</th>
-                </g:if>
-            </tr>
-            <g:each in="${courses}" var="course">
-                <tr>
-                    <td>${course.name}</td>
-                    <td><g:each in="${course.faculty}"var="faculty">${faculty.getName()}<br> </g:each></td>
-                    <td>${course.applicantCap}</td>
-                    <td>${course.startDate.getDateString()}</td>
-                    <td>${course.endDate.getDateString()}</td>
-                    <td>${course.getTermFull()}</td>
-                    <td>${course.getCapacity()}</td>
-                    <%-- Either fix or consider removing logic from GSP --%>
-                    <g:if test="${student}">
-                            <g:if test="${course.students.find { it.id ==  student.id } == null}">
-                            <td><a href="${createLink(controller: "student", action: "enroll", params: [courseName: course.name] )}">Enroll</a></td>
-                        </g:if>
-                        <g:else>
-                            <td>Already Enrolled</td>
-                        </g:else>
-                    </g:if>
-                </tr>
-            </g:each>
+                        <tr>
+                            <th>Course Name</th>
+                            <th>Faculty</th>
+                            <th>Applicant Cap</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Term</th>
+                            <th>Capacity</th>
+                            <g:if test="${student}">
+                                <th>Enroll</th>
+                            </g:if>
+                        </tr>
+                        <g:each in="${courses}" var="course">
+                            <tr>
+                                <td>${course.name}</td>
+                                <td><g:each in="${course.faculty}"var="faculty">${faculty.getName()}<br> </g:each></td>
+                                <td>${course.applicantCap}</td>
+                                <td>${course.startDate.getDateString()}</td>
+                                <td>${course.endDate.getDateString()}</td>
+                                <td>${course.getTermFull()}</td>
+                                <td>${course.getCapacity()}</td>
+                                <g:if test="${student}">
+                                    <g:if test="${course.students.find { it.id ==  student.id } == null}">
+                                        <td><a href="${createLink(controller: "student", action: "enroll", params: [id: course.syllabusId] )}">Enroll</a></td>
+                                    </g:if>
+                                    <g:else>
+                                        <td>
+                                            Enrolled</br>
+                                            <a href="${createLink(controller: "student", action: "withdraw", params: [id: course.syllabusId] )}">Withdraw</a>
+                                        </td>
+                                    </g:else>
+                                </g:if>
+                            </tr>
+                        </g:each>
+                    </table>
                 </p>
             </div>
         </div>
