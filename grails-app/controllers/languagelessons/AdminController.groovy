@@ -1,6 +1,17 @@
 package languagelessons
 
-class AdminController {
+import grails.plugin.springsecurity.SpringSecurityUtils
+import grails.plugin.springsecurity.annotation.Secured
+import grails.plugin.springsecurity.SpringSecurityService
 
-    def index() { }
+class AdminController {
+    
+    transient springSecurityService
+
+    def index() { 
+
+        SecUser userInfo = getAuthenticatedUser()
+
+        render(view:"index", model:[userInfo:userInfo])
+    }
 }

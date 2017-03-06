@@ -30,7 +30,7 @@ class BootStrap {
         
         // Test Admin User  %%%%%%%%%%%%%%%%%//
            def adminUser = new SecUser(username:"andrew@test.com", password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true').save(failOnError:true);
-           Faculty a1 = new Faculty(title: 'Dr', firstName: 'Andrew', surname: 'Smith').save()
+           Faculty a1 = new Faculty(title: 'Dr', firstName: 'Andrew', surname: 'Smith',email:"andrew@test.com",university:"University of Liverpool").save()
            UserRole.create adminUser, adminRole
            adminUser.faculty = a1;
            adminUser.save()

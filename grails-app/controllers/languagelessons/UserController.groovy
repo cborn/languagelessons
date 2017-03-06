@@ -68,7 +68,7 @@ class UserController {
             applicantRole.save(flush: true, failOnError:true);
             
             UserRole.create userInfo, applicantRole;
-
+            
             try {
             // Email Applicant needs seting up
             mailService.sendMail {
@@ -79,7 +79,7 @@ class UserController {
                 html g.render(template: "/templates/registration", model:[email:params.email,link:link,key:key])
                 }
             } catch (Exception e) {
-            log.error("Failed to send email ${emailMessage}", e)
+            log.error("Failed to send email ${params.email}", e)
             }
 //            recaptchaService.cleanUp(session);
             
@@ -119,5 +119,517 @@ class UserController {
             redirect(uri: "/");
             return
         }
-    }  
+    }
+    
+    @Secured(["ROLE_ADMIN"])
+    def list() {
+        
+        SecUser thisUser = SecUser.findById(springSecurityService.principal.id);
+        
+        def accountTypeList = ["Any":"Any","Student":"Student","Faculty":"Faculty","Administrator":"Administrator"];
+        
+        // modify this to change how many are shown in index pages
+        //def maxShownOnIndex = 10;
+
+        // if no max or offset sent, use 10 and 0 by default
+        //params.max = params.max ?: maxShownOnIndex
+        //params.offset = params.offset ?: 0
+        //params.sort = params.sort ?: "username"
+        //params.order = params.order ?: "asc"
+        
+        // allow specific user searches, e.g username, account type filters etc
+        def results, resultsSize;
+        
+        // if an account type selected
+        if(params.accountTypeSelect && !params.userSearch) {
+            
+            if(params.accountTypeSelect == "Any") {
+                results = SecUser.list();//params);  // All Users
+            }
+            else if(params.accountTypeSelect == "Student") {
+                results = SecUser.createCriteria().list(){//max:params.max, offset:params.offset) {
+                    eq("isStudent", true)
+                    //order(params.sort, params.order)
+                }
+            }
+            else if(params.accountTypeSelect == "Faculty") {
+                results = [];
+                //results += UserRole.findAllByRole(Role.findByAuthority("ROLE_MANAGER"),[max:params.max, offset:params.offset]).user;
+                results += UserRole.findAllByRole(Role.findByAuthority("ROLE_FACULTY")).user;
+            }
+            else if(params.accountTypeSelect == "Administrator") {
+                results = [];
+                //results += UserRole.findAllByRole(Role.findByAuthority("ROLE_ADMIN"),[max:params.max, offset:params.offset]).user;
+                results += UserRole.findAllByRole(Role.findByAuthority("ROLE_ADMIN")).user;
+            }
+        }
+        
+        // if something in the user search box
+        if(params.userSearch) {
+            
+            // if no account type specified, make it 'any'
+            if(!params.accountTypeSelect || params.accountTypeSelect == "Any") {
+                results = SecUser.createCriteria().list() {//max:params.max, offset:params.offset) {
+                    createAlias('student', 's', CriteriaSpecification.LEFT_JOIN)
+                    createAlias('faculty', 'f', CriteriaSpecification.LEFT_JOIN)
+                    or {
+                        ilike("username", '%'+params.userSearch+'%')
+                        ilike("s.firstName", '%'+params.userSearch+'%')
+                        ilike("f.firstName", '%'+params.userSearch+'%')
+                        ilike("s.surname", '%'+params.userSearch+'%')
+                        ilike("f.surname", '%'+params.userSearch+'%')
+                    }
+                    //order(params.sort, params.order)
+                }
+            }
+            else if(params.accountTypeSelect == "Student") {
+                results = SecUser.createCriteria().list() {//max:params.max, offset:params.offset) {
+                    eq("isStudent", true)
+                    createAlias('Student', 's', CriteriaSpecification.LEFT_JOIN)
+                    or {
+                        ilike("username", '%'+params.userSearch+'%')
+                        ilike("s.firstName", '%'+params.userSearch+'%')
+                        ilike("s.surname", '%'+params.userSearch+'%')
+                    }
+                    //order(params.sort, params.order)
+                }
+            }
+            else if(params.accountTypeSelect == "Faculty" || params.accountTypeSelect == "Administrator") {
+                def temp = SecUser.createCriteria().list() {//max:params.max, offset:params.offset) {
+                    eq("isFaculty", true)
+                    createAlias('Faculty', 'f', CriteriaSpecification.LEFT_JOIN)
+                    or {
+                        ilike("username", '%'+params.userSearch+'%')
+                        ilike("f.firstName", '%'+params.userSearch+'%')
+                        ilike("f.surname", '%'+params.userSearch+'%')
+                    }
+                    //order(params.sort, params.order)
+                }
+                
+                def temp2 = [];
+                
+                if(params.accountTypeSelect == "Faculty") {
+                    temp2 += UserRole.findAllByRole(Role.findByAuthority("ROLE_FACULTY"),[params]).user;
+                }
+                else if(params.accountTypeSelect == "Administrator") {
+                    temp2 += UserRole.findAllByRole(Role.findByAuthority("ROLE_ADMIN"),[params]).user;
+                }
+                
+                results = [];
+                // check through each, preserving order
+                for(acc in temp) {
+                    for(res in temp2) {
+                        if(res.id == acc.id) {
+                            results += res
+                        }
+                    }
+                }
+            }
+        }
+        
+        // if nothing searched for, show all
+        if(!params.accountTypeSelect && !params.userSearch) {
+            results = SecUser.list();//params);  // All Users
+        }
+        /*
+        if(params.accountTypeSelect == "Faculty" || params.accountTypeSelect == "Administrator") {
+            resultsSize = results.size();
+        }
+        else {
+            resultsSize = results.totalCount;
+        }
+        */
+        def resultsRoles = [];
+        for(result in results) {
+            resultsRoles.add(UserRole.findByUser(result).role);
+        }
+        /*
+        render(contentType: "application/json") {
+            users = array {
+                for (u in results) {
+                    secuser email: u.username
+                    secuser name: u.getFullName()
+                }
+            }
+        }
+        */
+        [results:results,resultsSize:resultsSize,accountTypeList:accountTypeList,resultsRoles:resultsRoles,thisUser:thisUser,title:"All Users"]
+    }
+    
+  def toggleUserEnabled() {
+        
+        SecUser userInfo = SecUser.findById(params.id);
+        
+        // if they are enabled, disable them
+        if(userInfo.enabled) {
+            userInfo.enabled = false;
+            flash.message = "User Account Disabled: " + userInfo.username;
+        }
+        else if(!userInfo.enabled) {
+            // check theyre' allowed to be enabled
+            //if(userInfo.applicant || userInfo.manager) {
+                userInfo.enabled = true;
+                flash.message = "User Account Enabled: " + userInfo.username;
+            /*}
+            else {
+                flash.message = "Cannot Enable Account: " + userInfo.username;
+            }*/
+        }
+        
+        userInfo.save(failOnError:true);
+        
+        redirect(action:"list");
+    }
+    
+    def delete() {
+        
+        SecUser userInfo = SecUser.findById(params.id);
+        userInfo.lock();
+        
+        // delete manager and applicant
+        try {
+            if(userInfo.isFaculty && userInfo.faculty) {
+                def facultyInfo = userInfo.faculty;
+                
+                // take the courses off them
+                facultyInfo.courses.clear();
+                
+                // remove the manager account
+                userInfo.faculty = null;
+                userInfo.save(flush:true);
+                
+                // then delete manager
+                facultyInfo.delete(flush:true);
+            }
+
+            if(userInfo.isStudent && userInfo.student) {
+                def studentInfo = userInfo.student;
+				
+		if(studentInfo != null)
+		{
+                    // Need to delete:
+                    // applicantId (applications), paymentEvents, events
+                    // Should delete automatically:
+                    // address, transcriptAddress, identification, primaryContact, secondaryContact, answerId
+                    
+                    // ... and now schollarship!!!
+                    
+                    // delete their applications
+                    // applicantId = applications
+                    def apps = [];
+                    apps += studentInfo.studentId;
+                    apps.each { studentId ->
+                        studentInfo.removeFromStudentId(studentId);
+                    }
+                    
+                    // delete their events and payment events
+
+                    // remove the applicant account
+                    userInfo.student = null;
+                    userInfo.save(flush:true);
+
+                    // then delete the applicant
+                    studentInfo.delete(flush:true);
+                }
+            }
+			
+            // find the roles associated with this user. 
+            Collection<UserRole> userRoles = UserRole.findAllByUser(userInfo);
+            userRoles*.delete();
+		  
+            // finally delete the user
+            userInfo.delete(flush:true);
+            
+            // other data is deleted through cascading
+        }
+        // TODO: check this may cause error when deleting user with multiple applications
+        catch (org.springframework.dao.DataIntegrityViolationException e) {
+            flash.message = "Could not delete user " + userInfo.username;
+            redirect(action:"list");
+        }
+        
+        // redirect to admin page
+        flash.message = "User deleted";
+        redirect(action:"list");
+    }
+    
+    def edit() {
+        
+        SecUser userLoggedIn = SecUser.findById(springSecurityService.principal.id);
+        SecUser userInfo = SecUser.findById(params.id);
+        
+        def accountTypeList = ["Student":"Student","Faculty":"Faculty","Administrator":"Administrator"];
+        
+        def titleList = ["Prof":"Prof.",
+                        "Dr":"Dr.",
+                        "Mr":"Mr.",
+                        "Mrs":"Mrs.",
+                        "Ms":"Ms.",
+                        "None":"None",
+                        "Lord":"Lord"];
+        
+        // put the right value in the select
+        UserRole currentRole = UserRole.findByUser(userInfo);
+        def currentAccountType;
+        
+        if(currentRole.role.toString() == "ROLE_STUDENT") { 
+            currentAccountType = "Student";
+        }
+        else if(currentRole.role.toString() == "ROLE_FACULTY") { 
+            currentAccountType = "Faculty";
+        }
+        else if(currentRole.role.toString() == "ROLE_ADMIN") { 
+            currentAccountType = "Administrator";
+        }
+        
+        [userLoggedIn:userLoggedIn,userInfo:userInfo,accountTypeList:accountTypeList,currentAccountType:currentAccountType,titleList:titleList]
+    }
+    
+    def processEditUser() {
+        
+        SecUser userLoggedIn = SecUser.findById(springSecurityService.principal.id);
+        SecUser userInfo = SecUser.findById(params.id);
+        
+        def allUsers = SecUser.findAll();
+        def detailsOk = true;
+        
+        // update username
+        if(params.username) {
+            for(user in allUsers) {
+                if(user.username == params.username) {
+                    // if it's the same user, ignore; if it's someone else, stop them
+                    if(userInfo.id != SecUser.findById(user.id).id) {
+                        flash.error = "Could not update email: \"" + params.username + "\" is already in use";
+                        detailsOk = false;
+                    }
+                }
+            }
+            if(detailsOk){
+                userInfo.setUsername(params.username);
+            }
+        }
+        
+        // update roles
+        UserRole userInfoRole;
+        if(params.accountTypeSelect == "Student") {
+            // get the role
+            Role studentRole = Role.findByAuthority("ROLE_STUDENT");
+            
+            // remove the current userrole and replace it
+            UserRole.removeAll(userInfo);
+            UserRole.create(userInfo,studentRole);
+            
+            // edit extra data
+            userInfo.faculty = null;
+            userInfo.isFaculty = false;
+            userInfo.isStudent = true;  // if being downgraded they will have to add applicant details on first login
+            // TODO: disassociate from courses
+        }
+        else if(params.accountTypeSelect == "Faculty") {
+            // get the role
+            Role facultyRole = Role.findByAuthority("ROLE_FACULTY");
+            
+            // remove the current userrole and replace it
+            UserRole.removeAll(userInfo);
+            UserRole.create(userInfo,facultyRole);
+            
+            // edit extra data
+            userInfo.student = null;
+            if(!userInfo.faculty) {
+                Faculty newFaculty = new Faculty();
+            
+                newFaculty.setTitle("");
+                newFaculty.setFirstName("");
+                newFaculty.setSurname("");
+                newFaculty.setUniversity("");
+                newFaculty.save(failOnError:true);
+
+                userInfo.faculty = newFaculty;
+            }
+            userInfo.isFaculty = true;
+            userInfo.isStudent = false;
+        }
+        else if(params.accountTypeSelect == "Administrator") {
+            // get the role
+            Role adminRole = Role.findByAuthority("ROLE_ADMIN");
+            
+            // remove the current userrole and replace it
+            UserRole.removeAll(userInfo);
+            UserRole.create(userInfo,adminRole);
+            
+            // edit extra data
+            userInfo.student = null;
+            if(!userInfo.faculty) {
+                Faculty newFaculty = new Faculty();
+            
+                newFaculty.setTitle("");
+                newFaculty.setFirstName("");
+                newFaculty.setSurname("");
+                newFaculty.setUniversity("");
+                newFaculty.save(failOnError:true);
+
+                userInfo.faculty = newManager;
+            }
+            userInfo.isFaculty = true;
+            userInfo.isStudent = false;
+        }
+        
+        // if the user logged in is looking at their own page, they can edit password
+        if(userLoggedIn == userInfo) {
+            if(params.password && params.passwordDuplicate) { // if both fields completed
+                if(params.password == params.passwordDuplicate) { // if they match
+                    // set password
+                    userInfo.setPassword(params.password);
+                    flash.message = "Password changed";
+                }
+                else {
+                    flash.error = "Could not update password: fields did not match";
+                    detailsOk = false;
+                }
+            }
+            else if(params.password || params.passwordDuplicate) {
+                flash.error = "Could not update password: complete both fields to update password";
+                detailsOk = false;
+            }
+        }
+        
+        // update the manager info
+        if(userInfo.isFaculty) {
+            if(params.title) {
+                userInfo.faculty.title = params.title;
+            }
+            if(params.firstName) {
+                userInfo.faculty.firstName = params.firstName;
+            }
+            if(params.surname) {
+                userInfo.faculty.surname = params.surname;
+            }
+            if(params.university) {
+                userInfo.faculty.university = params.university;
+            }
+        }
+        else if(userInfo.isStudent) {
+            // TODO: don't have anything here, right? They can edit it all on userinfo page
+        }
+        
+        if(detailsOk) {
+            userInfo.save(failOnError:true);
+            flash.message = "User Information Updated";
+        }
+        
+        redirect(action:"edit", params:[id:userInfo.id]);
+    }
+    
+    def create() {
+        
+        def accountTypeList = ["Student":"Student","Faculty":"Faculty","Administrator":"Administrator"];
+        
+        def titleList = ["":"None","Prof":"Prof.",
+                        "Dr":"Dr.",
+                        "Mr":"Mr.",
+                        "Mrs":"Mrs.",
+                        "Ms":"Ms.",
+                        "Lord":"Lord"];
+        
+        if(params.courseWorkflow) {
+            def course = Course.findById(params.courseWorkflow);
+            
+            accountTypeList = ["Faculty":"Faculty"];    // default to manager for safety
+            flash.message = "Please create a new manager account for " + course.name;
+        }
+        
+        [accountTypeList:accountTypeList,titleList:titleList]
+    }
+    
+    def processAddUser() {
+        
+        def allUsers = SecUser.findAll();
+        def detailsOk = true;
+        
+        // check username
+        for(user in allUsers) {
+            if(user.username == params.username) {
+                flash.error = "Could not create account: \"" + params.username + "\" is already associated with an account";
+                detailsOk = false;
+            }
+        }
+        
+        if(detailsOk) {
+            // create the user
+            String pw = UUID.randomUUID().toString();
+            SecUser userInfo = new SecUser(username:params.username,password:pw);
+            
+            if(params.accountTypeSelect == "Faculty" || params.accountTypeSelect == "Administrator") {
+                Faculty newFaculty = new Faculty();
+
+                newFaculty.setTitle(params.managerTitle);
+                newFaculty.setFirstName(params.managerFirstName);
+                newFaculty.setSurname(params.managerSurname);
+                newFaculty.setUniversity(params.managerUniversity);
+                newFaculty.save(failOnError:true);
+
+                userInfo.faculty = newFaculty;
+                userInfo.isFaculty = true;
+                userInfo.isStudent = false;
+                userInfo.save(failOnError:true);
+
+                if(params.accountTypeSelect == "Administrator") {
+                    Role adminRole = Role.findByAuthority("ROLE_ADMIN");
+                    UserRole.create(userInfo,adminRole);
+                    
+                    //Email Details
+                    addedFacultyEmail(userInfo);
+                    flash.message = "User Created: " + userInfo.username + ", Administrator";
+                }
+                else if (params.accountTypeSelect == "Faculty") {
+                    Role managerRole = Role.findByAuthority("ROLE_FACULTY");
+                    UserRole.create(userInfo,facultyRole);
+                    
+                    //Email Details
+                    addedFacultyEmail(userInfo);
+                    flash.message = "User Created: " + userInfo.username + ", Manager";
+                }
+                else {
+                    Role studentRole = Role.findByAuthority("ROLE_STUDENT");
+                    UserRole.create(userInfo,studentRole);
+                    flash.message = "User Created: " + userInfo.username + ", Student";
+                }
+            }
+            else if(params.accountTypeSelect == "Student") {
+                Student newStudent = new Student();
+
+                newStudent.setFirstName(params.applicantFirstName);
+                newStudent.setSurname(params.applicantSurname);
+                newStudent.save(failOnError:true);
+
+                userInfo.student = newStudent;
+                userInfo.isFaculty = false;
+                userInfo.isStudent = true;
+                userInfo.save(failOnError:true);
+
+                Role studentRole = Role.findByAuthority("ROLE_STUDENT");
+                UserRole.create(userInfo,studentRole);
+                
+                //Email Details
+                addedStudentEmail(userInfo);
+                flash.message = "User Created: " + userInfo.username + ", Student";
+            }
+            
+            if(params.courseWorkflow) { // if we're making a course go back to that
+                def course = Course.findById(params.courseWorkflow);
+                course.setDirector(userInfo.faculty);
+                
+                redirect(controller:"course",action:"index")
+            }
+            else {
+                redirect(action:"list");
+            }
+        }
+        else {
+            redirect(action:"create", params:[username:params.username,accountTypeSelect:params.accountTypeSelect,
+                managerTitle:params.managerTitle,managerFirstName:params.managerFirstName,
+                managerSurname:params.managerSurname,managerUniversity:params.managerUniversity,
+                applicantFirstName:params.applicantFirstName,applicantSurname:params.applicantSurname]);
+        }
+    }
 }

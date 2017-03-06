@@ -9,12 +9,12 @@
             <h1>All Users</h1>
         </div>
         <ul class="nav nav-tabs">
-            <li class="nav"><a class="ifr-home-tab" href="${createLink(controller:'admin', action:'index')}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
+            <li class="nav"><a class="ll-home-tab" href="${createLink(controller:'admin', action:'index')}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
             
             <li class="nav active"><a href="#content" data-toggle="tab">Users</a></li>
             <li class="nav"><a href="${createLink(action:'create')}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add New User</a></li>
             <li class="nav pull-right">
-                        <a class="ifr-save-tab">
+                        <a class="ll-save-tab">
                             <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span>
                             <button type="button" class="btn-masking-as-tab" data-toggle="modal" data-target="#myModal">Download List</button>
                         </a>
@@ -125,7 +125,7 @@
                                     <td>${user.getFirstName()}</td>
                                     <td>${user.getSurname()}</td>
                                     <td>
-                                        <g:if test="${resultsRoles[i].toString() == "ROLE_STANDARD"}">Student</g:if>
+                                        <g:if test="${resultsRoles[i].toString() == "ROLE_STUDENT"}">Student</g:if>
                                         <g:elseif test="${resultsRoles[i].toString() == "ROLE_FACULTY"}">Faculty</g:elseif>
                                         <g:elseif test="${resultsRoles[i].toString() == "ROLE_ADMIN"}">Administrator</g:elseif>
                                         <g:else>-</g:else>
@@ -136,7 +136,7 @@
                                     </td>
                                     <td class="user-col">
                                         <g:form name="emailUserForm">
-                                             <g:hiddenField name="page" value="faculty" />
+                                            <g:hiddenField name="page" value="faculty" />
                                             <g:hiddenField name="id" value="${user.id}" />
                                             <g:hiddenField name="email" value="${user.username}" />
                                             <g:if test="${user.id != thisUser.id}">
