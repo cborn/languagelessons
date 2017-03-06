@@ -61,9 +61,10 @@ class BootStrap {
           //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
           //Create Test Assignment
           
+          //monty python style
           def assign1 = new Assignment(name:"Quiz 1",
                                        assignmentId: 12,
-                                       introText: "Please take this quiz for monday.",
+                                       introText: "Please take this quiz for MMonday.",
                                        openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), 
                                        dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"),
                                        maxAttempts: 4)
@@ -71,10 +72,25 @@ class BootStrap {
           def q1 = new MultipleChoiceQuestion(pointValue: 4,
                                               question: "What is your name?",
                                               view: "multipleChoice",
+                                              id: 1,
                                               answers: ["Will", "Joe", "Todd"],
                                               correctAnswer: 0)
+          def q2 = new MultipleChoiceQuestion(pointValue: 4,
+                                              question: "What is your favorite color?",
+                                              view: "multipleChoice",
+                                              id: 2,
+                                              answers: ["Red", "Green", "Blue"],
+                                              correctAnswer: 2)
+          def q3 = new MultipleChoiceQuestion(pointValue: 4,
+                                              question: "What is the airspeed of an unladen swallow?",
+                                              view: "multipleChoice",
+                                              id: 3,
+                                              answers: ["What? I don't know that.", "African or European?"],
+                                              correctAnswer: 1)
           assign1
             .addToQuestions(q1)
+            .addToQuestions(q2)
+            .addToQuestions(q3)
 //        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
         // Create Test Courses
