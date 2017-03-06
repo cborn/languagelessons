@@ -12,21 +12,21 @@
             <ul class="nav nav-tabs">
                 <li class="nav">
                     <sec:access expression="hasRole('ROLE_STUDENT')">
-                        <a class="ifr-home-tab" href="${createLink(controller:'student', action:'index')}">
+                        <a class="ll-home-tab" href="${createLink(controller:'student', action:'index')}">
                     </sec:access>
                     <sec:access expression="hasRole('ROLE_FACULTY')">
-                        <a class="ifr-home-tab" href="${createLink(controller:'admin', action:'index')}">
+                        <a class="ll-home-tab" href="${createLink(controller:'admin', action:'index')}">
                     </sec:access>
                     <sec:access expression="hasRole('ROLE_ADMIN')">
-                        <a class="ifr-home-tab" href="${createLink(controller:'admin', action:'index')}">
+                        <a class="ll-home-tab" href="${createLink(controller:'admin', action:'index')}">
                     </sec:access>
                         <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home
                     </a>
                 </li>
                 <li class="nav active"><a href="#content" data-toggle="tab">Edit User</a></li>
-                <li class="nav"><a class="ifr-save-tab"><span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span> <g:actionSubmit class="btn-masking-as-tab" name="updateUser" value="Save Changes" action="processEditUser" onclick="return confirm('Are you sure?')" /></a></li>
+                <li class="nav"><a class="ll-save-tab"><span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span> <g:actionSubmit class="btn-masking-as-tab" name="updateUser" value="Save Changes" action="processEditUser" onclick="return confirm('Are you sure?')" /></a></li>
                 <%-- SPLIT --%>
-                <g:if test="${userInfo.isFaculty}"><li class="nav pull-right"><a class="ifr-save-tab" href="${createLink(controller:"faculty",action:"index")}"><span class="glyphicon glyphicon-education" aria-hidden="true"></span> All Faculty</a></li></g:if>
+                <g:if test="${userInfo.isFaculty}"><li class="nav pull-right"><a class="ll-save-tab" href="${createLink(controller:"faculty",action:"index")}"><span class="glyphicon glyphicon-education" aria-hidden="true"></span> All Faculty</a></li></g:if>
             </ul>
             <div class="tab-content">
                 <g:if test="${flash.message}">

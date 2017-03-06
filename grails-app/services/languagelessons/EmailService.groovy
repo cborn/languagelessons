@@ -1,14 +1,15 @@
 package languagelessons
 
-//TODO: Email Class needs finishing
+import grails.transaction.Transactional
 
-class EmailController {
-    
+@Transactional
+class EmailService {
+
     transient mailService
 
-    def sendEmail(String ) { 
+    def sendEmail(String emailTo, String emailSubject, String emailTemp) { 
         
-    asyncMailService.sendMail {
+    mailService.sendMail {
     // Mail parameters
         try {
             // Email Applicant needs seting up

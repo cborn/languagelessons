@@ -3,12 +3,17 @@
   To change this template file, choose Tools | Templates
   and open the template in the editor.
 -->
+<!--
+  To change this license header, choose License Headers in Project Properties.
+  To change this template file, choose Tools | Templates
+  and open the template in the editor.
+-->
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <html>
     <head>
-        <title>My Courses</title>
+        <title>${course.name}</title>
         <meta name="layout" content="main"/>
         <style type="text/css" media="screen">
             #status {
@@ -82,7 +87,6 @@
                 }
             }
         </style>
-        <g:javascript src="vis-script.js" />
     </head>
     <body>
         <g:if test="${flash.message}">
@@ -105,11 +109,7 @@
         </g:if>
         <div class="col-xs-12">
             <div class="jumbotron">
-                <img src="" class="img-responsive"/>
-                <p>My Courses<p>
-                <g:each in="${courses}" var="course">
-                    <h3><a href="${createLink(controller: "course", action: "viewCourse", params: [syllabusId: course.syllabusId])}">${course.name}</a></h3>
-                </g:each>
+                <canvas class="visualizer" width="400" height="150"></canvas>
             </div>
         </div>
     </body>

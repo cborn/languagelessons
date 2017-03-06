@@ -15,6 +15,7 @@ class SecUser implements Serializable {
     String k;
     String username
     String password
+    Date lastLoginTime
     boolean enabled = false   // Change this before going to production
     boolean accountExpired
     boolean accountLocked
@@ -124,6 +125,7 @@ class SecUser implements Serializable {
         student nullable:true, unique: true
         k nullable: true
         resetKey nullable: true
+        lastLoginTime nullable: true
    }
 
    static mapping = {

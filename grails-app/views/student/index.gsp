@@ -81,7 +81,7 @@
             <ul>
                 <g:each var="c" in="${courses}">
                         <li>
-                            <g:link controller="student" action="enroll" params="[courseName: c.name]">${c.name}</g:link>
+                            <g:link controller="student" action="enroll" params="[id: c.syllabusId]">${c.name}</g:link>
                         </li>
                 </g:each>
             </ul>

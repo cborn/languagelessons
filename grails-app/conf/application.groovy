@@ -25,6 +25,20 @@ grails.resources.adhoc.patterns = ['/images/*', '/css/*', '/js/*', '/plugins/*',
 grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.rejectIfNoRule = true
 
+grails.plugin.springsecurity.useSecurityEventListener = true // enable events
+grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appCtx -> 
+
+// TODO: This would record last login time but can't get withTransaction working
+//        SecUser.withTransaction {
+//        def user = getAuthenticatedUser()
+//        if(!user.isAttached())
+//            user.attach()
+//        user.lastLoginTime = new Date() // update login time
+//        user.save(failOnError: true)
+//    }
+    
+}
+
 
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'languagelessons.SecUser'

@@ -22,8 +22,20 @@ class StudentController {
     }
     
 @Secured(["ROLE_STUDENT"])
-    def enroll(String courseName) {
-        def result = studentService.addToCourse(courseName);
+    def enroll() {
+        def result = studentService.addToCourse(params.int("id"));
+        
+        if(!result.error) {
+            redirect(controller:"course", action:"listCourses")
+            return;
+        }
+
+        flash.message = g.message(code: result.error.code, args: result.error.args)
+        redirect(controller:"course", action:"listCourses")
+    }
+    
+    def withdraw() {
+        def result = studentService.removeFromCourse(params.int("id"));
         
         if(!result.error) {
             redirect(controller:"course", action:"listCourses")

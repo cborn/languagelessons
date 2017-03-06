@@ -8,7 +8,10 @@ import java.text.SimpleDateFormat
 // Do all of these pages belong in the course controller? 
 
 class CourseController {
-    def index() { }
+    
+    def courseService
+    
+    static scaffold = Course
     
     @Secured(["ROLE_STUDENT"])
     def studentCourseView() {
@@ -23,11 +26,7 @@ class CourseController {
     @Secured(["ROLE_FACULTY", "ROLE_ADMIN", "ROLE_STUDENT"])
     def listCourses() {
         SecUser userInfo = getAuthenticatedUser()
-        Faculty faculty = userInfo.faculty
-        Student student = userInfo.student
-        def courses = Course.list()
-        
-        [courses:courses, userInfo:userInfo, faculty:faculty, student:student]
+        [courses:Course.list(), userInfo:userInfo, faculty:userInfo.faculty, student:userInfo.student]
     }
     
     @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
@@ -37,23 +36,10 @@ class CourseController {
     
     @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
     def create() {
-        SecUser userInfo = getAuthenticatedUser()
-        Faculty faculty = userInfo.faculty
-        if (faculty){
-            //User is a member of faculty and thus will be automatically added to the course
-            String courseName = params.courseName
-            String syllabusId = params.syllabusId
-            int applicantCap = Integer.parseInt(params.applicantCap)
-            Date start = Date.parse("yyyy-MM-dd", params.startDate)
-            Date end = Date.parse("yyyy-MM-dd", params.endDate)
-            Course course = new Course(name: courseName, syllabusId: syllabusId, applicantCap: applicantCap, startDate: start, endDate: end)
-            course.addToFaculty(faculty)
-            course.save(failOnError: true, flush: true)
-            redirect(action:"facultyCourseView")
-        } else {
-            //user is admin, tbd
-        }
+        courseService.createCourse(params)
+        redirect(action:"facultyCourseView")
     }
+    
     def viewCourse() {
         SecUser userInfo = getAuthenticatedUser()
         String access

@@ -2,83 +2,78 @@
 <html lang="en" class="no-js">
     <head>
         <meta name="layout" content="main"/>
-        <title>Language Lessons - Users</title>
+        <title>LL - Faculty</title>
     </head>
     <body>
-        <div class="col-md-12 text-center">
-            <h1>Search</h1>
+        <div class="col-xs-12 text-center">
+            <h1>Faculty</h1>
         </div>
         <ul class="nav nav-tabs">
             <li class="nav"><a class="ll-home-tab" href="${createLink(controller:'admin', action:'index')}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
-            
-            <li class="nav active"><a href="#content" data-toggle="tab">Users</a></li>
-       
+            <li class="nav active"><a href="#content" data-toggle="tab">Manager</a></li>
+            <li class="nav"><a href="${createLink(controller:"user",action:"create")}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add New Faculty User</a></li>
         </ul>
         <div class="tab-content">
-            <g:if test="${flash.message}">
-                <%-- display an info message to confirm --%>
-                <div class="col-xs-12 text-center">
-                    <div class="alert alert-info alert-dismissible" role="alert" style="display: block; margin-top: 5px;">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        ${flash.message}
-                    </div>
-                </div>
-            </g:if>
-            <g:if test="${flash.error}">
-                <%-- display an info message to confirm --%>
-                <div class="col-xs-12 text-center">
-                    <div class="alert alert-danger alert-dismissible" role="alert" style="display: block; margin-top: 5px;">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        ${flash.error}
-                    </div>
-                </div>
-            </g:if>
 <%-- HOME --%>
 <%-- CONTENT --%>
             <div class="tab-pane fade in active" id="content">
                 <br />
                 <div class="col-md-12">
-                    
                     <table id="sortableTable">
                         <thead class="th-green">
                             <tr>
-                                <%--<g:sortableColumn params="${params}" class="text-center" property="username" defaultOrder="desc" title="Email &#9650;&#9660;" />--%>
-                                <th class="text-center">Name</th>
-                                <th class="text-center">Type</th>
-                                <th class="text-center">Go</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Affiliation</th>
+                                <th>Courses</th>
+                                <th>Impersonate</th>
+                                <th class="{sorter: false}"></th>
+                                <th class="{sorter: false}">Reset Password</th>
                                 
                             </tr>
                         </thead>
-                        <tbody class="text-center">
-                            <g:each var="res" in="${results}" status="i">
-                             
-                                <tr onclick="window.location.href='${res.url}'">
-                                    
-                                    <td class="user-col">
-                                     <a href="${res.url}">  ${res.title}   
-                                    </td>
-                                    <td class="user-col">
-                                          <a href="${res.url}">  ${res.subtitle}  </a>  
-                                    </td>
-                                    <td class="user-col">
-                                   
-                                        <input type="button" class="btn btn-success" value="Go" onclick="window.location.href='${res.url}'"/>
-                                    
-                                    </td> 
-                                 
-                                </tr>
-                              
-                            </g:each>
-                            <g:unless test="${results}">
+                        <tbody>
+                            <g:each var="user" in="${allFaculty}" status="i">
                                 <tr>
-                                    <td colspan="9">No Results found</td>
+                                    <td><g:link action="show" id="${user.faculty.id}">${user.faculty.title + " " + user.faculty.firstName + " " + user.faculty.surname}</g:link></td>
+                                    <td>${user.username}</td>
+                                    <td>${user.faculty.university}</td>
+                                    <td>
+                                        <ul><%-- TODO SHOW ONLY ACTIVE COURSES?  --%>
+                                            <g:each var="course" in="${user.faculty.courses}">
+                                                <li><g:link controller="course" action="show" id="${course.id}">${course.getCourseName()}</g:link></li>
+                                            </g:each>
+                                        </ul>
+                                        <g:unless test="${user.faculty.courses}">
+                                            <p>No courses assigned</p>
+                                        </g:unless>
+                                    </td>
+                                    <td>
+                                    <form action='${request.contextPath}/login/impersonate' method='POST'> 
+            							<input type='hidden' value="${user.username}"  name='username'/> 
+            							<input type='submit' class="btn btn-success btn-block" value='Impersonate'/> 
+        							</form>
+                                    
+                                    </td>
+                                    <td><a class="btn btn-default btn-block" href="${createLink(controller:"user",action:"edit", id:user.id)}">Edit</a></td>
+                                    <td>
+                                    <g:form name="emailUserForm" controller="user">
+                                         <g:hiddenField name="page" value="faculty" />
+                                             
+                                        <g:hiddenField name="id" value="${user.id}" />
+                                            <g:hiddenField name="email" value="${user.username}" />
+                                               <g:actionSubmit class="btn btn-primary btn-block" name="emailUser"  value="Email" action="sendEmailReset" />
+                                          
+                                        </g:form>
+                                    
+                                    </td>
                                 </tr>
-                            </g:unless>
+                            </g:each>
                         </tbody>
                         <!-- pager --> 
                         <tfoot>
                             <tr>
-                                <th colspan="9" class="ts-pager form-horizontal">
+                                <th colspan="5" class="ts-pager form-horizontal">
                                     <div class="col-md-4">
                                         <button type="button" class="btn first"><i class="icon-step-backward glyphicon glyphicon-step-backward"></i></button>
                                         <button type="button" class="btn prev"><i class="icon-arrow-left glyphicon glyphicon-backward"></i></button>

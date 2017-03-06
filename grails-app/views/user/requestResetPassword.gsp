@@ -9,7 +9,7 @@
             <h1>Request Password Reset</h1>
         </div>
         <ul class="nav nav-tabs">
-            <li class="nav"><a class="ifr-home-tab" href="${createLink(uri:'/')}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
+            <li class="nav"><a class="ll-home-tab" href="${createLink(uri:'/')}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
             <li class="nav active"><a href="#content" data-toggle="tab">Request Password Reset</a></li>
         </ul>
         <div class="tab-content">
