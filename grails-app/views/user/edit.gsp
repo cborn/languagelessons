@@ -123,131 +123,13 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="col-md-12">
-                                                    <label for="facultyUniversity">Institute</label>
+                                                    <label for="facultyInstitution">Institute</label>
                                                 </div>
-                                                <div id="facultyUniversity">
+                                                <div id="facultyInstitution">
                                                     <div class="col-md-12 form-group">
-                                                        <g:textField class="form-control required" name="university" placeholder="University or College" value="${userInfo.faculty.university}" />
+                                                        <g:textField class="form-control required" name="university" placeholder="University or College" value="${userInfo.faculty.institution}" />
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="col-md-12">
-                                                    <label>Personal Phone Number</label>
-                                                </div>
-                                                <div>
-                                                    <div class="form-group col-md-6">
-                                                        <g:select class="form-control" name="personalPhoneCode" from="${countryList}" optionKey="name" optionValue="${{it.name + " +" + it.phoneCode}}" value="${userInfo.faculty.personalTelNumberCountry?.name}" noSelection="['': 'Select Country']" />
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <g:textField class="form-control" name="personalPhone" placeholder="Phone" value="${userInfo.faculty.personalTelNumber}" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="col-md-12">
-                                                    <label>Work Phone Number</label>
-                                                </div>
-                                                <div>
-                                                    <div class="form-group col-md-6">
-                                                        <g:select class="form-control" name="workPhoneCode" from="${countryList}" optionKey="name" optionValue="${{it.name + " +" + it.phoneCode}}" value="${userInfo.faculty.workTelNumberCountry?.name}" noSelection="['': 'Select Country']" />
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <g:textField class="form-control" name="workPhone" placeholder="Phone" value="${userInfo.faculty.workTelNumber}" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="col-md-12">
-                                                    <label>Phone Number in the Field</label>
-                                                </div>
-                                                <div>
-                                                    <div class="form-group col-md-6">
-                                                        <g:select class="form-control" name="fieldPhoneCode" from="${countryList}" optionKey="name" optionValue="${{it.name + " +" + it.phoneCode}}" value="${userInfo.faculty.fieldTelNumberCountry?.name}" noSelection="['': 'Select Country']" />
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <g:textField class="form-control" name="fieldPhone" placeholder="Phone" value="${userInfo.faculty.fieldTelNumber}" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="col-md-12">
-                                                <label>Address</label>
-                                            </div>
-                                            <div>
-                                                <div class="row">
-                                                    <div class="form-group col-md-4">
-                                                        <g:textField class="form-control" name="address1" placeholder="Address 1" value="${userInfo.faculty.address?.address1}" />
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <g:textField class="form-control" name="address2" placeholder="Address 2" value="${userInfo.faculty.address?.address2}" />
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <g:textField class="form-control" name="city" placeholder="City" value="${userInfo.faculty.address?.city}" />
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="form-group col-md-4">
-                                                        <g:textField class="form-control" name="state" placeholder="State" value="${userInfo.faculty.address?.state}" />
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <g:textField class="form-control" name="zip" placeholder="Zip or Pin Code" value="${userInfo.faculty.address?.zip}" />
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <g:select class="form-control" name="countrySelect" from="${countryList}" optionKey="id" optionValue="name" value="${userInfo.faculty.address?.country?.id}" noSelection="['': 'Select Country']" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <h3>Emergency Contact</h3>
-                                <div class="panel panel-green-border">
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="form-group col-md-2">
-                                                <g:textField class="form-control" name="primaryContactName" placeholder="Name" value="${userInfo.faculty.primaryContact?.name}" />
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                                <g:textField class="form-control" name="primaryContactRelationship" placeholder="Relationship" value="${userInfo.faculty.primaryContact?.relationship}" />
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                                <g:textField class="form-control email" name="primaryContactEmail" placeholder="Email" value="${userInfo.faculty.primaryContact?.email}" />
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <div class="form-group col-md-6">
-                                                    <g:select class="form-control" name="primaryContactPhoneCode" from="${countryList}" optionKey="name" optionValue="${{it.name + " +" + it.phoneCode}}" value="${userInfo.faculty.primaryContact?.telNumberCountry?.name}" noSelection="['': 'Select Country']" />
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <g:textField class="form-control" name="primaryContactPhone" placeholder="Phone" value="${userInfo.faculty.primaryContact?.telNumber}" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-md-4">
-                                                <g:textField class="form-control" name="primaryContactAddress1" placeholder="Address 1" value="${userInfo.faculty.primaryContact?.address?.address1}" />
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <g:textField class="form-control" name="primaryContactAddress2" placeholder="Address 2" value="${userInfo.faculty.primaryContact?.address?.address2}" />
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <g:textField class="form-control" name="primaryContactCity" placeholder="City" value="${userInfo.faculty.primaryContact?.address?.city}" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-md-4">
-                                                <g:textField class="form-control" name="primaryContactState" placeholder="State" value="${userInfo.faculty.primaryContact?.address?.state}" />
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <g:textField class="form-control" name="primaryContactZip" placeholder="Zip or Pin Code" value="${userInfo.faculty.primaryContact?.address?.zip}" />
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <g:select class="form-control" name="primaryContactCountry" from="${countryList}" optionKey="id" optionValue="name" value="${userInfo.faculty.primaryContact?.address?.country?.id}" noSelection="['': 'Select Country']" />
                                             </div>
                                         </div>
                                     </div>

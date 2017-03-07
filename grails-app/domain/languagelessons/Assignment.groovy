@@ -12,9 +12,12 @@ class Assignment {
     Boolean orderedQuestions = false;
     int maxAttempts;
     String gradeType = "points";
-    static hasMany = [questions:Question];
+    
+    static hasMany = [questions:Question]; 
     static belongsTo = [Course];
+    
     def results = []
+    
     static constraints = {
         isArchived nullable: true
         orderedQuestions nullable: true
@@ -22,6 +25,7 @@ class Assignment {
         gradeType nullable: true
         results nullable: true
     }
+    
     boolean isOpen(){
         Date now = new Date()
         return now.after(openDate)

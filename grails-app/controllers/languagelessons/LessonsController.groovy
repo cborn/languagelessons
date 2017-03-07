@@ -3,11 +3,15 @@ import static java.util.Calendar.*
 
 class LessonsController {
 
-    def index() { }
+    def index() { 
+    
+    }
+    
     def newLesson() {
         Course course = Course.findBySyllabusId(params.syllabusId)
         [course: course]
     }
+    
     def create() {
         String lessonName = params.lessonName
         String lessonText = params.lessonText
@@ -25,6 +29,7 @@ class LessonsController {
             .save(flush: true)
         redirect(controller: "course", action:"viewCourse", params: [syllabusId: params.syllabusId])
     }
+    
     def viewLesson(){
         Course course = Course.findBySyllabusId(params.syllabusId)
         Lesson lesson;

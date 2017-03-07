@@ -23,6 +23,7 @@ apply plugin:"asset-pipeline"
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
+    maven { url "http://dl.bintray.com/stefanogualdi/plugins" }
 }
 
 dependencyManagement {
@@ -38,8 +39,11 @@ dependencies {
 
     compile "org.grails.plugins:spring-security-core:3.1.1"
 
-// I have decided to removed the UI and build by hand    
-// compile "org.grails.plugins:spring-security-ui:3.0.0.M2"
+    // Ckeditor https://stefanogualdi.github.io/grails-ckeditor/docs/index.html
+    compile "org.grails.plugins:ckeditor:4.5.9.0"
+
+    // Search
+    compile 'org.grails.plugins:grails-quick-search:0.7.2'
 
     compile "org.grails:grails-core"
     compile "org.springframework.boot:spring-boot-starter-actuator"

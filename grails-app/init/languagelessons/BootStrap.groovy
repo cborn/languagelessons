@@ -30,7 +30,7 @@ class BootStrap {
         
         // Test Admin User  %%%%%%%%%%%%%%%%%//
            def adminUser = new SecUser(username:"andrew@test.com", password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true').save(failOnError:true);
-           Faculty a1 = new Faculty(title: 'Dr', firstName: 'Andrew', surname: 'Smith',email:"andrew@test.com",university:"University of Liverpool").save()
+           Faculty a1 = new Faculty(title: 'Dr', firstName: 'Andrew', surname: 'Smith',email:"andrew@test.com",institution:"University of Liverpool").save()
            UserRole.create adminUser, adminRole
            adminUser.faculty = a1;
            adminUser.save()
@@ -38,7 +38,7 @@ class BootStrap {
         
 //        // Test Faculty User  %%%%%%%%%%%%%%%%%//
            def facultyUser1 = new SecUser(username: 'lee@test.com', password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true').save()
-           Faculty f1 = new Faculty(title:"Dr",firstName:"Lee",surname:"Willams",email:"lee@test.com",university:"Some University").save(failOnError:true);
+           Faculty f1 = new Faculty(title:"Dr",firstName:"Lee",surname:"Willams",email:"lee@test.com",institution:"Some University").save(failOnError:true);
            UserRole.create facultyUser1, facultyRole
            facultyUser1.faculty = f1
            facultyUser1.save()
@@ -46,7 +46,7 @@ class BootStrap {
 
 //        // Test Faculty User  %%%%%%%%%%%%%%%%%//
            def facultyUser2 = new SecUser(username: 'jane@test.com', password: 'password', isFaculty: 'true', isStudent: 'false', enabled: 'true').save()
-           Faculty f2 = new Faculty(title:"Prof",firstName:"Jane",surname:"Smith",email:"jane@test.com",university:"Second University").save(failOnError:true);
+           Faculty f2 = new Faculty(title:"Prof",firstName:"Jane",surname:"Smith",email:"jane@test.com",institution:"Second University").save(failOnError:true);
            UserRole.create facultyUser2, facultyRole
            facultyUser2.faculty = f2
            facultyUser2.save()
@@ -54,7 +54,7 @@ class BootStrap {
         
 //        // Test Student User  %%%%%%%%%%%%%%%%%//
            def studentUser = new SecUser(username: 'joe@test.com', password: 'password', enabled: 'true').save()
-           Student s1 = new Student(firstName:"Joe",surname:"Mearman",studentId: 1111, email:"joe@test.com",university:"Second Rate University").save(failOnError:true);
+           Student s1 = new Student(firstName:"Joe",surname:"Mearman",studentId: 1111, email:"joe@test.com",institution:"Second Rate University").save(failOnError:true);
            UserRole.create studentUser, studentRole
            studentUser.student = s1
            studentUser.save()

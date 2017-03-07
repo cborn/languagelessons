@@ -64,10 +64,10 @@ class UserController {
             // create a new user here
             SecUser userInfo = new SecUser(k: key, username: params.email, password: params.password).save(flush: true, failOnError:true);
             
-            Role applicantRole = Role.findByAuthority('ROLE_STUDENT');
-            applicantRole.save(flush: true, failOnError:true);
+            Role studentRole = Role.findByAuthority('ROLE_STUDENT');
+            studenttRole.save(flush: true, failOnError:true);
             
-            UserRole.create userInfo, applicantRole;
+            UserRole.create userInfo, studentRole;
             
             try {
             // Email Applicant needs seting up
@@ -441,7 +441,7 @@ class UserController {
                 newFaculty.setTitle("");
                 newFaculty.setFirstName("");
                 newFaculty.setSurname("");
-                newFaculty.setUniversity("");
+                newFaculty.setInstitution("");
                 newFaculty.save(failOnError:true);
 
                 userInfo.faculty = newFaculty;
@@ -465,7 +465,7 @@ class UserController {
                 newFaculty.setTitle("");
                 newFaculty.setFirstName("");
                 newFaculty.setSurname("");
-                newFaculty.setUniversity("");
+                newFaculty.setInstitution("");
                 newFaculty.save(failOnError:true);
 
                 userInfo.faculty = newManager;
@@ -504,8 +504,8 @@ class UserController {
             if(params.surname) {
                 userInfo.faculty.surname = params.surname;
             }
-            if(params.university) {
-                userInfo.faculty.university = params.university;
+            if(params.institution) {
+                userInfo.faculty.institution = params.institution;
             }
         }
         else if(userInfo.isStudent) {
@@ -562,10 +562,10 @@ class UserController {
             if(params.accountTypeSelect == "Faculty" || params.accountTypeSelect == "Administrator") {
                 Faculty newFaculty = new Faculty();
 
-                newFaculty.setTitle(params.managerTitle);
-                newFaculty.setFirstName(params.managerFirstName);
-                newFaculty.setSurname(params.managerSurname);
-                newFaculty.setUniversity(params.managerUniversity);
+                newFaculty.setTitle(params.facultyTitle);
+                newFaculty.setFirstName(params.facultyFirstName);
+                newFaculty.setSurname(params.facultySurname);
+                newFaculty.setInstitution(params.facultyInstitution);
                 newFaculty.save(failOnError:true);
 
                 userInfo.faculty = newFaculty;
@@ -598,8 +598,8 @@ class UserController {
             else if(params.accountTypeSelect == "Student") {
                 Student newStudent = new Student();
 
-                newStudent.setFirstName(params.applicantFirstName);
-                newStudent.setSurname(params.applicantSurname);
+                newStudent.setFirstName(params.studentFirstName);
+                newStudent.setSurname(params.studentSurname);
                 newStudent.save(failOnError:true);
 
                 userInfo.student = newStudent;
@@ -627,9 +627,9 @@ class UserController {
         }
         else {
             redirect(action:"create", params:[username:params.username,accountTypeSelect:params.accountTypeSelect,
-                managerTitle:params.managerTitle,managerFirstName:params.managerFirstName,
-                managerSurname:params.managerSurname,managerUniversity:params.managerUniversity,
-                applicantFirstName:params.applicantFirstName,applicantSurname:params.applicantSurname]);
+                facultyTitle:params.facultyTitle,facultyFirstName:params.facultyFirstName,
+                facultySurname:params.facultySurname,facultyInstitution:params.facultyInstitution,
+                studentFirstName:params.studentFirstName,studentSurname:params.studentSurname]);
         }
     }
 }

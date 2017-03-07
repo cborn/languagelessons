@@ -133,11 +133,11 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="col-md-12">
-                                                <label for="facultyUniversity">Institute</label>
+                                                <label for="facultyInstitution">Institute</label>
                                             </div>
-                                            <div id="facultyUniversity">
+                                            <div id="facultyInstitution">
                                                 <div class="col-md-12 form-group">
-                                                    <g:textField class="form-control " name="facultyUniversity" placeholder="University or College"value="${params.facultyUniversity}" />
+                                                    <g:textField class="form-control " name="facultyInstitution" placeholder="University or College"value="${params.facultyInstitution}" />
                                                 </div>
                                             </div>
                                         </div>       
