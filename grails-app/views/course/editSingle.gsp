@@ -18,7 +18,7 @@
             <g:hiddenField name="id" value="${course.id}" />
             <ul class="nav nav-tabs">
                 <li class="nav"><a class="ll-home-tab" href="${createLink(controller:'admin', action:'index')}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
-                <li class="nav active"><a href="#content" data-toggle="tab">${config.getInstance().courseName}</a></li>
+                <li class="nav active"><a href="#content" data-toggle="tab">Course</a></li>
                 <li class="nav"><a href="#content2" data-toggle="tab">Faculty</a></li>
                 <li class="nav"><a href="#content3" data-toggle="tab">Lessons</a></li>
                 <li class="nav"><a class="ll-save-tab"><span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span> <g:actionSubmit class="btn-masking-as-tab" name="editCourse" value="Save Changes" action="processEditCourse" onclick="return confirm('Are you sure?')" /></a></li>
@@ -218,10 +218,10 @@
                                     <label for="q">Which Lesson would you like to add to this course? (Scroll down for more)</label>
                                     <div id="q">
                                         <div class="form-group">
-                                            <g:select id="question" name="questionSelect" from="${questionList}"  value="${course.questions}" multiple="true" optionKey="id" optionValue="question" aria-describedby="helpBlock" />
+                                            <g:select id="lessons" name="lessonSelect" from="${lessonList}"  value="${course.lessons}" multiple="true" optionKey="id" optionValue="lesson" aria-describedby="helpBlock" />
                                            <script>
                                            
-                                               $("#question").multiSelect();
+                                               $("#lesson").multiSelect();
                                            
                                            
                                            </script>
