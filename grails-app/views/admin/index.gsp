@@ -190,7 +190,10 @@
                                     <div class="panel panel-green-border admin-panel">
                                         <div class="panel-body text-center">
                                             <h4>All Users:</h4>
+                                             <h3>${allUsers.totalCount}</h3>
+                                            <g:link controller="user" action="list">
                                                 Show all &raquo;
+                                            </g:link>
                                         </div>
                                     </div>
                                 </div>
@@ -200,7 +203,10 @@
                                     <div class="panel panel-green-border admin-panel">
                                         <div class="panel-body text-center">
                                             <h4>All Courses:</h4>
+                                            <h3>${allCourses.totalCount}</h3>
+                                            <g:link controller="course" action="index" params="[status:"all"]">
                                                 Show all &raquo;
+                                            </g:link>
                                         </div>
                                     </div>
                                 </div>
@@ -216,7 +222,10 @@
                                     <div class="panel panel-green-border admin-panel">
                                         <div class="panel-body text-center">
                                             <h4>All Faculty:</h4>
+                                            <h3>${allFaculty.size()}</h3>
+                                            <g:link controller="faculty" action="index">
                                                 Show all &raquo;
+                                            </g:link>
                                         </div>
                                     </div>
                                 </div>

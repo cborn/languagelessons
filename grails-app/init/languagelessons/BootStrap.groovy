@@ -87,7 +87,8 @@ class BootStrap {
                 .addToFaculty(f1)
                 .addToStudents(s1) //addTo___ also supports creating the object inline
                 .addToLessons(name: "Read Chapter 5",openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
-                .addToAssignments(assign1)
+//              I have moved assignemnts to lessons need to fix this:
+//              .addToAssignments(assign1)
                 .save(failOnError: true)
 
             new Course(name: 'Chinese', syllabusId: '2222', applicantCap: 20, startDate: start, endDate: end)

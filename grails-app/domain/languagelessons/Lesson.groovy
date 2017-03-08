@@ -7,6 +7,11 @@ class Lesson {
     Date openDate;
     Date dueDate;
     Course course;
+    
+    
+    
+    static hasMany = [assignments:Assignment]
+    
     static constraints = {
         text nullable: true
     }
