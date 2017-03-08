@@ -5,4 +5,7 @@ class MultipleChoiceQuestion extends Question{
     int correctAnswer;
     static constraints = {
     }
+    boolean grade(String answer) {
+        return Integer.parseInt(answer) == correctAnswer;
+    }
 }

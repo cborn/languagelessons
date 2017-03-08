@@ -4,6 +4,6 @@ abstract class Question {
     int pointValue;
     String question;
     String view;
-    int id;
+    int questionNum;
     static belongsTo = Assignment;
 }

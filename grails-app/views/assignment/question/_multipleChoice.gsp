@@ -1,4 +1,4 @@
-<br>${question.question}<br>
-<g:each status="i" in="${question.answers}" var="answer">
-    ${i + 1}: <g:radio name="${question.id}" value="${i}"/>&nbsp ${answer}<br>
-</g:each>
+<br>${(question.questionNum)}: ${question.question} (${question.pointValue} point<g:if test="${question.pointValue > 1}">s</g:if>)<br>
+<g:radioGroup name="${question.questionNum}" labels="${question.answers}" values="${0..(question.answers.size()-1)}">
+    ${it.radio} ${it.label} <br>
+</g:radioGroup>
