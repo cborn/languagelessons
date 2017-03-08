@@ -37,18 +37,18 @@
                                 <div class="col-md-5">
                                     <div class="col-md-6">
                                         <div class="col-md-12">
-                                            <label for="facultyUniversity">Email</label>
+                                            <label for="facultyInstitution">Email</label>
                                         </div>
-                                        <div id="facultyUniversity">
+                                        <div id="facultyInstitution">
                                              <p class="form-control-static">${thisFaculty.username}</p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="col-md-12">
-                                            <label for="facultyUniversity">Affiliation</label>
+                                            <label for="facultyInstitution">Affiliation</label>
                                         </div>
-                                        <div id="facultyUniversity" class="col-md-12">
-                                             <p class="form-control-static">${thisFaculty.faculty.university}</p>
+                                        <div id="facultyInstitution" class="col-md-12">
+                                             <p class="form-control-static">${thisFaculty.faculty.institution}</p>
                                         </div>
                                     </div>
                                 </div>

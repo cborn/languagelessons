@@ -7,13 +7,20 @@ class Lesson {
     Date openDate;
     Date dueDate;
     Course course;
+    
+    
+    
+    static hasMany = [assignments:Assignment]
+    
     static constraints = {
         text nullable: true
     }
+    
     boolean isOpen() {
         Date now = new Date()
         return now.after(openDate)
     }
+    
     boolean isDue() {
         Date now = new Date()
         return now.after(dueDate)

@@ -5,7 +5,7 @@ class Student {
         String firstName;
         String middleName;
         String surname;
-        String university;
+        String institution;
         int studentId;
         static hasMany = [courses: Course]
 	static belongsTo = SecUser;
@@ -14,7 +14,7 @@ class Student {
             studentId unique:true
             middleName nullable: true
             courses nullable: true
-            university nullable: true
+            institution nullable: true
         }
         
     String getName() {

@@ -1,92 +1,271 @@
 <!doctype html>
-<html>
-<head>
-    <meta name="layout" content="main"/>
-    <title>Welcome to Grails</title>
+<html lang="en" class="no-js">
+    <head>
+        <g:set var="config" bean="configurationService"/>
+        <meta name="layout" content="main" />
+        <title>LL - Student Homepage</title>
+        <script><g:tabSave /></script>
+        <style>
+        
+        .new a { 
 
-    <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
-</head>
-<body>
-    <sec:access expression="hasAnyRole('ROLE_ADMIN', 'ROLE_FACULTY', 'ROLE_STUDENT')">
-    <content tag="nav">
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Application Status <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#">Environment: ${grails.util.Environment.current.name}</a></li>
-                <li><a href="#">App profile: ${grailsApplication.config.grails?.profile}</a></li>
-                <li><a href="#">App version:
-                    <g:meta name="info.app.version"/></a>
-                </li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Grails version:
-                    <g:meta name="info.app.grailsVersion"/></a>
-                </li>
-                <li><a href="#">Groovy version: ${GroovySystem.getVersion()}</a></li>
-                <li><a href="#">JVM version: ${System.getProperty('java.version')}</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Reloading active: ${grails.util.Environment.reloadingAgentEnabled}</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Artefacts <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#">Controllers: ${grailsApplication.controllerClasses.size()}</a></li>
-                <li><a href="#">Domains: ${grailsApplication.domainClasses.size()}</a></li>
-                <li><a href="#">Services: ${grailsApplication.serviceClasses.size()}</a></li>
-                <li><a href="#">Tag Libraries: ${grailsApplication.tagLibClasses.size()}</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Installed Plugins <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <g:each var="plugin" in="${applicationContext.getBean('pluginManager').allPlugins}">
-                    <li><a href="#">${plugin.name} - ${plugin.version}</a></li>
-                </g:each>
-            </ul>
-        </li>
-    </content>
+            color: green !important;
+        }
 
-    <div class="svg" role="presentation">
-        <div class="grails-logo-container">
-            <asset:image src="grails-cupsonly-logo-white.svg" class="grails-logo"/>
+        .new.active a{
+
+
+            border-color: green !important;
+            border-bottom-color: transparent !important;
+        }
+
+        .new a:before {
+               font-size: 9px;
+    content: "NEW";
+    position: absolute;
+    top: 4px;
+    right: 2px;
+    color: #921F1F;
+        }
+        
+        
+        
+        </style>
+    </head>
+    <body>
+        <div class="col-xs-12 text-center">
+            <h1>Applicant: ${studentInfo.firstName} ${studentInfo.surname}  -<br/> LL ID: (${userInfo.id})</h1>
         </div>
-    </div>
-
-    <div id="content" role="main">
-        <section class="row colset-2-its">
-            <h1>Welcome to Grails</h1>
-
-            <p>
-                Congratulations, you have successfully started your first Grails application! At the moment
-                this is the default page, feel free to modify it to either redirect to a controller or display
-                whatever content you may choose. Below is a list of controllers that are currently deployed in
-                this application, click on each to execute its default action:
-            </p>
+        <ul id="myTabs" class="nav nav-tabs">
+            <li class="nav active"><a class="ll-home-tab" href="#overview"
+                data-toggle="tab"><span class="glyphicon glyphicon-home"
+                aria-hidden="true"></span> Home</a></li>
+            <li class="nav"><a href="#information" data-toggle="tab">Your
+                    Information</a></li>
+            <li class="nav"><a id="applicationsTab" href="#applications"
+                data-toggle="tab">Applications</a></li>
+                <g:if test="${hasAcceptedApplications}">
+                <li class="nav"><a id="paymentsTab" href="#payments"
+                    data-toggle="tab">Payments</a></li>
+                <li class="nav"><a href="#forms" data-toggle="tab">Forms</a></li>
+                </g:if>
+                    
+                    
+               
+        </ul>
+        <div class="tab-content">
             
-            <div id="controllers" role="navigation">
-                <h2>Available Controllers:</h2>
-                <ul>
-                    <g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-                        <li class="controller">
-                            <g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link>
-                        </li>
-                    </g:each>
-                </ul>
+            
+            
+                <%-- OVERVIEW --%>
+            <div class="tab-pane fade in active" id="overview">
+                
+                <g:if test="${flash.message}">
+            <%-- display an info message to confirm --%>
+            <div class="col-xs-12 text-center">
+                <div class="alert alert-info alert-dismissible" role="alert" style="display: block; margin-top: 5px;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    ${raw(flash.message)}
+                </div>
             </div>
-            
-            <p>
-                Below is a list of all available courses. Click on one to sign up for it.
-            </p>
-            
-            <ul>
-                <g:each var="c" in="${courses}">
-                        <li>
-                            <g:link controller="student" action="enroll" params="[id: c.syllabusId]">${c.name}</g:link>
-                        </li>
-                </g:each>
-            </ul>
-        </section>
-    </div>
-    </sec:access>
-</body>
+        </g:if>
+                
+                <br />
+                <div class="col-md-10">
+                    <div class="col-md-12">
+                        <p>Hello ${studentInfo.firstName},</p>
+                        <p>Welcome to the LL Applicant Homepage. Below you will see the applications for the courses you applied to. It will also contain status updates about the applications and payments as they are processed.</p>
+                        <p>If you have any questions, please contact the LL at <a href=***">****</a> or call us at ****.</p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="col-md-12">
+                        <g:form name="accountSettingsForm" controller="user">
+                            <div class="row form-group">
+                                <g:hiddenField name="id" value="${userInfo.id}" />
+                                <g:actionSubmit class="btn btn-default btn-block submit-button-green pull-right" name="accountSettings" value="Account Settings" action="edit" />
+                            </div>
+                        </g:form>
+                        <g:form name="logoutForm" controller="logout">
+                            <div class="row form-group">
+                                <g:actionSubmit class="btn btn-default btn-block submit-button-green pull-right" name="logout" value="Log Out" action="index" />
+                            </div>
+                        </g:form>
+                    </div>
+                </div>
+                <div class="col-md-12" style="padding-top: 20px">
+                    <div class="col-md-4">
+                        <div class="panel panel-green-border admin-panel">
+                            <div class="panel-body text-center">
+                                <h4>Your Information:</h4>
+                                <h3> <span class="glyphicon glyphicon-user" aria-hidden="true"></span></h3>
+                                <g:link controller="student" action="edit">
+                                    <h4>View & Edit</h4>
+                                </g:link>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-green-border admin-panel">
+                            <div class="panel-body text-center">
+                                <h4>Your Applications:</h4>
+                                <h3>
+                                    <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                                </h3>
+                                <a data-tab-destination="applicationsTab">
+                                    <h4>View & Edit</h4>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-4 col-md-offset-4">
+                        <div class="panel panel-green-border admin-panel">
+                            <div class="panel-body text-center">
+                                <h4>Make an Application</h4>
+                                <br />
+                                <g:link controller="GenericApplication" action="index"
+                                    class="btn btn-lg submit-button-green">Apply Now</g:link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                $("a[data-tab-destination]").on('click', function() {
+                var tab = $(this).attr('data-tab-destination');
+                $("#"+tab).click();
+                });
+            </script>
+                <%-- INFORMATION --%>
+            <div class="tab-pane fade" id="information">
+                <br />
+                <div class="col-md-12">
+                    <h3>Your Information</h3>
+                    <div class="panel panel-green-border">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="col-md-12">
+                                        <dl class="dl-horizontal applicant-info-wide">
+                                            <dt>Full Name</dt>
+                                            <g:if test="${studentInfo.middleName}">
+                                                <dd>
+                                                    ${studentInfo.firstName + " " + studentInfo.middleName +" " + studentInfo.surname}
+                                                </dd>
+                                            </g:if>
+                                            <g:else>
+                                                <dd>
+                                                    ${studentInfo.firstName + " " + studentInfo.surname}
+                                                </dd>
+                                            </g:else>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="col-md-12">
+                                        <dl class="dl-horizontal applicant-info">
+                                            <dt>University</dt>
+                                            <dd>
+                                                ${studentInfo.institution}
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <g:form name="goToInfo">
+                                        <g:actionSubmit
+                                            class="btn btn-default pull-right submit-button-green"
+                                            name="editApplicant" value="Edit Your Information" action="edit" />
+                                    </g:form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%-- APPLICATIONS --%>
+            <div class="tab-pane fade" id="applications">
+                <br />
+                <div class="col-md-12">
+                    <h3>Your Courses</h3>
+                    <div class="panel panel-green-border">
+                        <div class="panel-body">
+                            <g:if test="${studentInfo.courses.size() == 0}">
+                                <p class="text-center">No applications.</p>
+                            </g:if>
+                            <g:else>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Course Name</th>
+                                            <th>Application Date</th>
+                                            <th>Rec. Letter</th>
+                                            <th class="text-center">Status</th>
+                                            <th>Grade</th>
+                                            
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <g:each var="student" in="${GenericApplications}"
+                                            status="i">
+                                            <tr>
+                                                <td>
+                                                    ${student.course.location.name + " - " +student.course.name}
+                                                </td>
+                                                <td><g:formatDate format="MMM dd, yyyy"
+                                                    date="${student.applicationMade}" /></td>
+                                                <td>
+                                                        <%-- if the course requires a letter --%> <g:if
+                                                    test="${application.course.recommendationRequired}">
+                                                    <%-- if letter received --%>
+                                                        <g:if test="${application.recommendationReceived}">
+                                                            Rec. Letter Received
+                                                        </g:if>
+                                                                                                        <%-- if letter not received --%>
+                                                        <g:else>
+                                                            Rec. Letter Not Yet Received
+                                                        </g:else>
+                                                                                                </g:if> <%-- if the course doesn't require a letter --%> <g:else>
+                                                        This course does not require a letter of recommendation
+                                                    </g:else>
+                                                </td>
+                                                <td>
+                                                <g:if test="${application.graded}">
+                                                    ${application.grade}
+                                                </g:if>
+                                                <g:else>
+                                                   No Grade
+                                                </g:else>
+                                                
+                                                
+                                                
+                                                </td>
+                                                <td><g:form name="editApp"
+                                                        controller="GenericApplication">
+                                                        <g:hiddenField name="applicationId"
+                                                        value="${application.id}" />
+                                                        <g:actionSubmit class="btn  submit-button-green btn-block"
+                                                            name="editApplication" value="Show" action="edit" />
+                                                    </g:form></td>
+                                            </tr>
+                                        </g:each>
+                                    </tbody>
+                                </table>
+                            </g:else>
+                            <g:form name="newApplication" controller="GenericApplication">
+                                <g:actionSubmit
+                                    class="btn btn-default submit-button-green pull-right"
+                                    name="newApp" value="New Application" action="index" />
+                            </g:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

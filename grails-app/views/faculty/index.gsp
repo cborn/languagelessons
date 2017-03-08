@@ -37,7 +37,7 @@
                                 <tr>
                                     <td><g:link action="show" id="${user.faculty.id}">${user.faculty.title + " " + user.faculty.firstName + " " + user.faculty.surname}</g:link></td>
                                     <td>${user.username}</td>
-                                    <td>${user.faculty.university}</td>
+                                    <td>${user.faculty.institution}</td>
                                     <td>
                                         <ul><%-- TODO SHOW ONLY ACTIVE COURSES?  --%>
                                             <g:each var="course" in="${user.faculty.courses}">
