@@ -1,15 +1,8 @@
-<!--
-  To change this license header, choose License Headers in Project Properties.
-  To change this template file, choose Tools | Templates
-  and open the template in the editor.
--->
-
-<%@ page contentType="text/html;charset=UTF-8" %>
-
+<!doctype html>
 <html>
     <head>
-        <title>${course.name}</title>
         <meta name="layout" content="main"/>
+        <title>Welcome to Language Lessons</title>
         <style type="text/css" media="screen">
             #status {
                 background-color: #eee;
@@ -105,16 +98,16 @@
         <div class="col-xs-12">
             <div class="jumbotron">
                 <img src="" class="img-responsive"/>
-                <p>${course.name}: ${assignment.name}</p>
-                <p>Due: <g:formatDate date="${assignment.dueDate}" type="datetime" style="SHORT"/></p>
-                ${assignment.introText}
-                <g:form name="assign" action="gradeAssignment">
-                    <g:hiddenField name="assignmentId" value="${assignment.assignmentId}"/>
-                    <g:each in="${assignment.questions.sort{it.questionNum}}" var="question">
-                        <g:render template="question/${question.view}" model="${[question: question]}"/>
-                    </g:each>
-                    <g:actionSubmit value="gradeAssignment"/>
-                </g:form>
+                <p>Welcome to Language Lessons. Please login or signup to begin.</p>
+                <p>
+                    <g:link role="button" controller="student" class="btn btn-primary btn-lg" action="index">Login</g:link>
+                    <g:link role="button" controller="user" class="btn btn-success btn-lg" action="index">Apply Now</g:link>
+                    <g:link role="button" class="btn btn-success btn-lg" uri="/faq" >FAQ</g:link>
+                
+                </p>
+                <small>
+                    <g:link controller="user" class="btn btn-warning btn-lg" action="requestResetPassword">Help! I have forgotten my password</g:link>
+                </small>
             </div>
         </div>
     </body>

@@ -1,15 +1,8 @@
-<!--
-  To change this license header, choose License Headers in Project Properties.
-  To change this template file, choose Tools | Templates
-  and open the template in the editor.
--->
-
-<%@ page contentType="text/html;charset=UTF-8" %>
-
+<!doctype html>
 <html>
     <head>
-        <title>${course.name}</title>
         <meta name="layout" content="main"/>
+        <title>Welcome to Language Lessons</title>
         <style type="text/css" media="screen">
             #status {
                 background-color: #eee;
@@ -81,7 +74,48 @@
                     margin-top: 0;
                 }
             }
+            
+	canvas { 
+		display: inline-block; 
+		background: #202020; 
+		width: 90%;
+		height: 40%;
+		box-shadow: 0px 0px 10px blue;
+	}
+	#controls {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-around;
+		height: 20%;
+		width: 100%;
+	}
+	#record { height: 15vh; }
+	#record.recording { 
+		background: red;
+		background: -webkit-radial-gradient(center, ellipse cover, #ff0000 0%,lightgrey 75%,lightgrey 100%,#7db9e8 100%); 
+		background: -moz-radial-gradient(center, ellipse cover, #ff0000 0%,lightgrey 75%,lightgrey 100%,#7db9e8 100%); 
+		background: radial-gradient(center, ellipse cover, #ff0000 0%,lightgrey 75%,lightgrey 100%,#7db9e8 100%); 
+	}
+	#save, #save img { height: 10vh; }
+	#save { opacity: 0.25;}
+	#save[download] { opacity: 1;}
+	#viz {
+		height: 80%;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+	}
+	@media (orientation: landscape) {
+		body { flex-direction: row;}
+		#controls { flex-direction: column; height: 100%; width: 10%;}
+		#viz { height: 100%; width: 90%;}
+	}
         </style>
+        
+
     </head>
     <body>
         <g:if test="${flash.message}">
@@ -103,19 +137,44 @@
             </div>
         </g:if>
         <div class="col-xs-12">
-            <div class="jumbotron">
-                <img src="" class="img-responsive"/>
-                <p>${course.name}: ${assignment.name}</p>
-                <p>Due: <g:formatDate date="${assignment.dueDate}" type="datetime" style="SHORT"/></p>
-                ${assignment.introText}
-                <g:form name="assign" action="gradeAssignment">
-                    <g:hiddenField name="assignmentId" value="${assignment.assignmentId}"/>
-                    <g:each in="${assignment.questions.sort{it.questionNum}}" var="question">
-                        <g:render template="question/${question.view}" model="${[question: question]}"/>
-                    </g:each>
-                    <g:actionSubmit value="gradeAssignment"/>
-                </g:form>
-            </div>
+        <div id="viz">
+		<canvas id="analyser" width="1024" height="500"></canvas>
+		<canvas id="wavedisplay" width="1024" height="500"></canvas>
+	</div>
+	<div id="controls">
+		<asset:image id="record" src="mic128.png" onclick="toggleRecording(this);"/>
+		<a id="save" href="#"><asset:image src="save.svg" /></a>
+	</div>
+        
+              <h3>Recordings</h3>
+      <div id="recording-list"></div>
+    </div>
+    <div id="modal-loading" class="modal fade">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title"></h4>
+          </div>
         </div>
+      </div>
+    </div>
+    <div id="modal-progress" class="modal fade">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body">
+            <div class="progress">
+              <div style="width: 0%;" class="progress-bar"></div>
+            </div>
+            <div class="text-center">0%</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
     </body>
 </html>

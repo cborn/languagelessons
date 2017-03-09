@@ -4,9 +4,9 @@ abstract class Question {
     int pointValue;
     String question;
     String view;
+    int questionNum;
     
     Boolean archived = false;
-    
     static belongsTo = Assignment;
     
     static constraints = {
