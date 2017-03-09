@@ -7,13 +7,14 @@ class Lesson {
     Date openDate;
     Date dueDate;
     Course course;
-    
+    Boolean isArchived = false;
     
     
     static hasMany = [assignments:Assignment]
     
     static constraints = {
         text nullable: true
+        isArchived nullable: true
     }
     
     boolean isOpen() {

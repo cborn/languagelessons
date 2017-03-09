@@ -112,9 +112,9 @@ class CourseController {
         
         if(params.clone) {
             def clonedCourse = Course.findById(params.clone);
-            flash.message = "Cloned from "+AppConfiguration.instance.courseName+": " + clonedCourse.name + " " + clonedCourse.startDate[Calendar.YEAR] + " (" + clonedCourse.syllabusId + ")";
+            flash.message = "Cloned from course: " + clonedCourse.name + " " + clonedCourse.startDate[Calendar.YEAR] + " (" + clonedCourse.syllabusId + ")";
             
-            params.managerSelect = clonedCourse.faculty;
+            params.facultySelect = clonedCourse.faculty;
             params.questionSelect = clonedCourse.lessons;
             params.name = clonedCourse.name;
             params.applicantCap = clonedCourse.applicantCap;
@@ -130,7 +130,7 @@ class CourseController {
         def questionList = Questions.findAllByArchivedOrArchived(null,false);
        
         
-        [managerList:managerList,questionList:questionList]
+        [facultyList:facultyList,facultyList:facultyList]
     }
     
     @Secured(["ROLE_ADMIN"])
@@ -222,16 +222,15 @@ class CourseController {
     }
     
     // edit individual courses, TODO let manager update their own course?
-    @Secured(["ROLE_MANAGER","ROLE_ADMIN"])
+    @Secured(["ROLE_FACULTY","ROLE_ADMIN"])
     def editSingle() {
         
-        SecUser userInfo = SecUser.findById(springSecurityService.principal.id);
+        SecUser userInfo = getAuthenticatedUser();
         
         // TODO: get only questions and manager lists for items not already associated to the course
         
-        def managerList = Manager.findAll();
-        def countryList = Country.findAll();
-        def questionList = Questions.findAllByArchivedOrArchived(null,false);
+        def facultyList = Faculty.findAll();
+        def lessonList = Lesson.findAllByArchivedOrArchived(null,false);
         
         def thisCourse = Course.findById(params.id);
         
@@ -239,17 +238,17 @@ class CourseController {
         def courseQuestionList = [];
         if(thisCourse != null)
         {  
-            thisDir = SecUser.findByManager(thisCourse.directors);
+            thisDir = SecUser.findByFaculty(thisCourse.faculty);
             
-            if(!thisCourse.questions.isEmpty())
-                courseQuestionList = Questions.findAllByIdInList(thisCourse.questions?.id);
+            if(!thisCourse.lessons.isEmpty())
+                courseLessonList = Lesson.findAllByIdInList(thisCourse.lessons?.id);
         }
        
         // if manager, only let them edit the courses assigned to them
-        if(SpringSecurityUtils.ifAllGranted("ROLE_MANAGER")) {
+        if(SpringSecurityUtils.ifAllGranted("ROLE_FACULTY")) {
             def allowedUser = false;
-            for(director in thisDir) {
-                if(director.manager == userInfo.manager) {
+            for(faculty in thisDir) {
+                if(facutly.faculty == userInfo.faculty) {
                     allowedUser = true;
                 }
             }
@@ -259,32 +258,31 @@ class CourseController {
             }
         }
         
-        [course:thisCourse,countryList:countryList,managerList:managerList,directors:thisDir,questionList:questionList,courseQuestionList:courseQuestionList]
+        [course:thisCourse,facultyList:facultyList,faculty:thisDir,lessonList:lessonList,courseLessonList:courseLessonList]
     }  
     
-    @Secured(["ROLE_MANAGER","ROLE_ADMIN"])
+    @Secured(["ROLE_FACULTY","ROLE_ADMIN"])
     def show() {
         
-        SecUser userInfo = SecUser.findById(springSecurityService.principal.id);
+        SecUser userInfo = getAuthenticatedUser();
         
-        def managerList = SecUser.findAllByManagerIsNotNull();
-        def countryList = Country.findAll();
-        def questionList =  Questions.findAllByArchivedOrArchived(null,false);
+        def facultyList = SecUser.findAllByFacultyIsNotNull();
+        def lessonList =  Lesson.findAllByIsArchivedOrIsArchived(null,false);
         
         def thisCourse = Course.findById(params.id);
-        def thisDir = SecUser.findByManager(thisCourse.directors);
+        def thisDir = SecUser.findByFaculty(thisCourse.faculty);
         
-        def courseQuestionList = [];
+        def courseLessonList = [];
         
-        if(!thisCourse.questions.isEmpty())
+        if(!thisCourse.lessons.isEmpty())
         {
-            courseQuestionList = Questions.findAllByIdInList(thisCourse.questions?.id);
+            courseLessonList = Lessons.findAllByIdInList(thisCourse.lessons?.id);
         }
         // if manager, only let them edit the courses assigned to them
-        if(SpringSecurityUtils.ifAllGranted("ROLE_MANAGER")) {
+        if(SpringSecurityUtils.ifAllGranted("ROLE_FACULTY")) {
             def allowedUser = false;
-            for(director in thisDir) {
-                if(director.manager == userInfo.manager) {
+            for(faculty in thisDir) {
+                if(faculty.faculty == userInfo.faculty) {
                     allowedUser = true;
                 }
             }
@@ -295,56 +293,140 @@ class CourseController {
         }
         
         // ENROLLMENT TAB
-        def enrollmentList = GenericApplication.findAllByCourse(thisCourse);
+       // def enrollmentList = GenericApplication.findAllByCourse(thisCourse);
         
-        def mostRecentForm = [], decisionCount = 0, depositCount = 0, tuitionCount = 0, formCount = 0;
-        // if it's a US school, use proof of health insurance too
-        if(thisCourse.location.name == "United States") {
-            // for each application, if they have all forms completed, work out the most recent date and add to the list
-            for(sa in enrollmentList) {
-                if(sa.applicantId.liabilityWaiver && sa.applicantId.userPermission && sa.applicantId.proofOfInsurance) {
-                    mostRecentForm.add([sa.applicantId.liabilityWaiver,sa.applicantId.userPermission,sa.applicantId.proofOfInsurance].max());
-                    formCount++;
-                }
-                else {
-                    // fill in the blanks so we can iterate over the list in the gsp to match the table rowsusing [i]
-                    mostRecentForm.add("-");
-                }
-            }
-        }
-        // otherwise, just liability waiver and user permission
-        else {
-            // for each application, if they have all forms completed, work out the most recent date and add to the list
-            for(sa in enrollmentList) {
-                if(sa.applicantId.liabilityWaiver && sa.applicantId.userPermission) {
-                    mostRecentForm.add([sa.applicantId.liabilityWaiver,sa.applicantId.userPermission].max());
-                    formCount++;
-                }
-                else {
-                    // fill in the blanks so we can iterate over the list in the gsp to match the table rowsusing [i]
-                    mostRecentForm.add("-");
-                }
-            }
-        }
         
-        for(sa in enrollmentList) {
-            if(sa.applicationDecision) {
-                decisionCount++;
-            }
-            if(sa.tuition.depositPaid) {
-                depositCount++;
-            }
-            if(sa.tuition.tuitionPaid) {
-                tuitionCount++;
-            }
-        }
-        
-        [course:thisCourse,countryList:countryList,managerList:managerList,directors:thisDir,questionList:questionList,
-            courseQuestionList:courseQuestionList,enrollmentList:enrollmentList,mostRecentForm:mostRecentForm,
-            decisionCount:decisionCount,depositCount:depositCount,tuitionCount:tuitionCount,formCount:formCount]
+        [course:thisCourse,facultyList:facultyList,faculty:thisDir,lessonList:lessonList,
+            courseLessonList:courseLessonList]
     }
     
-    @Secured(["ROLE_MANAGER","ROLE_ADMIN"])
+        @Secured(["ROLE_ADMIN"])
+    def archive() {
+        
+        def thisCourse = Course.get(params.id);
+        
+        thisCourse.setIsArchived(true);
+        thisCourse.setAcceptingApplications(false);
+        
+        // redirect to edit page
+        flash.message = "Course archived";
+        redirect(action:"editAll");
+    }
+    
+    @Secured(["ROLE_ADMIN"])
+    def unarchive() {
+        
+        def thisCourse = Course.get(params.id);
+        
+        thisCourse.setIsArchived(false);
+        // don't automatically open it though
+        
+        // redirect to edit page
+        flash.message = "Course unarchived";
+        redirect(action:"editAll");
+    }
+    
+    @Secured(["ROLE_ADMIN"])
+    def archiveAll() {
+        
+        // get the current season
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        def thisTerm = sdf.parse(Calendar.instance.get(YEAR).toString());
+        
+        // find all non-archived courses from previous seasons
+        def coursesToArchive = Course.createCriteria().list() {//max:params.max, offset:params.offset) {
+            lt("startDate", thisTerm-365)
+            eq("isArchived", false)
+        }
+        
+        // archive them
+        for(course in coursesToArchive) {
+            course.setIsArchived(true);
+        }
+        
+        // redirect to edit page
+        flash.message = "All Courses from previous seasons have been archived (modified ${coursesToArchive.size()} Courses)";
+        redirect(action:"index", params:[status:params.status]);
+    }
+    
+    @Secured(["ROLE_ADMIN"])
+    def list() {
+        
+        // modify this to change how many are shown in index pages
+        //def maxShownOnIndex = 10;
+
+        // if no max or offset sent, use 10 and 0 by default
+        //params.max = params.max ?: maxShownOnIndex
+        //params.offset = params.offset ?: 0
+        
+        def results;
+        
+        if(params.querySelect == "c") {
+            // the '%' means there can be attached chars here
+            if(params.fieldSelect == "cn") {
+                results = Course.createCriteria().list() {//max:params.max, offset:params.offset) {
+                    ilike("name", '%'+params.searchTerms+'%')
+                }
+            }
+            else if(params.fieldSelect == "sid") {
+                results = Course.createCriteria().list() {//max:params.max, offset:params.offset) {
+                    ilike("syllabusId", '%'+params.searchTerms+'%')
+                }
+            }
+            else if(params.fieldSelect == "dn") {
+                results = Course.createCriteria().list() {//max:params.max, offset:params.offset) {
+                    directors {
+                        or {
+                            ilike("firstName", '%'+params.searchTerms+'%')
+                            ilike("surname", '%'+params.searchTerms+'%')
+                        }
+                    }
+                }
+            }
+            else if(params.fieldSelect == "co") {
+                results = Course.createCriteria().list() {//max:params.max, offset:params.offset) {
+                    location {
+                        ilike("name", '%'+params.searchTerms+'%')
+                    }
+                }
+            }
+        }
+        
+        if(params.querySelect == "bw") {
+            // the '%' means there can be attached chars here
+            if(params.fieldSelect == "cn") {
+                results = Course.createCriteria().list() {//max:params.max, offset:params.offset) {
+                    ilike("name", params.searchTerms+'%')
+                }
+            }
+            else if(params.fieldSelect == "sid") {
+                results = Course.createCriteria().list() {//max:params.max, offset:params.offset) {
+                    ilike("syllabusId", params.searchTerms+'%')
+                }
+            }
+            else if(params.fieldSelect == "dn") {
+                results = Course.createCriteria().list() {//max:params.max, offset:params.offset) {
+                    directors {
+                        or {
+                            ilike("firstName", params.searchTerms+'%')
+                            ilike("surname", params.searchTerms+'%')
+                        }
+                    }
+                }
+            }
+            else if(params.fieldSelect == "co") {
+                results = Course.createCriteria().list() {//max:params.max, offset:params.offset) {
+                    location {
+                        ilike("name", params.searchTerms+'%')
+                    }
+                }
+            }
+        }
+        
+        [params:params,results:results]
+    }
+    
+    @Secured(["ROLE_FACULTY","ROLE_ADMIN"])
     def processEditCourse() {
         
         // get the course
@@ -354,67 +436,8 @@ class CourseController {
         if(params.courseName) {
             thisCourse.setName(params.courseName);
         }
-        if(params.courseType) {
-            thisCourse.setType(params.courseType);
-        }
         if(params.courseDescription) {
             thisCourse.setDescription(params.courseDescription);
-        }
-        if(params.courseDeposit) {
-            thisCourse.setDeposit(Float.parseFloat(params.courseDeposit));
-        }
-        if(params.courseCost) {
-            thisCourse.setCost(Float.parseFloat(params.courseCost));
-        }
-        if(params.courseCap) {
-            thisCourse.setApplicantCap(Integer.parseInt(params.courseCap));
-        }
-        if(params.hospName) {
-            thisCourse.setNearestHospital(params.hospName);
-        }
-        if(params.hospLat) {
-            thisCourse.nearestHospitalGpsLat = new java.math.BigDecimal(params.hospLat);
-        }
-        if(params.hospLong) {
-            thisCourse.nearestHospitalGpsLong = new java.math.BigDecimal(params.hospLong);
-        }
-        
-        // deal with the checkboxes TODO NOT WORKING
-        if(params.referenceRequired == "on") {
-            thisCourse.setReferenceRequired(true);
-        }
-        else {
-            thisCourse.setReferenceRequired(false);
-        }
-        if(params.interviewRequired == "on") {
-            thisCourse.setInterviewRequired(true);
-        }
-        else {
-            thisCourse.setInterviewRequired(false);
-        }
-        if(params.recommendationRequired == "on") {
-            thisCourse.setRecommendationRequired(true);
-        }
-        else {
-            thisCourse.setRecommendationRequired(false);
-        }
-        if(params.transcriptRequired == "on") {
-            thisCourse.setTranscriptRequired(true);
-        }
-        else {
-            thisCourse.setTranscriptRequired(false);
-        }
-        if(params.acceptingApplications == "on") {
-            thisCourse.setAcceptingApplications(true);
-        }
-        else {
-            thisCourse.setAcceptingApplications(false);
-        }
-        
-        // get the country
-        if(params.countrySelect) {
-            def courseCountry = Country.get(params.countrySelect);
-            thisCourse.setLocation(courseCountry);
         }
         
         // parse the dates
@@ -434,40 +457,40 @@ class CourseController {
         // if blank autogenerate a new id
         if(params.generateNewSyllabusId == "on") {
             // generate a syllabus id: first 3 chars of name, first 3 chars of country, 2 digit year, sequential char
-            thisCourse.setSyllabusId(generateSyllabusId(thisCourse.name,thisCourse.location,params.courseStartDate));
+            thisCourse.setSyllabusId(generateSyllabusId(thisCourse.name,params.courseStartDate));
         }
         
         // add or remove the questions
         //
-        def currentQuestions = Questions.getAll(thisCourse.questions?.id);  // find out what questions currently assigned
+        def currentLessons = Lessons.getAll(thisCourse.lessons?.id);  // find out what questions currently assigned
         def keepQuestion;
-        for(question in currentQuestions) {
+        for(lesson in currentLessons) {
           
-                thisCourse.removeFromQuestions(Questions.findById(question.id));    // remove it
+                thisCourse.removeFromLessons(Lessons.findById(lesson.id));    // remove it
             
         }
         // add after removing so we don't delete what we just added!
-        for(question in params.list("questionSelect")) {
-            thisCourse.addToQuestions(Questions.findById(question));
+        for(lesson in params.list("lessonSelect")) {
+            thisCourse.addToLessons(Lessons.findById(lesson));
         }
         
         // add or remove the manager
         //
-        def currentManager = Manager.getAll(thisCourse.directors?.id);  // find out what manager currently assigned
-        def checkedManager = params.list('managerBox');  // get list of manager ticked. this will return only the selected checkboxes
-        def selectedManager = Manager.getAll(checkedManager)
-        def keepManager;
-        for(manager in currentManager) {
+        def currentFaculty = Faculty.getAll(thisCourse.faculty?.id);  // find out what manager currently assigned
+        def checkedFaculty = params.list('facultyBox');  // get list of manager ticked. this will return only the selected checkboxes
+        def selectedFaculty = Faculty.getAll(checkedFaculty)
+        def keepFaculty;
+        for(faculty in currentFaculty) {
            
-                thisCourse.removeFromDirectors(Manager.findById(manager.id));    // remove it
+                thisCourse.removeFromFaculty(Faculty.findById(faculty.id));    // remove it
            
         }
         // add after removing so we don't delete what we just added!
-        for(manager in params.list("managerSelect")) {
-           def f = Manager.findById(manager);
+        for(faculty in params.list("facultySelect")) {
+           def f = Faculty.findById(faculty);
             if(f != null)
             {
-                 thisCourse.addToDirectors(f);
+                 thisCourse.addToFaculty(f);
             }
         }
         
@@ -475,8 +498,8 @@ class CourseController {
         flash.message = "Course updated";
         
         // if manager, send them to the 'show course' page
-        if(SpringSecurityUtils.ifAllGranted("ROLE_MANAGER")) {
-            redirect(action:"show",id:thisCourse.id)// TODO manager can't do this - need a fix
+        if(SpringSecurityUtils.ifAllGranted("ROLE_FACULTY")) {
+            redirect(action:"show",id:thisCourse.id)// TODO Faculty can't do this - need a fix
         }
         else {
             redirect(action:"editSingle",id:params.id);
