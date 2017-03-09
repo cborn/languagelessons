@@ -115,12 +115,7 @@
                             <hr>
                             <g:each in="${day.value}" var="lesson">
                                 ${lesson.dueDate.format("hh:MM:aa")}
-                                <g:if test="${lesson.getClass() == languagelessons.Lesson}">
-                                    Lesson: <a href="${createLink(controller: "lessons", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a>
-                                </g:if>
-                                <g:if test="${lesson.getClass() == languagelessons.Assignment}">
-                                    Assignment: <a href="${createLink(controller: "assignment", action: "viewAssignment", params: [assignId: lesson.assignmentId, syllabusId: course.syllabusId])}">${lesson.name}</a>
-                                </g:if>
+                                Lesson: <a href="${createLink(controller: "lessons", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a>
                                 <br>
                             </g:each>
                         </div>

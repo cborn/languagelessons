@@ -97,14 +97,17 @@ class BootStrap {
             
         
         // Create Test Course and add faculty memeber
+            //Setting up a lesson for the first course
+            def lesson1 = new Lesson(name: "Read Chapter 5",openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
+            lesson1.addToAssignments(assign1) //fixed assignment adding
+            
+        
             Date start = Date.parse("yyyy-MM-dd", "2016-01-01");
             Date end = Date.parse("yyyy-MM-dd", "2017-01-01");
             new Course(name: 'Arabic', syllabusId: '1111', applicantCap: 15, startDate: start, endDate: end)
                 .addToFaculty(f1)
                 .addToStudents(s1) //addTo___ also supports creating the object inline
-                .addToLessons(name: "Read Chapter 5",openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
-//              I have moved assignemnts to lessons need to fix this:
-//              .addToAssignments(assign1)
+                .addToLessons(lesson1)
                 .save(failOnError: true)
 
             new Course(name: 'Chinese', syllabusId: '2222', applicantCap: 20, startDate: start, endDate: end)

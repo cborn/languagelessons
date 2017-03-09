@@ -18,20 +18,22 @@ class AssignmentController {
         //has the name gradeAssignment
         SecUser user = getAuthenticatedUser();
         Student student = user.student;
-        //assert (params.assignment != null);
-        //['assignmentId':'12', '1':'0', '2':'2', '3':'1']
         Assignment assignment = Assignment.findByAssignmentId(params.assignmentId)
         int i = 0;
         def results = [:]
+        def score = 0
         for (question in assignment.questions) {
             //question handles all of this to allow for more compatibility
-            assert params[question.questionNum] != null //this should exist, it does not currently
-            if (question.grade(params[question.questionNum])) {
+            //this will need to eventually allow for faculty review
+            if (question.grade(params[Integer.toString(question.questionNum)])) {
                 //answer was right
+                score = score + question.pointValue
             } else {
-                //answer was wrong
+                //answer was wrong, do something more with this later?
             }
+            results[question.questionNum] = params[Integer.toString(question.questionNum)]
         }
-        render params
+        assignment.addToResults(user.student.id, results)
+        redirect(action = "viewAssignment")
     }
 }
