@@ -37,40 +37,54 @@
             <h1>Applicant: ${studentInfo.firstName} ${studentInfo.surname}  -<br/> LL ID: (${userInfo.id})</h1>
         </div>
         <ul id="myTabs" class="nav nav-tabs">
-            <li class="nav active"><a class="ll-home-tab" href="#overview"
-                data-toggle="tab"><span class="glyphicon glyphicon-home"
-                aria-hidden="true"></span> Home</a></li>
-            <li class="nav"><a href="#information" data-toggle="tab">Your
-                    Information</a></li>
-            <li class="nav"><a id="applicationsTab" href="#applications"
-                data-toggle="tab">Applications</a></li>
-                <g:if test="${hasAcceptedApplications}">
-                <li class="nav"><a id="paymentsTab" href="#payments"
-                    data-toggle="tab">Payments</a></li>
-                <li class="nav"><a href="#forms" data-toggle="tab">Forms</a></li>
-                </g:if>
-                    
-                    
-               
+            <li class="nav active">
+                <a class="ll-home-tab" href="#overview" data-toggle="tab">
+                    <span class="glyphicon glyphicon-home" aria-hidden="true"></span> 
+                    Home
+                </a>
+            </li>
+            <li class="nav">
+                <a href="#information" data-toggle="tab">
+                    Your Information
+                </a>
+            </li>
+            <li class="nav">
+                <a id="applicationsTab" href="#applications" data-toggle="tab">
+                    Applications
+                </a>
+            </li>
+            <g:if test="${hasAcceptedApplications}">
+                <li class="nav">
+                    <a id="paymentsTab" href="#payments" data-toggle="tab">
+                        Payments
+                    </a>
+                </li>
+                <li class="nav">
+                    <a href="#forms" data-toggle="tab">
+                        Forms
+                    </a>
+                </li>
+            </g:if>
+            <li class="nav">
+                <a id="coursesTab" href="#courses" data-toggle="tab">
+                    Courses
+                </a>
+            </li>    
         </ul>
         <div class="tab-content">
-            
-            
-            
-                <%-- OVERVIEW --%>
+            <%-- OVERVIEW --%>
             <div class="tab-pane fade in active" id="overview">
-                
                 <g:if test="${flash.message}">
-            <%-- display an info message to confirm --%>
-            <div class="col-xs-12 text-center">
-                <div class="alert alert-info alert-dismissible" role="alert" style="display: block; margin-top: 5px;">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    ${raw(flash.message)}
-                </div>
-            </div>
-        </g:if>
-                
+                <%-- display an info message to confirm --%>
+                    <div class="col-xs-12 text-center">
+                        <div class="alert alert-info alert-dismissible" role="alert" style="display: block; margin-top: 5px;">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            ${raw(flash.message)}
+                        </div>
+                    </div>
+                </g:if>
                 <br />
+                
                 <div class="col-md-10">
                     <div class="col-md-12">
                         <p>Hello ${studentInfo.firstName},</p>
@@ -118,6 +132,19 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-green-border admin-panel">
+                            <div class="panel-body text-center">
+                                <h4>Your Courses:</h4>
+                                <h3>
+                                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                                </h3>
+                                <a data-tab-destination="coursesTab">
+                                    <h4>View</h4>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <div class="col-md-4 col-md-offset-4">
@@ -134,10 +161,10 @@
                 </div>
                 <script>
                 $("a[data-tab-destination]").on('click', function() {
-                var tab = $(this).attr('data-tab-destination');
-                $("#"+tab).click();
+                    var tab = $(this).attr('data-tab-destination');
+                    $("#"+tab).click();
                 });
-            </script>
+                </script>
                 <%-- INFORMATION --%>
             <div class="tab-pane fade" id="information">
                 <br />
@@ -262,6 +289,56 @@
                                     class="btn btn-default submit-button-green pull-right"
                                     name="newApp" value="New Application" action="index" />
                             </g:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%-- COURSES --%>
+            <div class="tab-pane fade" id="courses">
+                <br />
+                <div class="col-md-12">
+                    <h3>Your Courses</h3>
+                    <div class="panel panel-green-border">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="col-md-12">
+                                        <g:each var="course"
+                                        <dl class="dl-horizontal course-info-wide">
+                                            <dt>Full Name</dt>
+                                            <g:if test="${studentInfo.middleName}">
+                                                <dd>
+                                                    ${studentInfo.firstName + " " + studentInfo.middleName +" " + studentInfo.surname}
+                                                </dd>
+                                            </g:if>
+                                            <g:else>
+                                                <dd>
+                                                    ${studentInfo.firstName + " " + studentInfo.surname}
+                                                </dd>
+                                            </g:else>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="col-md-12">
+                                        <dl class="dl-horizontal applicant-info">
+                                            <dt>University</dt>
+                                            <dd>
+                                                ${studentInfo.institution}
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <g:form name="goToInfo">
+                                        <g:actionSubmit
+                                            class="btn btn-default pull-right submit-button-green"
+                                            name="editApplicant" value="Edit Your Information" action="edit" />
+                                    </g:form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

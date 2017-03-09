@@ -276,7 +276,7 @@ class CourseController {
         
         if(!thisCourse.lessons.isEmpty())
         {
-            courseLessonList = Lessons.findAllByIdInList(thisCourse.lessons?.id);
+            courseLessonList = Lesson.findAllByIdInList(thisCourse.lessons?.id);
         }
         // if manager, only let them edit the courses assigned to them
         if(SpringSecurityUtils.ifAllGranted("ROLE_FACULTY")) {
