@@ -182,5 +182,3 @@ function initAudio() {
             console.log(e);
         });
 }
-
-window.addEventListener('load', initAudio );

@@ -45,6 +45,8 @@ dependencies {
     // Search
     compile 'org.grails.plugins:grails-quick-search:0.7.2'
 
+    compile 'org.springframework.data:spring-data-mongodb:1.10.1.RELEASE'
+
     compile "org.grails:grails-core"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-tomcat"
