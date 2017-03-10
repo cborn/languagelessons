@@ -80,21 +80,21 @@ class CourseController {
     
     
 //    Removed Scaffolding
-//    @Secured(["ROLE_STUDENT"])
-//    def studentCourseView() {
-//        [courses:getAuthenticatedUser().student.courses]
-//    }
-//    
-//    @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
-//    def facultyCourseView() {
-//        [courses:getAuthenticatedUser().faculty.courses]
-//    }
-//    
-//    @Secured(["ROLE_FACULTY", "ROLE_ADMIN", "ROLE_STUDENT"])
-//    def listCourses() {
-//        SecUser userInfo = getAuthenticatedUser()
-//        [courses:Course.list(), userInfo:userInfo, faculty:userInfo.faculty, student:userInfo.student]
-//    }
+    @Secured(["ROLE_STUDENT"])
+    def studentCourseView() {
+        [courses:getAuthenticatedUser().student.courses]
+    }
+    
+    @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
+    def facultyCourseView() {
+        [courses:getAuthenticatedUser().faculty.courses]
+    }
+    
+    @Secured(["ROLE_FACULTY", "ROLE_ADMIN", "ROLE_STUDENT"])
+    def listCourses() {
+        SecUser userInfo = getAuthenticatedUser()
+        [courses:Course.list(), userInfo:userInfo, faculty:userInfo.faculty, student:userInfo.student]
+    }
 //    
 //    @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
 //    def newCourse() {
@@ -261,7 +261,7 @@ class CourseController {
         [course:thisCourse,facultyList:facultyList,faculty:thisDir,lessonList:lessonList,courseLessonList:courseLessonList]
     }  
     
-    @Secured(["ROLE_FACULTY","ROLE_ADMIN"])
+    @Secured(["ROLE_FACULTY","ROLE_ADMIN","ROLE_STUDENT"])
     def show() {
         
         SecUser userInfo = getAuthenticatedUser();
@@ -269,14 +269,14 @@ class CourseController {
         def facultyList = SecUser.findAllByFacultyIsNotNull();
         def lessonList =  Lesson.findAllByIsArchivedOrIsArchived(null,false);
         
-        def thisCourse = Course.findById(params.id);
+        def thisCourse = Course.findBySyllabusId(params.syllabusId);
         def thisDir = SecUser.findByFaculty(thisCourse.faculty);
         
         def courseLessonList = [];
         
         if(!thisCourse.lessons.isEmpty())
         {
-            courseLessonList = Lessons.findAllByIdInList(thisCourse.lessons?.id);
+            courseLessonList = Lesson.findAllByIdInList(thisCourse.lessons?.id);
         }
         // if manager, only let them edit the courses assigned to them
         if(SpringSecurityUtils.ifAllGranted("ROLE_FACULTY")) {
@@ -295,9 +295,18 @@ class CourseController {
         // ENROLLMENT TAB
        // def enrollmentList = GenericApplication.findAllByCourse(thisCourse);
         
+        def days = [:]
+        for (lesson in courseLessonList){
+            if (!(lesson.dueDate.format("dd-MM-yyyy") in days)) {
+                days[lesson.dueDate.format("dd-MM-yyyy")] = [lesson]
+            }
+            else {
+                days[lesson.dueDate.format("dd-MM-yyyy")].add(lesson)
+            }
+        }
         
         [course:thisCourse,facultyList:facultyList,faculty:thisDir,lessonList:lessonList,
-            courseLessonList:courseLessonList]
+            courseLessonList:courseLessonList, days: days]
     }
     
         @Secured(["ROLE_ADMIN"])
@@ -504,58 +513,6 @@ class CourseController {
         else {
             redirect(action:"editSingle",id:params.id);
         }
-    }
-    
-    def viewCourse() {
-        SecUser userInfo = getAuthenticatedUser()
-        String access
-        if (userInfo.isFaculty) {
-            access = "faculty"
-        } else if (userInfo.isStudent){
-            access = "student"
-        }
-        Course course = Course.findBySyllabusId(params.syllabusId)
-        def allLessons = course.lessons.sort {it.dueDate}
-        def lessonsToDisplay = []
-        if (access == "student") {
-            for (lesson in allLessons) {
-                if (lesson.isOpen()) {
-                    lessonsToDisplay.add(lesson)
-                }
-            }
-        } else {
-            lessonsToDisplay = allLessons
-        }
-        def allAssignments = course.assignments.sort {it.dueDate}
-        def assignmentsToDisplay = []
-        if (access == "student"){
-            for (assignment in allAssignments) {
-                if (assignment.isOpen()) {
-                    assignmentsToDisplay.add(assignment)
-                }
-            }
-        } else {
-            assignmentsToDisplay = allAssignments;
-        }
-        def days = [:]
-        def dayKeys = []
-        for (lesson in lessonsToDisplay){
-            if (!(lesson.dueDate.format("dd-MM-yyyy") in days)) {
-                days[lesson.dueDate.format("dd-MM-yyyy")] = [lesson]
-            }
-            else {
-                days[lesson.dueDate.format("dd-MM-yyyy")].add(lesson)
-            }
-        }
-        for (assignment in assignmentsToDisplay){
-            if (!(assignment.dueDate.format("dd-MM-yyyy") in days)) {
-                days[assignment.dueDate.format("dd-MM-yyyy")] = [assignment]
-            }
-            else {
-                days[assignment.dueDate.format("dd-MM-yyyy")].add(assignment)
-            }
-        }
-        [course: course, access: access, days: days]
     }
 }
 

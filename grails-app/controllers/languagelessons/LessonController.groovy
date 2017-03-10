@@ -1,10 +1,10 @@
 package languagelessons
 import static java.util.Calendar.*
 
-class LessonsController {
+class LessonController {
 
     def index() { 
-    
+        
     }
     
     def newLesson() {
@@ -42,5 +42,9 @@ class LessonsController {
         assert (course != null)
         assert (lesson != null)
         [course: course, lesson: lesson]
+    }
+    
+    def voiceLesson() {
+        
     }
 }

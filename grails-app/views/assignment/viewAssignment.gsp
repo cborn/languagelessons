@@ -108,9 +108,13 @@
                 <p>${course.name}: ${assignment.name}</p>
                 <p>Due: <g:formatDate date="${assignment.dueDate}" type="datetime" style="SHORT"/></p>
                 ${assignment.introText}
-                <g:each in="${assignment.questions}" var="question">
-                    <g:render template="question/${question.view}" model="${[question: question]}"/>
-                </g:each>
+                <g:form name="assign" action="gradeAssignment">
+                    <g:hiddenField name="assignmentId" value="${assignment.assignmentId}"/>
+                    <g:each in="${assignment.questions.sort{it.questionNum}}" var="question">
+                        <g:render template="question/${question.view}" model="${[question: question]}"/>
+                    </g:each>
+                    <g:actionSubmit value="gradeAssignment"/>
+                </g:form>
             </div>
         </div>
     </body>

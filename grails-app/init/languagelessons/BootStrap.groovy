@@ -61,9 +61,10 @@ class BootStrap {
           //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
           //Create Test Assignment
           
+          //monty python style
           def assign1 = new Assignment(name:"Quiz 1",
                                        assignmentId: 12,
-                                       introText: "Please take this quiz for monday.",
+                                       introText: "Please take this quiz for Monday.",
                                        openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), 
                                        dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"),
                                        maxAttempts: 4)
@@ -71,24 +72,42 @@ class BootStrap {
           def q1 = new MultipleChoiceQuestion(pointValue: 4,
                                               question: "What is your name?",
                                               view: "multipleChoice",
+                                              questionNum: 1,
                                               answers: ["Will", "Joe", "Todd"],
                                               correctAnswer: 0)
+          def q2 = new MultipleChoiceQuestion(pointValue: 4,
+                                              question: "What is your favorite color?",
+                                              view: "multipleChoice",
+                                              questionNum: 2,
+                                              answers: ["Red", "Green", "Blue"],
+                                              correctAnswer: 2)
+          def q3 = new MultipleChoiceQuestion(pointValue: 4,
+                                              question: "What is the airspeed of an unladen swallow?",
+                                              view: "multipleChoice",
+                                              questionNum: 3,
+                                              answers: ["What? I don't know that.", "African or European?"],
+                                              correctAnswer: 1)
           assign1
             .addToQuestions(q1)
+            .addToQuestions(q2)
+            .addToQuestions(q3)
 //        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
         // Create Test Courses
             
         
         // Create Test Course and add faculty memeber
+            //Setting up a lesson for the first course
+            def lesson1 = new Lesson(name: "Read Chapter 5",openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
+            lesson1.addToAssignments(assign1) //fixed assignment adding
+            
+        
             Date start = Date.parse("yyyy-MM-dd", "2016-01-01");
             Date end = Date.parse("yyyy-MM-dd", "2017-01-01");
             new Course(name: 'Arabic', syllabusId: '1111', applicantCap: 15, startDate: start, endDate: end)
                 .addToFaculty(f1)
                 .addToStudents(s1) //addTo___ also supports creating the object inline
-                .addToLessons(name: "Read Chapter 5",openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
-//              I have moved assignemnts to lessons need to fix this:
-//              .addToAssignments(assign1)
+                .addToLessons(lesson1)
                 .save(failOnError: true)
 
             new Course(name: 'Chinese', syllabusId: '2222', applicantCap: 20, startDate: start, endDate: end)

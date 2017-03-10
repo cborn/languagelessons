@@ -9,7 +9,6 @@ class Lesson {
     Course course;
     Boolean isArchived = false;
     
-    
     static hasMany = [assignments:Assignment]
     
     static constraints = {

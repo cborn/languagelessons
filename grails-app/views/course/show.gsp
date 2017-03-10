@@ -109,22 +109,17 @@
                 <g:if test="${!course.lessons}">
                     <h3>No lessons found at the moment, sorry!</h3>
                 </g:if>
-                    <g:each in="${days}" var="day">
-                        <div class="img-responsive">
-                            ${day.key}
-                            <hr>
-                            <g:each in="${day.value}" var="lesson">
-                                ${lesson.dueDate.format("hh:MM:aa")}
-                                <g:if test="${lesson.getClass() == languagelessons.Lesson}">
-                                    Lesson: <a href="${createLink(controller: "lessons", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a>
-                                </g:if>
-                                <g:if test="${lesson.getClass() == languagelessons.Assignment}">
-                                    Assignment: <a href="${createLink(controller: "assignment", action: "viewAssignment", params: [assignId: lesson.assignmentId, syllabusId: course.syllabusId])}">${lesson.name}</a>
-                                </g:if>
-                                <br>
-                            </g:each>
-                        </div>
-                    </g:each>
+                <g:each in="${days}" var="day">
+                    <div class="img-responsive">
+                        ${day.key}
+                        <hr>
+                        <g:each in="${day.value}" var="lesson">
+                            ${lesson.dueDate.format("hh:MM:aa")}
+                            Lesson: <a href="${createLink(controller: "lesson", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a>
+                            <br>
+                        </g:each>
+                    </div>
+                </g:each>
                 </table>
                 <g:if test="${access=="faculty"}">
                     <g:link role="button" class="btn btn-primary btn-lg" controller="lessons" action="newLesson" params="[syllabusId: course.syllabusId]">New Assignment</g:link>
