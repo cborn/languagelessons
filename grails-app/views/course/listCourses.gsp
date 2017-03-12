@@ -131,12 +131,12 @@
                                 <td>${course.getCapacity()}</td>
                                 <g:if test="${student}">
                                     <g:if test="${course.students.find { it.id ==  student.id } == null}">
-                                        <td><a href="${createLink(controller: "student", action: "enroll", params: [id: course.syllabusId] )}">Enroll</a></td>
+                                        <td><g:link controller="student" action="enroll" params="[syllabusId: course.syllabusId]">Enroll</g:link></td>
                                     </g:if>
                                     <g:else>
                                         <td>
                                             Enrolled</br>
-                                            <a href="${createLink(controller: "student", action: "withdraw", params: [id: course.syllabusId] )}">Withdraw</a>
+                                            <g:link controller="student" action="withdraw" params="[syllabusId: course.syllabusId]">Withdraw</g:link>
                                         </td>
                                     </g:else>
                                 </g:if>

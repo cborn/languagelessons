@@ -52,7 +52,7 @@ class AdminController {
         // All courses
         def allCourses = Course.list(max:params.max, offset:params.offset);
 
-        render(view:"index", model:[userInfo:userInfo,allUsers:allUsers,allFaculty:allFaculty,allCourses:allCourses])
+        render(view:"index", model:[userInfo:userInfo, allUsers:allUsers, allFaculty:allFaculty, allCourses:allCourses])
         }
     }
 }

@@ -88,7 +88,7 @@
                 <br />
                 <div class="row">
                     <div class="col-md-10">
-                        <sec:access expression="hasRole('FACULTY')"    >
+                        <sec:access expression="hasRole('FACULTY')">
                             <div class="col-md-12">
                                 <g:if test="${userInfo.faculty.title == 'None'}">
                                     <p>Welcome,</p>
@@ -129,39 +129,53 @@
                             
                             <!--  scholarship overview -->
                             <g:if test="${hasScholarship}">
-                             <div class="col-md-12">
-                               	<h3>Scholarship Information</h3>
-                                <p>You can look up enrollment data for scholarships you are currently assigned to as a board member here. You will only be able to access the data for applicants applying to your scholarships.</p>
-                             </div>
+                                <div class="col-md-12">
+                                    <h3>Scholarship Information</h3>
+                                    <p>You can look up enrollment data for scholarships you are currently assigned to as a board member here. You will only be able to access the data for applicants applying to your scholarships.</p>
+                                </div>
                             
-                            <div class="col-md-12" style="padding-top: 20px">
-                                <div class="col-md-4">
-                                    <div class="panel panel-green-border admin-panel">
-                                        <div class="panel-body text-center">
-                                            <h4>Accepted Applications:</h4>
-                                                Show all &raquo;
+                                <div class="col-md-12" style="padding-top: 20px">
+                                    <div class="col-md-4">
+                                        <div class="panel panel-green-border admin-panel">
+                                            <div class="panel-body text-center">
+                                                <h4>Accepted Applications:</h4>
+                                                    Show all &raquo;
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="panel panel-green-border admin-panel">
-                                        <div class="panel-body text-center">
-                                            <h4>Pending Applications:</h4>
-                                                Show all &raquo;
+                                    <div class="col-md-4">
+                                        <div class="panel panel-green-border admin-panel">
+                                            <div class="panel-body text-center">
+                                                <h4>Pending Applications:</h4>
+                                                    Show all &raquo;
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="col-md-4">
+                                        <div class="panel panel-green-border admin-panel">
+                                            <div class="panel-body text-center">
+                                                <h4>Rejected Applications:</h4>
+                                                    Show all &raquo;
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>  
+                            </g:if>
+                                                
+                            <%-- admin sec --%>
+                            <div class="col-md-12">
                                 <div class="col-md-4">
                                     <div class="panel panel-green-border admin-panel">
                                         <div class="panel-body text-center">
-                                            <h4>Rejected Applications:</h4>
+                                            <h4>Your Courses:</h4>
+                                            <h3>${userInfo.faculty.courses.size()}</h3>
+                                            <g:link controller="course" action="index" params="[facultyId: userInfo.faculty.id]">
                                                 Show all &raquo;
+                                            </g:link>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            </g:if>
                         </sec:access>
                         <sec:access expression="hasRole('ROLE_ADMIN')">
                             <%-- <div class="col-md-12">

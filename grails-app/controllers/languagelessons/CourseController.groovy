@@ -69,13 +69,17 @@ class CourseController {
             int thisSeasonYear = year + 1;
             condition = "All Courses in the " + thisSeasonYear + " Season";
         }
+        else if(params.facultyId != null) {
+            println params.facultyId
+            results = Faculty.findById(params.facultyId).courses;
+        }
         else {
             results = allCourses;
             condition = "All Courses";
         }
         
         
-        [courseList:results,title:condition]
+        [courseList:results, title:condition]
     }
     
     
