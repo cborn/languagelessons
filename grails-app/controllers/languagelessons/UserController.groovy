@@ -17,6 +17,259 @@ class UserController {
     }
     
     
+// This will change, when I have time to add a real search %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    @Secured(["ROLE_ADMIN"])
+    def searchResults()
+    {
+      ArrayList<HashMap<String,Object>> results = new ArrayList<HashMap<String,Object>>();
+        if(params.query != null)
+        {
+            results = getSearchResults(params.query);
+        }
+        [results:results];
+    }
+    
+    
+    
+    @Secured(["ROLE_ADMIN"])
+    def search(){
+       ArrayList<HashMap<String,Object>> res =  getSearchResults(params.query);
+        
+        render res as JSON;
+    }
+        // find all sec users with username like
+        
+     public ArrayList<HashMap<String,Object>> getSearchResults(String q){
+        
+        
+        String query = q.split(" ")[0];
+        
+        ArrayList<HashMap<String,Object>> list = new ArrayList<>();
+	if(query.length() > 2)
+	{
+        
+            if(query.isNumber())
+            {
+                SecUser secuser = SecUser.findById(query);
+
+                if(secuser != null && secuser.isStudent)
+                {
+
+                    Student stuu = secuser.student;
+
+                    if(stuu.firstName != null)
+                    { HashMap<String,Object> map = new HashMap<String, Object>();
+                        map.put("title",stuu.firstName + " "+stuu.surname);
+                        map.put("subtitle","Student");
+                        map.put("url","/student/edit/"+stuu.id);
+                        list.add(map);
+                    }
+                }
+                }
+        
+        def su = SecUser.findAllByUsernameIlike('%'+query+'%') as Set;
+        
+        
+        for(SecUser user : su)
+        {
+                
+             HashMap<String,Object> map = new HashMap<String, Object>();
+           
+            
+            if(user.isStudent && user.student)
+            {
+            
+                Student s = user.student;
+             
+                    if(s.firstName != null)
+                    {
+                        map.put("title",s.firstName + " "+s.surname);
+                    }
+                    else
+                    {
+                        map.put("title",user.username);
+                    }
+                
+                map.put("subtitle","Student");
+                map.put("url","/student/edit/"+s.id);
+
+             
+            }
+            else if(user.isFaculty && user.faculty)
+            {
+                
+                Faculty faculty = user.faculty;
+                
+                if(faculty.firstName != null)
+                {
+                    map.put("title",faculty.firstName + " "+faculty.surname);
+                    map.put("subtitle","Faculty");
+                    map.put("url","/faculty/show/"+faculty.id);
+                }
+            }
+            
+            list.add(map);  
+        }
+
+        def s1 = Student.findAllByFirstNameIlike('%'+query+'%') as Set;
+        def s2 = Student.findAllBySurnameIlike('%'+query+'%') as Set;
+        
+        
+        Set u = s1 + s2;
+        
+             HashSet<Student> newSet = new HashSet<Student>();
+            // remove dupes 
+            
+            
+            for(Student s : u)
+            {
+                boolean contains = false;
+                for(Student stu : newSet)
+                {
+                    if(s.getId() == stu.getId())
+                    {
+                        contains = true;
+                    }
+                }              
+                if(!contains)
+                {
+                    newSet.add(s);
+                }
+            }
+
+        
+        def f1 = Faculty.findAllByFirstNameIlike("%"+query+"%") as Set;
+        def f2 = Faculty.findAllBySurnameIlike("%"+query+"%") as Set;
+        
+        
+        Set f = f1 + f2;        
+        
+            
+            HashSet<Faculty> fac = new HashSet<Faculty>();
+            // remove dupes 
+            
+            
+            for(Faculty s : f)
+            {
+                boolean contains = false;
+                for(Faculty stu : fac)
+                {
+                    if(s.getId() ==  stu.getId())
+                    {
+                        contains = true;
+                    }
+                }
+                
+                
+                if(!contains)
+                {
+                    fac.add(s);
+                }
+                
+                
+            }
+            
+        
+        for(Faculty faculty : fac)
+        {
+             HashMap<String,Object> mp = new HashMap<String, Object>();
+            
+                if(faculty.firstName != null)
+                {  
+                    mp.put("title",faculty.firstName +" "+faculty.surname + " "+faculty.surname);
+                    mp.put("subtitle","faculty");
+                    mp.put("url","/faculty/show/"+faculty.id);
+                }
+            list.add(mp);
+            
+            
+        }
+        
+        
+//        Can't get courses working in the search 
+//        def c1 = Course.findAllByNameIlike("%"+query+"%") as Set;
+//        def c2 = Course.findAllByTypeIlike("%"+query+"%") as Set;
+//        
+//        Set c = c1 + c2;
+//        
+//            HashSet<Course> cou = new HashSet<Course>();
+//            // remove dupes 
+//            
+//            
+//            for(Course s : c)
+//            {
+//                boolean contains = false;
+//                for(Course stu : cou)
+//                {
+//                    if(s.getId() ==  stu.getId())
+//                    {
+//                        contains = true;
+//                    }
+//                }
+//                
+//                
+//                if(!contains)
+//                {
+//                    cou.add(s);
+//                }
+//                
+//                
+//            }
+//        
+//        for(Course course : cou)
+//        {
+//           HashMap<String,Object> mp = new HashMap<String, Object>();
+//            
+//            if(course.name != null)
+//            {
+//                mp.put("title",course.name);
+//                mp.put("subtitle","Course");
+//                mp.put("url","/course/show/"+course.id);
+//            }
+//            
+//            list.add(mp);  
+//        }
+//        
+        
+
+        
+		}
+        ArrayList<HashMap<String,Object>> newList = new ArrayList<HashMap<String,Object>>();
+        
+        for(HashMap<String,Object> mp : list)
+        {
+             boolean contains = false;
+            for(HashMap<String,Object> mpin : newList)
+            {
+                if(mp.get("url") != null)
+                {
+                    if(mp.get("url").equalsIgnoreCase(mpin.get("url")))
+                    {
+                        contains = true;
+                    }
+                    if(mp.get("title") == "" || mp.get("title") == null )
+                    {
+                        contains = true;
+                    }
+                }
+                else
+                {
+                    contains = true;
+                }
+            }
+            
+            if(!contains)
+            {
+                newList.add(mp);
+            }
+             
+        }      
+        return newList;
+    }
+    
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    
     def processRegistration() {
         
         // check details

@@ -2,9 +2,11 @@ package languagelessons
 
 class RecordingQuestion extends Question{
     
-    String[] answers;
+    // String[] answers;
+    byte[] audioAnswer;
+    String audioType;
     
     static constraints = {
-        answers nullable:true
+        audioAnswer nullable:true
     }
 }
