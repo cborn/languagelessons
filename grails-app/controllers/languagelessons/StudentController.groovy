@@ -15,7 +15,7 @@ class StudentController {
        // verify applicant and go to correct user homepage
         if (isLoggedIn()) {
             
-            SecUser userInfo = SecUser.findById(springSecurityService.principal.id);
+            SecUser userInfo = getAuthenticatedUser();
             def studentInfo;
             
             // if a applicant, go to their personal homepage
@@ -81,7 +81,7 @@ class StudentController {
         
         if (isLoggedIn()) {
             // find out who the current user is
-            SecUser userInfo = SecUser.findById(springSecurityService.principal.id);
+            SecUser userInfo = getAuthenticatedUser();
             
             def studentInfo;
             if(userInfo.isStudent) {

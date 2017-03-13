@@ -186,7 +186,8 @@ class UserController {
         }
         
         
-//        Can't get courses working in the search 
+//        Can't get courses working in the search
+//
 //        def c1 = Course.findAllByNameIlike("%"+query+"%") as Set;
 //        def c2 = Course.findAllByTypeIlike("%"+query+"%") as Set;
 //        
@@ -293,20 +294,6 @@ class UserController {
             }
         }
         
-// Recaptcha        
-//        if(!recaptchaService.verifyAnswer(session, request.getRemoteAddr(), params)) {
-//            flash.error = "Could not complete registration please try again";
-//            recaptchaOk = false;
-//        }
-        
-//        SimpleDateFormat sdf = new SimpleDateFormat("M/dd/yyyy");
-//        def dateOfBirth = sdf.parse(params.dateOfBirth);
-//        // check dob
-//        if(new Date() - dateOfBirth < 6205) { // if less than 365*17=6205 days between dob and now
-//            flash.error = "Sorry, you must be over 17 to register";
-//            detailsOk = false;
-//        }
-        
         if(detailsOk){ // Add && recaptchaOk if using recaptcha
 
             String key = UUID.randomUUID().toString();
@@ -317,23 +304,24 @@ class UserController {
             // create a new user here
             SecUser userInfo = new SecUser(k: key, username: params.email, password: params.password).save(flush: true, failOnError:true);
             
-            Role studentRole = Role.findByAuthority('ROLE_STUDENT');
-            studenttRole.save(flush: true, failOnError:true);
-            
+            Role studentRole = Role.findByAuthority("ROLE_STUDENT");
+            println(userInfo);
             UserRole.create userInfo, studentRole;
             
-            try {
-            // Email Applicant needs seting up
-            mailService.sendMail {
-            async true
-                to params.email;
-                from "****" //This needs changing to a setting
-                subject "Welcome " + params.email +". Thank you for registering on the Language Lessons";
-                html g.render(template: "/templates/registration", model:[email:params.email,link:link,key:key])
-                }
-            } catch (Exception e) {
-            log.error("Failed to send email ${params.email}", e)
-            }
+                
+
+//            try {
+//            // Email Applicant needs seting up
+//            mailService.sendMail {
+//            async true
+//                to params.email;
+//                from "****" //This needs changing to a setting
+//                subject "Welcome " + params.email +". Thank you for registering on the Language Lessons";
+//                html g.render(template: "/templates/registration", model:[email:params.email,link:link,key:key])
+//                }
+//            } catch (Exception e) {
+//            log.error("Failed to send email ${params.email}", e)
+//            }
 //            recaptchaService.cleanUp(session);
             
             render(view:"completeRegistration")
@@ -377,7 +365,7 @@ class UserController {
     @Secured(["ROLE_ADMIN"])
     def list() {
         
-        SecUser thisUser = SecUser.findById(springSecurityService.principal.id);
+        SecUser thisUser = getAuthenticatedUser();
         
         def accountTypeList = ["Any":"Any","Student":"Student","Faculty":"Faculty","Administrator":"Administrator"];
         
@@ -407,19 +395,16 @@ class UserController {
             }
             else if(params.accountTypeSelect == "Faculty") {
                 results = [];
-                //results += UserRole.findAllByRole(Role.findByAuthority("ROLE_MANAGER"),[max:params.max, offset:params.offset]).user;
                 results += UserRole.findAllByRole(Role.findByAuthority("ROLE_FACULTY")).user;
             }
             else if(params.accountTypeSelect == "Administrator") {
                 results = [];
-                //results += UserRole.findAllByRole(Role.findByAuthority("ROLE_ADMIN"),[max:params.max, offset:params.offset]).user;
                 results += UserRole.findAllByRole(Role.findByAuthority("ROLE_ADMIN")).user;
             }
         }
         
         // if something in the user search box
         if(params.userSearch) {
-            
             // if no account type specified, make it 'any'
             if(!params.accountTypeSelect || params.accountTypeSelect == "Any") {
                 results = SecUser.createCriteria().list() {//max:params.max, offset:params.offset) {
@@ -509,6 +494,8 @@ class UserController {
         [results:results,resultsSize:resultsSize,accountTypeList:accountTypeList,resultsRoles:resultsRoles,thisUser:thisUser,title:"All Users"]
     }
     
+    
+  // This isn't working for some reason !!!!
   def toggleUserEnabled() {
         
         SecUser userInfo = SecUser.findById(params.id);
@@ -516,20 +503,22 @@ class UserController {
         // if they are enabled, disable them
         if(userInfo.enabled) {
             userInfo.enabled = false;
+            userInfo.save(failOnError:true);
             flash.message = "User Account Disabled: " + userInfo.username;
+            println(userInfo.enabled);
         }
         else if(!userInfo.enabled) {
             // check theyre' allowed to be enabled
             //if(userInfo.applicant || userInfo.manager) {
                 userInfo.enabled = true;
+                userInfo.save(failOnError:true);
                 flash.message = "User Account Enabled: " + userInfo.username;
+                println(userInfo.enabled);
             /*}
             else {
                 flash.message = "Cannot Enable Account: " + userInfo.username;
             }*/
         }
-        
-        userInfo.save(failOnError:true);
         
         redirect(action:"list");
     }
@@ -608,7 +597,7 @@ class UserController {
     
     def edit() {
         
-        SecUser userLoggedIn = SecUser.findById(springSecurityService.principal.id);
+        SecUser userLoggedIn = getAuthenticatedUser();
         SecUser userInfo = SecUser.findById(params.id);
         
         def accountTypeList = ["Student":"Student","Faculty":"Faculty","Administrator":"Administrator"];

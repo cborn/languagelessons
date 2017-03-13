@@ -65,19 +65,6 @@ grails:
     spring:
         transactionManagement:
             proxies: false
-        
-endpoints:
-    enabled: false
-    jmx:
-        enabled: true
-        unique-names: true
-        
-spring:
-    main:
-        banner-mode: "off"
-    groovy:
-        template:
-            check-template-location: false
 
 hibernate:
     cache:
@@ -90,7 +77,6 @@ hibernate:
 dataSource:
     pooled: true
     jmxExport: true
-    dialect: org.hibernate.ogm.dialect.mongodb.MongoDBDialect
     driverClassName: org.h2.Driver
     username: sa
     password:

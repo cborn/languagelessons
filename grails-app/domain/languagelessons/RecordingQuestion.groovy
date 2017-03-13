@@ -1,9 +1,11 @@
 package languagelessons
 
+import java.sql.Blob;
+
 class RecordingQuestion extends Question{
     
     // String[] answers;
-    byte[] audioAnswer;
+    Blob audioAnswer;
     String audioType;
     
     static constraints = {
