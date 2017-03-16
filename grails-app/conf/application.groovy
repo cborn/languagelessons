@@ -1,4 +1,3 @@
-
 environments { 
 	development {
                     grails {
@@ -30,18 +29,19 @@ grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.rejectIfNoRule = true
 
 grails.plugin.springsecurity.useSecurityEventListener = true // enable events
-grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appCtx -> 
 
-// TODO: This would record last login time but can't get withTransaction working
-//        SecUser.withTransaction {
-//        def user = getAuthenticatedUser()
+
+// TODO: Want to get this working
+//grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appCtx -> 
+//
+//    User.withTransaction {
+//        def user = SecUser.findById(appCtx.springSecurityService.principal.id)
 //        if(!user.isAttached())
 //            user.attach()
 //        user.lastLoginTime = new Date() // update login time
-//        user.save(failOnError: true)
+//        user.save(flush: true, failOnError: true)
 //    }
-    
-}
+//}
 
 
 // Added by the Spring Security Core plugin:
@@ -72,3 +72,12 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/**',             filters: 'JOINED_FILTERS']
 ]
 
+grails.plugin.springsecurity.useSwitchUserFilter = true
+
+grails.plugin.springsecurity.interceptUrlMap = [
+	[pattern: '/login/impersonate', access: ['ROLE_ADMIN']],
+	[pattern: '/logout/impersonate', access: ['permitAll']]
+	
+]
+
+grails.plugin.springsecurity.switchUser.targetUrl = '/student/index';

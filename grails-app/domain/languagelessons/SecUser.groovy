@@ -23,6 +23,7 @@ class SecUser implements Serializable {
     Faculty faculty
     boolean isStudent = true;
     boolean isFaculty = false;
+    Date lastLoginTime;
 
         // Added some methods for easy name retrieval - just ask the User!
 	// user.getFullName() 
@@ -124,6 +125,7 @@ class SecUser implements Serializable {
         student nullable:true, unique: true
         k nullable: true
         resetKey nullable: true
+        lastLoginTime nullable: true
    }
 
    static mapping = {
