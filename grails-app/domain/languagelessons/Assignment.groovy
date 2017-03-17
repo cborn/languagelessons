@@ -5,7 +5,7 @@ class Assignment {
     int assignmentId;
     String introText;
     Boolean isArchived = false;
-    
+    Lesson lesson;
     Date openDate;
     Date dueDate;
     
@@ -13,10 +13,8 @@ class Assignment {
     int maxAttempts;
     String gradeType = "points";
     
-    static hasMany = [questions:Question]; 
+    static hasMany = [questions:Question, results: AssignmentResult]; 
     static belongsTo = Lesson;
-    
-    def results = [:]
     
     static constraints = {
         isArchived nullable: true
@@ -29,8 +27,5 @@ class Assignment {
     boolean isOpen(){
         Date now = new Date()
         return now.after(openDate)
-    }
-    void addToResults(long UserId, Map results) {
-        results[UserId] = results
     }
 }

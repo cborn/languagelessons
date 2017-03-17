@@ -11,7 +11,7 @@ class Lesson {
     
     
     static hasMany = [assignments:Assignment]
-    
+    static belongsTo = Course
     static constraints = {
         text nullable: true
         isArchived nullable: true

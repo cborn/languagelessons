@@ -318,6 +318,13 @@ div {
     background-color: #678f00;
 }
 
+.correct {
+    color: #00cc33
+}
+.incorrect {
+    color: #ff9933
+}
+
 /* this css makes the navbar links centre but doesnt work with the search bar
 @media (min-width: 768px) {
     .navbar .navbar-nav {
