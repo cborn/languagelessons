@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta name="layout" content="main"/>
+        <script>window.addEventListener('load', initAudio );</script>
         <title>Welcome to Language Lessons</title>
         <style type="text/css" media="screen">
             #status {
@@ -176,5 +177,5 @@
         </div>
       </div>
     </div>
-    </body>
+   </body>
 </html>

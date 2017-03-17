@@ -238,8 +238,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <g:each var="student" in="${GenericApplications}"
-                                            status="i">
+                                        <g:each var="student" in="${GenericApplications}" status="i">
                                             <tr>
                                                 <td>
                                                     ${student.course.location.name + " - " +student.course.name}
@@ -300,43 +299,74 @@
                     <h3>Your Courses</h3>
                     <div class="panel panel-green-border">
                         <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="col-md-12">
-                                        <g:each var="course"
-                                        <dl class="dl-horizontal course-info-wide">
-                                            <dt>Full Name</dt>
-                                            <g:if test="${studentInfo.middleName}">
-                                                <dd>
-                                                    ${studentInfo.firstName + " " + studentInfo.middleName +" " + studentInfo.surname}
-                                                </dd>
-                                            </g:if>
-                                            <g:else>
-                                                <dd>
-                                                    ${studentInfo.firstName + " " + studentInfo.surname}
-                                                </dd>
-                                            </g:else>
-                                        </dl>
+                            <g:each var="course" in="${studentInfo.courses}">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="col-md-12">
+                                            <dl class="dl-horizontal course-info-wide">
+                                                <dt>Course Name</dt>
+                                                <dd>${course.name}</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="col-md-12">
+                                            <dl class="dl-horizontal course-info">
+                                                <dt>Faculty</dt>
+                                                <g:each var="faculty" in="${course.faculty}">
+                                                    <dd>${faculty.getName()}</dd>
+                                                </g:each>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="col-md-12">
+                                            <g:form name="goToCourse" controller="course" params="[syllabusId: course.syllabusId]">
+                                                <g:actionSubmit
+                                                    class="btn btn-default pull-right submit-button-green"
+                                                    name="viewCourse" value="View Course" action="show" />
+                                            </g:form>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="col-md-12">
-                                        <dl class="dl-horizontal applicant-info">
-                                            <dt>University</dt>
-                                            <dd>
-                                                ${studentInfo.institution}
-                                            </dd>
-                                        </dl>
+                            </g:each>
+                            <%-- Made dropdowns mostly for dev --%>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdow-toggle" type="button" data-toggle="dropdown">
+                                            Enroll
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <g:each var="course" in="${allCourses}">
+                                                <g:if test="${course.students.find { it.id ==  studentInfo.id}  == null}">
+                                                    <li><g:link action="enroll" params="[syllabusId: course.syllabusId]">${course.getCourseName()}</g:link></li>
+                                                </g:if>
+                                                <g:else>
+                                                    <li class="disabled"><a href="#">${course.getCourseName()}</a></li>
+                                                </g:else>
+                                            </g:each>
+                                        </ul>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <g:form name="goToInfo">
-                                        <g:actionSubmit
-                                            class="btn btn-default pull-right submit-button-green"
-                                            name="editApplicant" value="Edit Your Information" action="edit" />
-                                    </g:form>
+                                <div class="col-md-10">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdow-toggle" type="button" data-toggle="dropdown">
+                                            Withdraw
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <g:each var="course" in="${allCourses}">
+                                                <g:if test="${course.students.find { it.id ==  studentInfo.id}  != null}">
+                                                    <li><g:link action="withdraw" params="[syllabusId: course.syllabusId]">${course.getCourseName()}</g:link></li>
+                                                </g:if>
+                                                <g:else>
+                                                    <li class="disabled"><a href="#">${course.getCourseName()}</a></li>
+                                                </g:else>
+                                            </g:each>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>

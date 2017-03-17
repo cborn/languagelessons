@@ -13,31 +13,6 @@
             
             <li class="nav active"><a href="#content" data-toggle="tab">Users</a></li>
             <li class="nav"><a href="${createLink(action:'create')}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add New User</a></li>
-            <li class="nav pull-right">
-                        <a class="ll-save-tab">
-                            <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span>
-                            <button type="button" class="btn-masking-as-tab" data-toggle="modal" data-target="#myModal">Download List</button>
-                        </a>
-                    </li>
-                    
-                     <%-- Modal --%>
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">Download List: ${title}</h4>
-                                </div>
-                                <div class="modal-body text-center">
-                                    <p style="padding-bottom: 10px">Select a format to download data:</p>
-                                    <%--<export:resource />--%>
-                                    <export:formats formats="['csv', 'excel', 'pdf']" controller="reports" action="downloadAllUserList" params="[status: params.status]" />
-                                    <br/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <%-- END MODAL --%>
         </ul>
         <div class="tab-content">
             <g:if test="${flash.message}">
@@ -125,9 +100,9 @@
                                     <td>${user.getFirstName()}</td>
                                     <td>${user.getSurname()}</td>
                                     <td>
-                                        <g:if test="${resultsRoles[i].toString() == "ROLE_STUDENT"}">Student</g:if>
-                                        <g:elseif test="${resultsRoles[i].toString() == "ROLE_FACULTY"}">Faculty</g:elseif>
-                                        <g:elseif test="${resultsRoles[i].toString() == "ROLE_ADMIN"}">Administrator</g:elseif>
+                                        <g:if test="${resultsRoles[i].toString() == "Role(authority:ROLE_STUDENT)"}">Student</g:if>
+                                        <g:elseif test="${resultsRoles[i].toString() == "Role(authority:ROLE_FACULTY)"}">Faculty</g:elseif>
+                                        <g:elseif test="${resultsRoles[i].toString() == "Role(authority:ROLE_ADMIN)"}">Administrator</g:elseif>
                                         <g:else>-</g:else>
                                     </td>
                                     <td>

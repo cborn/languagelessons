@@ -51,19 +51,9 @@
 		<li class="nav"><a href="#identification" data-toggle="tab">Identification</a></li>
                 
 
-		<li class="nav"><a href="#applications" data-toggle="tab">Applications</a></li>
+		<li class="nav"><a href="#courses" data-toggle="tab">Courses</a></li>
 		<%-- SPLIT --%>
-		<sec:access expression="hasRole('ROLE_ADMIN')">
-			<li class="nav pull-right"><a class="ll-delete-tab"> <g:form
-						name="deleteBtnForm">
-						<g:hiddenField name="applicantId" value="${applicantInfo.id}" />
-						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-						<g:actionSubmit class="btn-masking-as-tab" name="delete"
-							value="Delete User" action="deleteUser"
-							onclick="return confirm('Are you sure?')" />
-					</g:form>
-			</a></li>
-			
+		<sec:access expression="hasRole('ROLE_ADMIN')">			
 			<li class="nav pull-right">
                             <a class="ll-save-tab">
                             <form action='${request.contextPath}/login/impersonate' class="ll-save-tab" method='POST'> 

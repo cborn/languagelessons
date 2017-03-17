@@ -64,7 +64,7 @@
                             <tbody class="text-center">
                                 <g:each var="course" in="${courseList}" status="i">
                                     <tr>
-                                        <td><g:link controller="course" action="show" id="${course.id}">${course.name}</g:link></td>
+                                        <td><g:link controller="course" action="show" params="[syllabusId: course.syllabusId]">${course.name}</g:link></td>
                                         <g:if test="${params.status == "all"}"><td>${course.getTermFull()}</td></g:if>
                                         <%--<td>${course.type}</td>--%>
                                         <td>${course.syllabusId}</td>

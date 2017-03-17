@@ -1,6 +1,6 @@
 package languagelessons
 
-class AudioController {
+class RecordingController {
 
     def index() { }
 }

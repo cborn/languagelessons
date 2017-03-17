@@ -15,20 +15,18 @@ class StudentController {
        // verify applicant and go to correct user homepage
         if (isLoggedIn()) {
             
-            SecUser userInfo = SecUser.findById(springSecurityService.principal.id);
+            SecUser userInfo = getAuthenticatedUser();
             def studentInfo;
             
             // if a applicant, go to their personal homepage
             if(SpringSecurityUtils.ifAllGranted("ROLE_STUDENT")) {
                 // if this is their first time logging in, take them to enter details
                 if(!userInfo.student) {
-                    
                     render(view:"onFirstLogin", model:[userInfo:userInfo])
                 }
                 else {
                     studentInfo = userInfo.student;
-			
-                    [userInfo:userInfo,studentInfo:studentInfo]
+                    [userInfo:userInfo, studentInfo:studentInfo, allCourses: Course.list()]
                 }
             }
             // if admin/manager, send them to their own homepage
@@ -54,27 +52,27 @@ class StudentController {
     
 @Secured(["ROLE_ADMIN", "ROLE_FACULTY", "ROLE_STUDENT"])
     def enroll() {
-        def result = studentService.addToCourse(params.int("id"));
+        def result = studentService.addToCourse(params.int("syllabusId"));
         
         if(!result.error) {
-            redirect(controller:"course", action:"listCourses")
+        redirect(controller:"student", action:"index")
             return;
         }
 
         flash.message = g.message(code: result.error.code, args: result.error.args)
-        redirect(controller:"course", action:"listCourses")
+        redirect(controller:"student", action:"index")
     }
     
     def withdraw() {
-        def result = studentService.removeFromCourse(params.int("id"));
+        def result = studentService.removeFromCourse(params.int("syllabusId"));
         
         if(!result.error) {
-            redirect(controller:"course", action:"listCourses")
+            redirect(controller:"student", action:"index")
             return;
         }
 
         flash.message = g.message(code: result.error.code, args: result.error.args)
-        redirect(controller:"course", action:"listCourses")
+        redirect(controller:"student", action:"index")
     }
     
     
@@ -83,7 +81,7 @@ class StudentController {
         
         if (isLoggedIn()) {
             // find out who the current user is
-            SecUser userInfo = SecUser.findById(springSecurityService.principal.id);
+            SecUser userInfo = getAuthenticatedUser();
             
             def studentInfo;
             if(userInfo.isStudent) {

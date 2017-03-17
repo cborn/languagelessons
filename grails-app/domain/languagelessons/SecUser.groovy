@@ -15,7 +15,6 @@ class SecUser implements Serializable {
     String k;
     String username
     String password
-    Date lastLoginTime
     boolean enabled = false   // Change this before going to production
     boolean accountExpired
     boolean accountLocked
@@ -24,6 +23,7 @@ class SecUser implements Serializable {
     Faculty faculty
     boolean isStudent = true;
     boolean isFaculty = false;
+    Date lastLoginTime;
 
         // Added some methods for easy name retrieval - just ask the User!
 	// user.getFullName() 

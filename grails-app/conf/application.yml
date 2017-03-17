@@ -1,30 +1,8 @@
----
-grails:
-    profile: web
-    codegen:
-        defaultPackage: languagelessons
-    spring:
-        transactionManagement:
-            proxies: false
 info:
     app:
         name: '@info.app.name@'
         version: '@info.app.version@'
         grailsVersion: '@info.app.grailsVersion@'
-spring:
-    main:
-        banner-mode: "off"
-    groovy:
-        template:
-            check-template-location: false
-
-# Spring Actuator Endpoints are Disabled by Default
-endpoints:
-    enabled: false
-    jmx:
-        enabled: true
-
----
 grails:
     mime:
         disable:
@@ -81,17 +59,20 @@ grails:
                 staticparts: none
     resources:
         pattern: /**
-endpoints:
-    jmx:
-        unique-names: true
+    profile: web
+    codegen:
+        defaultPackage: languagelessons
+    spring:
+        transactionManagement:
+            proxies: false
 
----
 hibernate:
     cache:
         queries: false
         use_second_level_cache: true
         use_query_cache: false
         region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+
 
 dataSource:
     pooled: true

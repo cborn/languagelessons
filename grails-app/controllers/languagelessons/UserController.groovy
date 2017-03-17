@@ -17,6 +17,260 @@ class UserController {
     }
     
     
+// This will change, when I have time to add a real search %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    @Secured(["ROLE_ADMIN"])
+    def searchResults()
+    {
+      ArrayList<HashMap<String,Object>> results = new ArrayList<HashMap<String,Object>>();
+        if(params.query != null)
+        {
+            results = getSearchResults(params.query);
+        }
+        [results:results];
+    }
+    
+    
+    
+    @Secured(["ROLE_ADMIN"])
+    def search(){
+       ArrayList<HashMap<String,Object>> res =  getSearchResults(params.query);
+        
+        render res as JSON;
+    }
+        // find all sec users with username like
+        
+     public ArrayList<HashMap<String,Object>> getSearchResults(String q){
+        
+        
+        String query = q.split(" ")[0];
+        
+        ArrayList<HashMap<String,Object>> list = new ArrayList<>();
+	if(query.length() > 2)
+	{
+        
+            if(query.isNumber())
+            {
+                SecUser secuser = SecUser.findById(query);
+
+                if(secuser != null && secuser.isStudent)
+                {
+
+                    Student stuu = secuser.student;
+
+                    if(stuu.firstName != null)
+                    { HashMap<String,Object> map = new HashMap<String, Object>();
+                        map.put("title",stuu.firstName + " "+stuu.surname);
+                        map.put("subtitle","Student");
+                        map.put("url","/student/edit/"+stuu.id);
+                        list.add(map);
+                    }
+                }
+                }
+        
+        def su = SecUser.findAllByUsernameIlike('%'+query+'%') as Set;
+        
+        
+        for(SecUser user : su)
+        {
+                
+             HashMap<String,Object> map = new HashMap<String, Object>();
+           
+            
+            if(user.isStudent && user.student)
+            {
+            
+                Student s = user.student;
+             
+                    if(s.firstName != null)
+                    {
+                        map.put("title",s.firstName + " "+s.surname);
+                    }
+                    else
+                    {
+                        map.put("title",user.username);
+                    }
+                
+                map.put("subtitle","Student");
+                map.put("url","/student/edit/"+s.id);
+
+             
+            }
+            else if(user.isFaculty && user.faculty)
+            {
+                
+                Faculty faculty = user.faculty;
+                
+                if(faculty.firstName != null)
+                {
+                    map.put("title",faculty.firstName + " "+faculty.surname);
+                    map.put("subtitle","Faculty");
+                    map.put("url","/faculty/show/"+faculty.id);
+                }
+            }
+            
+            list.add(map);  
+        }
+
+        def s1 = Student.findAllByFirstNameIlike('%'+query+'%') as Set;
+        def s2 = Student.findAllBySurnameIlike('%'+query+'%') as Set;
+        
+        
+        Set u = s1 + s2;
+        
+             HashSet<Student> newSet = new HashSet<Student>();
+            // remove dupes 
+            
+            
+            for(Student s : u)
+            {
+                boolean contains = false;
+                for(Student stu : newSet)
+                {
+                    if(s.getId() == stu.getId())
+                    {
+                        contains = true;
+                    }
+                }              
+                if(!contains)
+                {
+                    newSet.add(s);
+                }
+            }
+
+        
+        def f1 = Faculty.findAllByFirstNameIlike("%"+query+"%") as Set;
+        def f2 = Faculty.findAllBySurnameIlike("%"+query+"%") as Set;
+        
+        
+        Set f = f1 + f2;        
+        
+            
+            HashSet<Faculty> fac = new HashSet<Faculty>();
+            // remove dupes 
+            
+            
+            for(Faculty s : f)
+            {
+                boolean contains = false;
+                for(Faculty stu : fac)
+                {
+                    if(s.getId() ==  stu.getId())
+                    {
+                        contains = true;
+                    }
+                }
+                
+                
+                if(!contains)
+                {
+                    fac.add(s);
+                }
+                
+                
+            }
+            
+        
+        for(Faculty faculty : fac)
+        {
+             HashMap<String,Object> mp = new HashMap<String, Object>();
+            
+                if(faculty.firstName != null)
+                {  
+                    mp.put("title",faculty.firstName +" "+faculty.surname + " "+faculty.surname);
+                    mp.put("subtitle","faculty");
+                    mp.put("url","/faculty/show/"+faculty.id);
+                }
+            list.add(mp);
+            
+            
+        }
+        
+        
+//        Can't get courses working in the search
+//
+//        def c1 = Course.findAllByNameIlike("%"+query+"%") as Set;
+//        def c2 = Course.findAllByTypeIlike("%"+query+"%") as Set;
+//        
+//        Set c = c1 + c2;
+//        
+//            HashSet<Course> cou = new HashSet<Course>();
+//            // remove dupes 
+//            
+//            
+//            for(Course s : c)
+//            {
+//                boolean contains = false;
+//                for(Course stu : cou)
+//                {
+//                    if(s.getId() ==  stu.getId())
+//                    {
+//                        contains = true;
+//                    }
+//                }
+//                
+//                
+//                if(!contains)
+//                {
+//                    cou.add(s);
+//                }
+//                
+//                
+//            }
+//        
+//        for(Course course : cou)
+//        {
+//           HashMap<String,Object> mp = new HashMap<String, Object>();
+//            
+//            if(course.name != null)
+//            {
+//                mp.put("title",course.name);
+//                mp.put("subtitle","Course");
+//                mp.put("url","/course/show/"+course.id);
+//            }
+//            
+//            list.add(mp);  
+//        }
+//        
+        
+
+        
+		}
+        ArrayList<HashMap<String,Object>> newList = new ArrayList<HashMap<String,Object>>();
+        
+        for(HashMap<String,Object> mp : list)
+        {
+             boolean contains = false;
+            for(HashMap<String,Object> mpin : newList)
+            {
+                if(mp.get("url") != null)
+                {
+                    if(mp.get("url").equalsIgnoreCase(mpin.get("url")))
+                    {
+                        contains = true;
+                    }
+                    if(mp.get("title") == "" || mp.get("title") == null )
+                    {
+                        contains = true;
+                    }
+                }
+                else
+                {
+                    contains = true;
+                }
+            }
+            
+            if(!contains)
+            {
+                newList.add(mp);
+            }
+             
+        }      
+        return newList;
+    }
+    
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    
     def processRegistration() {
         
         // check details
@@ -40,20 +294,6 @@ class UserController {
             }
         }
         
-// Recaptcha        
-//        if(!recaptchaService.verifyAnswer(session, request.getRemoteAddr(), params)) {
-//            flash.error = "Could not complete registration please try again";
-//            recaptchaOk = false;
-//        }
-        
-//        SimpleDateFormat sdf = new SimpleDateFormat("M/dd/yyyy");
-//        def dateOfBirth = sdf.parse(params.dateOfBirth);
-//        // check dob
-//        if(new Date() - dateOfBirth < 6205) { // if less than 365*17=6205 days between dob and now
-//            flash.error = "Sorry, you must be over 17 to register";
-//            detailsOk = false;
-//        }
-        
         if(detailsOk){ // Add && recaptchaOk if using recaptcha
 
             String key = UUID.randomUUID().toString();
@@ -64,23 +304,24 @@ class UserController {
             // create a new user here
             SecUser userInfo = new SecUser(k: key, username: params.email, password: params.password).save(flush: true, failOnError:true);
             
-            Role studentRole = Role.findByAuthority('ROLE_STUDENT');
-            studenttRole.save(flush: true, failOnError:true);
-            
+            Role studentRole = Role.findByAuthority("ROLE_STUDENT");
+            println(userInfo);
             UserRole.create userInfo, studentRole;
             
-            try {
-            // Email Applicant needs seting up
-            mailService.sendMail {
-            async true
-                to params.email;
-                from "****" //This needs changing to a setting
-                subject "Welcome " + params.email +". Thank you for registering on the Language Lessons";
-                html g.render(template: "/templates/registration", model:[email:params.email,link:link,key:key])
-                }
-            } catch (Exception e) {
-            log.error("Failed to send email ${params.email}", e)
-            }
+                
+
+//            try {
+//            // Email Applicant needs seting up
+//            mailService.sendMail {
+//            async true
+//                to params.email;
+//                from "****" //This needs changing to a setting
+//                subject "Welcome " + params.email +". Thank you for registering on the Language Lessons";
+//                html g.render(template: "/templates/registration", model:[email:params.email,link:link,key:key])
+//                }
+//            } catch (Exception e) {
+//            log.error("Failed to send email ${params.email}", e)
+//            }
 //            recaptchaService.cleanUp(session);
             
             render(view:"completeRegistration")
@@ -124,7 +365,7 @@ class UserController {
     @Secured(["ROLE_ADMIN"])
     def list() {
         
-        SecUser thisUser = SecUser.findById(springSecurityService.principal.id);
+        SecUser thisUser = getAuthenticatedUser();
         
         def accountTypeList = ["Any":"Any","Student":"Student","Faculty":"Faculty","Administrator":"Administrator"];
         
@@ -154,19 +395,16 @@ class UserController {
             }
             else if(params.accountTypeSelect == "Faculty") {
                 results = [];
-                //results += UserRole.findAllByRole(Role.findByAuthority("ROLE_MANAGER"),[max:params.max, offset:params.offset]).user;
                 results += UserRole.findAllByRole(Role.findByAuthority("ROLE_FACULTY")).user;
             }
             else if(params.accountTypeSelect == "Administrator") {
                 results = [];
-                //results += UserRole.findAllByRole(Role.findByAuthority("ROLE_ADMIN"),[max:params.max, offset:params.offset]).user;
                 results += UserRole.findAllByRole(Role.findByAuthority("ROLE_ADMIN")).user;
             }
         }
         
         // if something in the user search box
         if(params.userSearch) {
-            
             // if no account type specified, make it 'any'
             if(!params.accountTypeSelect || params.accountTypeSelect == "Any") {
                 results = SecUser.createCriteria().list() {//max:params.max, offset:params.offset) {
@@ -253,9 +491,14 @@ class UserController {
             }
         }
         */
+       
+        
+        
         [results:results,resultsSize:resultsSize,accountTypeList:accountTypeList,resultsRoles:resultsRoles,thisUser:thisUser,title:"All Users"]
     }
     
+    
+  // This isn't working for some reason !!!!
   def toggleUserEnabled() {
         
         SecUser userInfo = SecUser.findById(params.id);
@@ -263,20 +506,22 @@ class UserController {
         // if they are enabled, disable them
         if(userInfo.enabled) {
             userInfo.enabled = false;
+            userInfo.save(failOnError:true);
             flash.message = "User Account Disabled: " + userInfo.username;
+            println(userInfo.enabled);
         }
         else if(!userInfo.enabled) {
             // check theyre' allowed to be enabled
             //if(userInfo.applicant || userInfo.manager) {
                 userInfo.enabled = true;
+                userInfo.save(failOnError:true);
                 flash.message = "User Account Enabled: " + userInfo.username;
+                println(userInfo.enabled);
             /*}
             else {
                 flash.message = "Cannot Enable Account: " + userInfo.username;
             }*/
         }
-        
-        userInfo.save(failOnError:true);
         
         redirect(action:"list");
     }
@@ -355,7 +600,7 @@ class UserController {
     
     def edit() {
         
-        SecUser userLoggedIn = SecUser.findById(springSecurityService.principal.id);
+        SecUser userLoggedIn = getAuthenticatedUser();
         SecUser userInfo = SecUser.findById(params.id);
         
         def accountTypeList = ["Student":"Student","Faculty":"Faculty","Administrator":"Administrator"];
