@@ -9,7 +9,14 @@ class AssignmentController {
         def course = Course.findBySyllabusId(params.syllabusId)
         def assignment = Assignment.findByAssignmentId(params.assignId)
         SecUser user = getAuthenticatedUser()
-        [assignment:assignment, course: course]
+        Student student = user.student
+        def result;
+        for (indr in assignment.results) {
+            if (indr.studentId == student.studentId) {
+                result = indr;
+            }
+        }
+        [assignment:assignment, course: course, result: result]
     }
     @Secured(["ROLE_STUDENT"])
     def gradeAssignment() {
@@ -20,7 +27,7 @@ class AssignmentController {
         Student student = user.student;
         Assignment assignment = Assignment.findByAssignmentId(params.assignmentId)
         int i = 0;
-        def results = [:]
+        Map<String,String> results = [:]
         def score = 0
         for (question in assignment.questions) {
             //question handles all of this to allow for more compatibility
@@ -31,9 +38,15 @@ class AssignmentController {
             } else {
                 //answer was wrong, do something more with this later?
             }
-            results[question.questionNum] = params[Integer.toString(question.questionNum)]
+            results[Integer.toString(question.questionNum)] = params[Integer.toString(question.questionNum)]
         }
-        assignment.addToResults(user.student.id, results)
-        redirect(action = "viewAssignment")
+        assignment
+            .addToResults(studentId: student.studentId, results: results)
+            .save(flush: true)
+        redirect(controller: "lesson", 
+                 action: "viewLesson", 
+                 params: 
+                        [syllabusId: assignment.lesson.course.syllabusId,
+                         lessonName: assignment.lesson.name])
     }
 }

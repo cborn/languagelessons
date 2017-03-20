@@ -105,23 +105,30 @@
         <div class="col-xs-12">
             <div class="jumbotron">
                 <img src="" class="img-responsive"/>
-                <p>${course.name}: ${assignment.name}</p>
-                <p>Due: <g:formatDate date="${assignment.dueDate}" type="datetime" style="SHORT"/></p>
-                ${assignment.introText}
-                <g:if test="${result != null}">
-                    <g:each in="${assignment.questions.sort{it.questionNum}}" var="question">
-                        <g:render template="question/${question.view}" model="${[question: question, answer: result.getAnswer(question.questionNum)]}"/>
-                    </g:each>
+                <p>${course.name}<p>
+                <g:if test="${!course.lessons}">
+                    <h3>No lessons found at the moment, sorry!</h3>
                 </g:if>
-                <g:else>
-                    <g:form name="assign" action="gradeAssignment">
-                        <g:hiddenField name="assignmentId" value="${assignment.assignmentId}"/>
-                        <g:each in="${assignment.questions.sort{it.questionNum}}" var="question">
-                            <g:render template="question/${question.view}" model="${[question: question]}"/>
-                        </g:each>
-                        <g:actionSubmit value="gradeAssignment"/>
-                    </g:form>
-                </g:else>
+                    <g:each in="${days}" var="day">
+                        <div class="img-responsive">
+                            ${day.key}
+                            <hr>
+                            <g:each in="${day.value}" var="lesson">
+                                ${lesson.dueDate.format("hh:MM:aa")}
+                                <g:if test="${lesson.getClass() == languagelessons.Lesson}">
+                                    Lesson: <a href="${createLink(controller: "lesson", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a>
+                                </g:if>
+                                <g:if test="${lesson.getClass() == languagelessons.Assignment}">
+                                    Assignment: <a href="${createLink(controller: "assignment", action: "viewAssignment", params: [assignId: lesson.assignmentId, syllabusId: course.syllabusId])}">${lesson.name}</a>
+                                </g:if>
+                                <br>
+                            </g:each>
+                        </div>
+                    </g:each>
+                </table>
+                <g:if test="${access=="faculty"}">
+                    <g:link role="button" class="btn btn-primary btn-lg" controller="lessons" action="newLesson" params="[syllabusId: course.syllabusId]">New Assignment</g:link>
+                </g:if>
             </div>
         </div>
     </body>

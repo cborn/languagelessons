@@ -100,9 +100,9 @@
                                     <td>${user.getFirstName()}</td>
                                     <td>${user.getSurname()}</td>
                                     <td>
-                                        <g:if test="${resultsRoles[i].toString() == "ROLE_STUDENT"}">Student</g:if>
-                                        <g:elseif test="${resultsRoles[i].toString() == "ROLE_FACULTY"}">Faculty</g:elseif>
-                                        <g:elseif test="${resultsRoles[i].toString() == "ROLE_ADMIN"}">Administrator</g:elseif>
+                                        <g:if test="${resultsRoles[i].toString() == "Role(authority:ROLE_STUDENT)"}">Student</g:if>
+                                        <g:elseif test="${resultsRoles[i].toString() == "Role(authority:ROLE_FACULTY)"}">Faculty</g:elseif>
+                                        <g:elseif test="${resultsRoles[i].toString() == "Role(authority:ROLE_ADMIN)"}">Administrator</g:elseif>
                                         <g:else>-</g:else>
                                     </td>
                                     <td>
