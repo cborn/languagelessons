@@ -39,9 +39,6 @@ dependencies {
 
     compile "org.grails.plugins:spring-security-core:3.1.1"
 
-    // Ckeditor https://stefanogualdi.github.io/grails-ckeditor/docs/index.html
-    compile "org.grails.plugins:ckeditor:4.5.9.0"
-
     // Search
     compile 'org.grails.plugins:grails-quick-search:0.7.2'
 

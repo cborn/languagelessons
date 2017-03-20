@@ -305,7 +305,6 @@ class UserController {
             SecUser userInfo = new SecUser(k: key, username: params.email, password: params.password).save(flush: true, failOnError:true);
             
             Role studentRole = Role.findByAuthority("ROLE_STUDENT");
-            println(userInfo);
             UserRole.create userInfo, studentRole;
             
                 

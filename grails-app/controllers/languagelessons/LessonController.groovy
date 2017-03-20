@@ -7,6 +7,11 @@ class LessonController {
         
     }
     
+    def lessonBuilder() {
+        // Place holder for text editing system
+        
+    }
+    
     def newLesson() {
         Course course = Course.findBySyllabusId(params.syllabusId)
         [course: course]
