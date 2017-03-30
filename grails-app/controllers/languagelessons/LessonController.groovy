@@ -1,24 +1,26 @@
 package languagelessons
 import static java.util.Calendar.*
 import org.grails.gsp.GroovyPagesTemplateEngine
+import grails.plugin.springsecurity.annotation.Secured
+
 class LessonController {
     def groovyPagesTemplateEngine
+    @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
     def index() { 
         
     }
     
+    @Secured(["ROLE_FACULTY"])
     def lessonBuilder() {
         // Place holder for text editing system
-        
+        [user: getAuthenticatedUser()]
     }
     def syncPreview() {
-        System.out.println("I am working, at least.")
-        //def compiledContent = templateEngine.createTemplate(params.data, 'view')
-        //render(template: "syncPreview", model)
         
         //def output = new StringWriter()
-        //groovyPagesTemplateEngine.createTemplate(params.data, idgen).make([show: true, items: ['Grails','Groovy']]).writeTo(output)
-        render params.data
+        //groovyPagesTemplateEngine.createTemplate(params.data, '1').make([show: true, items: ['Grails','Groovy']]).writeTo(output)
+        //System.out.println(output.toString())
+        [data: params.data]
     }
     
     def newLesson() {
