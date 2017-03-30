@@ -1,8 +1,8 @@
 package languagelessons
 import static java.util.Calendar.*
-
+import org.grails.gsp.GroovyPagesTemplateEngine
 class LessonController {
-
+    def groovyPagesTemplateEngine
     def index() { 
         
     }
@@ -10,6 +10,15 @@ class LessonController {
     def lessonBuilder() {
         // Place holder for text editing system
         
+    }
+    def syncPreview() {
+        System.out.println("I am working, at least.")
+        //def compiledContent = templateEngine.createTemplate(params.data, 'view')
+        //render(template: "syncPreview", model)
+        
+        //def output = new StringWriter()
+        //groovyPagesTemplateEngine.createTemplate(params.data, idgen).make([show: true, items: ['Grails','Groovy']]).writeTo(output)
+        render params.data
     }
     
     def newLesson() {

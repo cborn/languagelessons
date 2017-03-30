@@ -108,7 +108,9 @@
                 <p>${course.name}: ${assignment.name}</p>
                 <p>Due: <g:formatDate date="${assignment.dueDate}" type="datetime" style="SHORT"/></p>
                 ${assignment.introText}
+                <br>
                 <g:if test="${result != null}">
+                    You scored: ${result.score}/${result.maxScore}
                     <g:each in="${assignment.questions.sort{it.questionNum}}" var="question">
                         <g:render template="question/${question.view}" model="${[question: question, answer: result.getAnswer(question.questionNum)]}"/>
                     </g:each>
