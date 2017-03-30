@@ -92,6 +92,26 @@ class BootStrap {
             .addToQuestions(q2)
             .addToQuestions(q3)
 //        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
+
+        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
+        // Create test recording assignment
+
+        def recordingAssignment = new Assignment(name:"Quiz 2",
+                                                assignmentId: 13,
+                                                introText: "Please take this quiz for Monday.",
+                                                openDate: Date.parse("yyyy-mm-dd", "2016-01-01"),
+                                                dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"),
+                                                maxAttempts: 4)
+
+        def question = new RecordingQuestion(pointValue: 4,
+                                            question: "Record something, dweeb.",
+                                            view: "recordingQuestion",
+                                            questionNum: 1,
+                                            audioType: "wav")
+
+        recordingAssignment.addToQuestions(question)
+
+        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
         
         // Create Test Courses
             
@@ -100,6 +120,9 @@ class BootStrap {
             //Setting up a lesson for the first course
             def lesson1 = new Lesson(name: "Read Chapter 5",openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
             lesson1.addToAssignments(assign1) //fixed assignment adding
+
+            def lesson2 = new Lesson(name: "Do the thing", openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
+            lesson2.addToAssignments(recordingAssignment)
             
         
             Date start = Date.parse("yyyy-MM-dd", "2016-01-01");
@@ -108,6 +131,7 @@ class BootStrap {
                 .addToFaculty(f1)
                 .addToStudents(s1) //addTo___ also supports creating the object inline
                 .addToLessons(lesson1)
+                .addToLessons(lesson2)
                 .save(failOnError: true)
 
             new Course(name: 'Chinese', syllabusId: '2222', applicantCap: 20, startDate: start, endDate: end)
