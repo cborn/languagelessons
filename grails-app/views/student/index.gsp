@@ -321,11 +321,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="col-md-12">
-                                            <g:form name="goToCourse" controller="course" params="[syllabusId: course.syllabusId]">
-                                                <g:actionSubmit
-                                                    class="btn btn-default pull-right submit-button-green"
-                                                    name="viewCourse" value="View Course" action="lessonBuilder" />
-                                            </g:form>
+                                            <g:link role="button" class="btn btn-primary" controller="course" action="show" params="[syllabusId: course.syllabusId]">View Course</g:link>
                                         </div>
                                     </div>
                                 </div>

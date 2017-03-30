@@ -120,21 +120,9 @@
                         </g:each>
                     </div>
                 </g:each>
-                </table>
-                <g:if test="${access=="faculty"}">
-                    <g:link role="button" class="btn btn-primary btn-lg" controller="lessons" action="newLesson" params="[syllabusId: course.syllabusId]">New Assignment</g:link>
-                </g:if>
-                <div class="row" style="padding-top:20px">
-                    <div class="col-md-3">
-                        <div class="col-md-12">
-                            <g:form name="newLesson" controller="lesson">
-                                <g:actionSubmit
-                                    class="btn btn-default pull-right submit-button-green"
-                                    name="newLesson" value="Create Lesson" action="newLesson" />
-                            </g:form>
-                        </div>
-                    </div>
-                </div>
+                <security:authorize access="hasRole('ROLE_FACULTY')">
+                    <g:link role="button" class="btn btn-primary btn-lg" controller="lesson" action="lessonBuilder">New Assignment</g:link>
+                </security:authorize>
             </div>
         </div>
     </body>
