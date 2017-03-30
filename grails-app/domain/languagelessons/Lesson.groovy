@@ -4,6 +4,7 @@ import static java.util.Calendar.*
 class Lesson {
     String name;
     String text;
+    int lessonId;
     Date openDate;
     Date dueDate;
     Course course;

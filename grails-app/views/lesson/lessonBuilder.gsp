@@ -114,7 +114,7 @@
                     jQuery.ajax({
                         type: "POST", 
                         url: "${createLink(action: 'syncPreview')}",
-                        data: "data=" + data,
+                        data: JSON.stringify({data: data, syllabusId: syllabusId}),
                         success: function (data) {
                             preview.setHtml(data);
                         }

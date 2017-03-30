@@ -12,14 +12,15 @@ class LessonController {
     
     @Secured(["ROLE_FACULTY"])
     def lessonBuilder() {
-        // Place holder for text editing system
-        [user: getAuthenticatedUser()]
+        int currentId = 2
+        def course = Course.findBySyllabusId(params.syllabusId)
+        def lesson = new Lesson(name: "untitled lesson",lessonId: currentId, openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
+        course.addToLessons(lesson).save(flush: true)
+        [user: getAuthenticatedUser(), lessonId: lesson.lessonId]
     }
     def syncPreview() {
-        
-        //def output = new StringWriter()
-        //groovyPagesTemplateEngine.createTemplate(params.data, '1').make([show: true, items: ['Grails','Groovy']]).writeTo(output)
-        //System.out.println(output.toString())
+        System.out.println(params.lessonId)
+        assert params.data != null;
         [data: params.data]
     }
     

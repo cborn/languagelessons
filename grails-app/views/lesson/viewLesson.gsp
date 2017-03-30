@@ -112,7 +112,7 @@
                 <img src="" class="img-responsive"/>
                 <p>${course.name}: ${lesson.name}</p>
                 <p>Due: <g:formatDate date="${lesson.dueDate}" type="datetime" style="SHORT"/></p>
-                ${lesson.text}
+                ${raw(lesson.text)}
                 <g:if test="${lesson.assignments}">
                     This lesson has attached assignments to be completed online: <br>
                     <g:each in="${lesson.assignments}" var="assignment">
