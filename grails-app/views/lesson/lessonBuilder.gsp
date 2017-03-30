@@ -24,7 +24,7 @@
             var preview = CKEDITOR.document.getById( 'preview' );
 
                 function syncPreview() {
-                    var data = editor.getData().replace("&nbsp;", " ")
+                    var data = encodeURIComponent(editor.getData())
                     jQuery.ajax({
                         type: "POST", 
                         url: "${createLink(action: 'syncPreview')}",
