@@ -578,3 +578,9 @@ h2.correct {
 h2.incorrect {
     color: #ffff00
 }
+div.editable-filename {
+    font-size: 25px;
+    height:25px;
+    width: 300px;
+    padding-bottom: 40px;
+}
