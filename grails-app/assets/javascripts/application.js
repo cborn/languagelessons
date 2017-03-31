@@ -9,7 +9,6 @@
 //= require bootstrap
 //= require jquery.validate.js
 //= require bootstrap-formhelpers.js
-//= require_tree .
 //= require_self
 
 if (typeof jQuery !== 'undefined') {

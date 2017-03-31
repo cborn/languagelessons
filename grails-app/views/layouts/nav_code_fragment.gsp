@@ -1,5 +1,5 @@
             <ul class="nav nav-tabs">
-                <li class="nav"><a class="ifr-home-tab" href="${createLink(controller:'admin', action:'index')}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
+                <li class="nav"><a class="ll-home-tab" href="${createLink(controller:'admin', action:'index')}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
                 <li class="nav active"><a href="#content" data-toggle="tab">Content</a></li>
             </ul>
             <div class="tab-content">
@@ -15,14 +15,14 @@
             
             
                 <li class="nav">
-                    <sec:access expression="hasRole('ROLE_STANDARD')">
-                        <a class="ifr-home-tab" href="${createLink(controller:'student', action:'index')}">
+                    <sec:access expression="hasRole('ROLE_STUDENT')">
+                        <a class="ll-home-tab" href="${createLink(controller:'student', action:'index')}">
                     </sec:access>
                     <sec:access expression="hasRole('ROLE_FACULTY')">
-                        <a class="ifr-home-tab" href="${createLink(controller:'admin', action:'index')}">
+                        <a class="ll-home-tab" href="${createLink(controller:'admin', action:'index')}">
                     </sec:access>
                     <sec:access expression="hasRole('ROLE_ADMIN')">
-                        <a class="ifr-home-tab" href="${createLink(controller:'admin', action:'index')}">
+                        <a class="ll-home-tab" href="${createLink(controller:'admin', action:'index')}">
                     </sec:access>
                         <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home
                     </a>
