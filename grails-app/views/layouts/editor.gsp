@@ -5,7 +5,6 @@
    	<meta name="viewport" content="width=device-width, initial-scale=1">
     	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<title><g:layoutTitle default="LL"/></title>
-        <asset:stylesheet src="bootstrap-datetimepicker.min.css"/>
         <asset:stylesheet src="application.css"/>
         <asset:stylesheet src="ll.css"/>
        
@@ -70,169 +69,16 @@
            </style>
            
 
-        <asset:javascript src="moment.js"/>
-        <!-- these include the others, hence we had duplicate loading before -->
-        <asset:javascript src="application.js"/>
-        <asset:stylesheet src="application.css"/>
-        <asset:javascript src="jquery.validate.js"/>
-        <asset:javascript src="validation.js"/>
         
         
         
         <script>
             
-            
-            
-            
-            function checkSession()
-            {
-            
-            res = $.ajax({
-              url: window.location.href,
-               
-              complete: function(xhr, textStatus) {
-                    
-                       
-                     if(xhr.status == 401)
-                    {
-                         $("#sessionNotice").show();
-                    }
-                    else
-                    {
-                     $("#sessionNotice").hide();
-                     }
-               } 
-              
-              
-              });
-                
-                 
-                
-                
-                
-                  setTimeout(checkSession,15000);
-                
-            }
-            
-            
-$(window).load(function(){
- $("#sessionNotice").hide();
-
- setTimeout(checkSession,1000);
-
-var isLoading = false;
-var shouldDoSearch = false;
-
-        
- $('#results').hide();
-
-        function searchUrl(query)
-        {
-        
-            return window.location.origin + "/user/search?query="+query;
-        
-        
-        }
-
-
-
-
-
-        $('#search').keyup(search);
-        
-        
-        function search(){
-        
-            var searchField = $('#search').val();
-            
-            
-            if(searchField.length > 0 && !isLoading)
-            {
-                
-                
-                isLoading = true;
-                
-                
-                
-        
-             $('#results').show();
-    
-            
-            
-            var regex = new RegExp(searchField, "i");
-             var count = 1;
-             var output = "";
-            $.getJSON(searchUrl(searchField), function(data) {
-            
-            $.each(data, function(key, val){
-                
-                
-               
-                if(val.title != undefined)
-                {
-                  output += "<div class='search-row'>";                    
-                       output += "<a href='"+window.location.origin + val.url+"'>";
-                            output += "<h6>"+val.title+"</h6>";
-                            output += "<span>"+val.subtitle+"</span>";
-                       output += "</a>";
-                  output +="</div>";
-                }
-                
-                
-                
-                
-                
-                
-              });
-              $('#results').html(output);
-              
-              
-                isLoading = false;
-              
-              
-              if(shouldDoSearch)
-              {
-              shouldDoSearch = false;
-              search();
-              
-              }
-              
-              
-            });
-
-            }
-            else if(isLoading)
-            {
-            	shouldDoSearch = true;
-            
-            
-            }else
-            {
-            
-        
- $('#results').hide();
-}
-        }
-        
-        
-        
-      });
-
             <g:tabSave />
             </script>
         
 
-<!--        <asset:stylesheet src="bootstrap-datetimepicker.min.css"/>
-        <asset:javascript src="jquery.validate.js"/>
-        <asset:stylesheet src="application.css"/>
         <asset:stylesheet src="ll.css"/>
-        <asset:javascript src="jquery.tablesorter.min.js" />
-        <asset:javascript src="jquery.tablesorter.staticrow.min.js" />
-        <asset:javascript src="jquery.tablesorter.pager.min.js" />
-        <asset:javascript src="jquery.tablesorter.widgets.js" />-->
-        <!-- CSS not loading; might be ok in production -->
-        <asset:stylesheet src="ll.css"/>
-        <asset:stylesheet src="bootstrap-datetimepicker.min.css"/>
         
 
         <g:layoutHead/>

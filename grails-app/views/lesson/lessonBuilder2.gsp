@@ -1,15 +1,9 @@
-<!--
-  To change this license header, choose License Headers in Project Properties.
-  To change this template file, choose Tools | Templates
-  and open the template in the editor.
--->
-
-<%@ page contentType="text/html;charset=UTF-8" %>
-
+<!doctype html>
 <html>
     <head>
-        <title>${course.name}</title>
         <meta name="layout" content="main"/>
+        <title>Welcome to Language Lessons</title>
+        
         <style type="text/css" media="screen">
             #status {
                 background-color: #eee;
@@ -81,6 +75,23 @@
                     margin-top: 0;
                 }
             }
+            #preview { outline: 2px dashed red; padding: 1em;  margin: 0 0 0 0.5em; } 
+
+            #container {
+                margin:20px auto;
+            }
+
+            #content {
+                float:left;
+                height: auto;
+                width:49%;
+                margin: 0 0.5em;
+            }
+
+            #sidebar {
+                float:left;
+                width:49%;
+            }
         </style>
     </head>
     <body>
@@ -105,41 +116,36 @@
         <div class="col-xs-12">
             <div class="jumbotron">
                 <img src="" class="img-responsive"/>
-                <p>${course.name}<p>
-                <g:if test="${!course.lessons}">
-                    <h3>No lessons found at the moment, sorry!</h3>
-                </g:if>
-                <g:each in="${days}" var="day">
-                    <div class="img-responsive">
-                        ${day.key}
-                        <hr>
-                        <g:each in="${day.value}" var="lesson">
-                            ${lesson.dueDate.format("hh:MM:aa")}
-                            Lesson: <a href="${createLink(controller: "lesson", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a>
-                            <br>
-                        </g:each>
+                    <div id="content">
+                        <h2>Page Editor</h2>
+                            <textarea id="editor" >
+                                <p>Hello world! <a href="http://google.com">This is some link</a>.</p>
+                                <p>And there is some <s>deleted</s>&nbsp;text.</p>
+                            </textarea>  
                     </div>
-                </g:each>
-<<<<<<< HEAD
-                </table>
-                <g:link controller="lesson" action="lessonBuilder" params="[syllabusId: course.syllabusId]">New Lesson</g:link>
-                <!-- this is broken <div class="row" style="padding-top:20px">
-                    <div class="col-md-3">
-                        <div class="col-md-12">
-                            <g:form name="newLesson" controller="lesson">
-                                <g:actionSubmit
-                                    class="btn btn-default pull-right submit-button-green"
-                                    name="newLesson" value="Create Lesson" action="lessonBuilder" params="[syllabusId: course.syllabusId]"/>
-                            </g:form>
-                        </div>
+
+                        <div id="sidebar">
+                            <h2>Live Preview</h2>
+                        <div id="preview"></div>
                     </div>
-                </div> -->
-=======
-                <security:authorize access="hasRole('ROLE_FACULTY')">
-                    <g:link role="button" class="btn btn-primary btn-lg" controller="lesson" action="lessonBuilder">New Assignment</g:link>
-                </security:authorize>
->>>>>>> 6a6e24ece287f389ac5b0d0f4e7864d533f212cd
+                </div>
             </div>
-        </div>
     </body>
+        <script>
+        var preview = CKEDITOR.document.getById( 'preview' );
+
+            function syncPreview() {
+                preview.setHtml( editor.getData() );
+            }
+
+            var editor = CKEDITOR.replace( 'editor', {
+                on: {
+                    // Synchronize the preview on user action that changes the content.
+                    change: syncPreview,
+
+                    // Synchronize the preview when the new data is set.
+                    contentDom: syncPreview
+                }
+            } );
+        </script>
 </html>

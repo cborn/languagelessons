@@ -70,7 +70,6 @@ class CourseController {
             condition = "All Courses in the " + thisSeasonYear + " Season";
         }
         else if(params.facultyId != null) {
-            println params.facultyId
             results = Faculty.findById(params.facultyId).courses;
         }
         else {
