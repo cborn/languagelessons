@@ -118,10 +118,10 @@ class BootStrap {
         
         // Create Test Course and add faculty memeber
             //Setting up a lesson for the first course
-            def lesson1 = new Lesson(name: "Read Chapter 5", lessonId:0,openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
+            def lesson1 = new Lesson(name: "Read Chapter 5",openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
             lesson1.addToAssignments(assign1) //fixed assignment adding
 
-            def lesson2 = new Lesson(name: "Do the thing", lessonId:1,openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
+            def lesson2 = new Lesson(name: "Do the thing",openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
             lesson2.addToAssignments(recordingAssignment)
             
         

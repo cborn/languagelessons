@@ -100,21 +100,55 @@
             </div>
         </g:if>-->
         <div class="editable-filename" id="filename" contenteditable="true">untitled lesson</div>
+        <button id="save-exit-btn" class="btn btn-primary" onclick="saveAndExit()">Save and Exit</button>
+        <button id="discard-exit-btn" class="btn btn-warning" onclick="discardAndExit()">Discard and Exit</button>
+        <button id="save-btn" class="btn btn-primary" onclick="save()">Save</button>
             <textarea id="editor" >
-                <p>Hello world! <a href="http://google.com">This is some link</a>.</p>
-                <p>And there is some <s>deleted</s>&nbsp;text.</p>
-            </textarea>   
+                ${html}
+            </textarea>
             <p>Live Preview:</p>
             <div id="preview"></div> 
         <script>
             CKEDITOR.disableAutoInline = true;
+            var currentfilename = "untitled lesson"
             var preview = CKEDITOR.document.getById( 'preview' );
+                function saveAndExit() {
+                    syncPreview()
+                    jQuery.ajax({
+                        type: "POST",
+                        url: "${createLink(action: 'saveLesson')}",
+                        data: {discard: false, syllabusId: ${syllabusId}},
+                        success: function (data) {
+                            window.location.href = "${createLink(controller: "course", action: "show", params: [syllabusId: syllabusId])}";
+                        }
+                    })
+                }
+                function save() {
+                    syncPreview()
+                    jQuery.ajax({
+                        type: "POST",
+                        url: "${createLink(action: 'saveLesson')}",
+                        data: {discard: false, syllabusId: ${syllabusId}},
+                        success: function (data) {
+                        }
+                    })
+                }
+                function discardAndExit() {
+                    jQuery.ajax({
+                        type: "POST",
+                        url: "${createLink(action: 'saveLesson')}",
+                        data: {discard: true, syllabusId: ${syllabusId}},
+                        success: function (data) {
+                            window.location.href = "${createLink(controller: "course", action: "show", params: [syllabusId: syllabusId])}";
+                        }
+                    })
+                }
                 function syncPreview() {
-                    var data = encodeURIComponent(editor.getData());
+                    var html = encodeURIComponent(editor.getData());
                     jQuery.ajax({
                         type: "POST", 
                         url: "${createLink(action: 'syncPreview')}",
-                        data: JSON.stringify({data: data, syllabusId: syllabusId}),
+                        data: {html: html, filename: currentfilename},
                         success: function (data) {
                             preview.setHtml(data);
                         }
@@ -127,6 +161,7 @@
                        filename_text = 'untitled lesson';
                     }
                     filename.setData(filename_text);
+                    currentfilename = filename_text
                 }
                 var editor = CKEDITOR.replace( 'editor', {
                     on: {
@@ -143,7 +178,7 @@
                                             on: {
                                                 blur: syncFilename,
                                             }
-                });         
+                });
         </script>
     </body>    
 </html>

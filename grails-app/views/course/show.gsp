@@ -114,31 +114,18 @@
                         ${day.key}
                         <hr>
                         <g:each in="${day.value}" var="lesson">
-                            ${lesson.dueDate.format("hh:MM:aa")}
-                            Lesson: <a href="${createLink(controller: "lesson", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a>
-                            <br>
+                            <g:if test="${!lesson.isDraft}">
+                                ${lesson.dueDate.format("hh:MM:aa")}
+                                Lesson: <a href="${createLink(controller: "lesson", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a>
+                                <br>
+                            </g:if>
                         </g:each>
                     </div>
                 </g:each>
-<<<<<<< HEAD
                 </table>
-                <g:link controller="lesson" action="lessonBuilder" params="[syllabusId: course.syllabusId]">New Lesson</g:link>
-                <!-- this is broken <div class="row" style="padding-top:20px">
-                    <div class="col-md-3">
-                        <div class="col-md-12">
-                            <g:form name="newLesson" controller="lesson">
-                                <g:actionSubmit
-                                    class="btn btn-default pull-right submit-button-green"
-                                    name="newLesson" value="Create Lesson" action="lessonBuilder" params="[syllabusId: course.syllabusId]"/>
-                            </g:form>
-                        </div>
-                    </div>
-                </div> -->
-=======
                 <security:authorize access="hasRole('ROLE_FACULTY')">
-                    <g:link role="button" class="btn btn-primary btn-lg" controller="lesson" action="lessonBuilder">New Assignment</g:link>
+                    <g:link role="button" class="btn btn-primary btn-lg" controller="lesson" action="lessonBuilder" params="[syllabusId: course.syllabusId, createNew: true]">New Lesson</g:link>
                 </security:authorize>
->>>>>>> 6a6e24ece287f389ac5b0d0f4e7864d533f212cd
             </div>
         </div>
     </body>
