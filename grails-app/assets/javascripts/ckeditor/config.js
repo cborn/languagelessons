@@ -25,4 +25,5 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeButtons = 'Flash,About,Print';
         config.extraPlugins = 'bidi';
         config.language_list = [  'ar:Arabic:rtl', 'fr:French', 'es:Spanish' , 'he:Hebrew:rtl', 'pt:Portuguese', 'de:German' ];
+        config.allowedContent = true;
 };

@@ -29,6 +29,7 @@ class AssignmentController {
         int i = 0;
         Map<String,String> results = [:]
         def score = 0
+        def maxScore = 0
         for (question in assignment.questions) {
             //question handles all of this to allow for more compatibility
             //this will need to eventually allow for faculty review
@@ -38,10 +39,11 @@ class AssignmentController {
             } else {
                 //answer was wrong, do something more with this later?
             }
+            maxScore = maxScore + question.pointValue
             results[Integer.toString(question.questionNum)] = params[Integer.toString(question.questionNum)]
         }
         assignment
-            .addToResults(studentId: student.studentId, results: results)
+            .addToResults(studentId: student.studentId, results: results, score: score, maxScore: maxScore)
             .save(flush: true)
         redirect(controller: "lesson", 
                  action: "viewLesson", 

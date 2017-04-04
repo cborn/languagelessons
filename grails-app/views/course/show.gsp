@@ -114,16 +114,18 @@
                         ${day.key}
                         <hr>
                         <g:each in="${day.value}" var="lesson">
-                            ${lesson.dueDate.format("hh:MM:aa")}
-                            Lesson: <a href="${createLink(controller: "lesson", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a>
-                            <br>
+                            <g:if test="${!lesson.isDraft}">
+                                ${lesson.dueDate.format("hh:MM:aa")}
+                                Lesson: <a href="${createLink(controller: "lesson", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a>
+                                <br>
+                            </g:if>
                         </g:each>
                     </div>
                 </g:each>
                 </table>
-                <g:if test="${access=="faculty"}">
-                    <g:link role="button" class="btn btn-primary btn-lg" controller="lessons" action="newLesson" params="[syllabusId: course.syllabusId]">New Assignment</g:link>
-                </g:if>
+                <security:authorize access="hasRole('ROLE_FACULTY')">
+                    <g:link role="button" class="btn btn-primary btn-lg" controller="lesson" action="lessonBuilder" params="[syllabusId: course.syllabusId, createNew: true]">New Lesson</g:link>
+                </security:authorize>
             </div>
         </div>
     </body>

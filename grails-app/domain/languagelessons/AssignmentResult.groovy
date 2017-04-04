@@ -2,6 +2,8 @@ package languagelessons
 
 class AssignmentResult {
     int studentId
+    int score
+    int maxScore
     Map<String, String> results = [:]
     static constraints = {
     }

@@ -1,15 +1,9 @@
-<!--
-  To change this license header, choose License Headers in Project Properties.
-  To change this template file, choose Tools | Templates
-  and open the template in the editor.
--->
-
-<%@ page contentType="text/html;charset=UTF-8" %>
-
+<!doctype html>
 <html>
     <head>
-        <title>${course.name}</title>
         <meta name="layout" content="main"/>
+        <title>Welcome to Language Lessons</title>
+        
         <style type="text/css" media="screen">
             #status {
                 background-color: #eee;
@@ -81,6 +75,23 @@
                     margin-top: 0;
                 }
             }
+            #preview { outline: 2px dashed red; padding: 1em;  margin: 0 0 0 0.5em; } 
+
+            #container {
+                margin:20px auto;
+            }
+
+            #content {
+                float:left;
+                height: auto;
+                width:49%;
+                margin: 0 0.5em;
+            }
+
+            #sidebar {
+                float:left;
+                width:49%;
+            }
         </style>
     </head>
     <body>
@@ -105,26 +116,36 @@
         <div class="col-xs-12">
             <div class="jumbotron">
                 <img src="" class="img-responsive"/>
-                <p>${course.name}: ${assignment.name}</p>
-                <p>Due: <g:formatDate date="${assignment.dueDate}" type="datetime" style="SHORT"/></p>
-                ${assignment.introText}
-                <br>
-                <g:if test="${result != null}">
-                    You scored: ${result.score}/${result.maxScore}
-                    <g:each in="${assignment.questions.sort{it.questionNum}}" var="question">
-                        <g:render template="question/${question.view}" model="${[question: question, answer: result.getAnswer(question.questionNum)]}"/>
-                    </g:each>
-                </g:if>
-                <g:else>
-                    <g:form name="assign" action="gradeAssignment">
-                        <g:hiddenField name="assignmentId" value="${assignment.assignmentId}"/>
-                        <g:each in="${assignment.questions.sort{it.questionNum}}" var="question">
-                            <g:render template="question/${question.view}" model="${[question: question]}"/>
-                        </g:each>
-                        <g:actionSubmit value="gradeAssignment"/>
-                    </g:form>
-                </g:else>
+                    <div id="content">
+                        <h2>Page Editor</h2>
+                            <textarea id="editor" >
+                                <p>Hello world! <a href="http://google.com">This is some link</a>.</p>
+                                <p>And there is some <s>deleted</s>&nbsp;text.</p>
+                            </textarea>  
+                    </div>
+
+                        <div id="sidebar">
+                            <h2>Live Preview</h2>
+                        <div id="preview"></div>
+                    </div>
+                </div>
             </div>
-        </div>
     </body>
+        <script>
+        var preview = CKEDITOR.document.getById( 'preview' );
+
+            function syncPreview() {
+                preview.setHtml( editor.getData() );
+            }
+
+            var editor = CKEDITOR.replace( 'editor', {
+                on: {
+                    // Synchronize the preview on user action that changes the content.
+                    change: syncPreview,
+
+                    // Synchronize the preview when the new data is set.
+                    contentDom: syncPreview
+                }
+            } );
+        </script>
 </html>

@@ -121,7 +121,7 @@ class BootStrap {
             def lesson1 = new Lesson(name: "Read Chapter 5",openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
             lesson1.addToAssignments(assign1) //fixed assignment adding
 
-            def lesson2 = new Lesson(name: "Do the thing", openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
+            def lesson2 = new Lesson(name: "Do the thing",openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
             lesson2.addToAssignments(recordingAssignment)
             
         

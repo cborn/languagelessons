@@ -321,51 +321,47 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="col-md-12">
-                                            <g:form name="goToCourse" controller="course" params="[syllabusId: course.syllabusId]">
-                                                <g:actionSubmit
-                                                    class="btn btn-default pull-right submit-button-green"
-                                                    name="viewCourse" value="View Course" action="show" />
-                                            </g:form>
+                                            <g:link role="button" class="btn btn-primary" controller="course" action="show" params="[syllabusId: course.syllabusId]">View Course</g:link>
                                         </div>
                                     </div>
                                 </div>
                             </g:each>
                             <%-- Made dropdowns mostly for dev --%>
                             <div class="row">
-                                <div class="col-md-2">
-                                    <div class="dropdown">
-                                        <button class="btn btn-primary dropdow-toggle" type="button" data-toggle="dropdown">
-                                            Enroll
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <g:each var="course" in="${allCourses}">
-                                                <g:if test="${course.students.find { it.id ==  studentInfo.id}  == null}">
-                                                    <li><g:link action="enroll" params="[syllabusId: course.syllabusId]">${course.getCourseName()}</g:link></li>
-                                                </g:if>
-                                                <g:else>
-                                                    <li class="disabled"><a href="#">${course.getCourseName()}</a></li>
-                                                </g:else>
-                                            </g:each>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-md-10">
-                                    <div class="dropdown">
-                                        <button class="btn btn-primary dropdow-toggle" type="button" data-toggle="dropdown">
-                                            Withdraw
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <g:each var="course" in="${allCourses}">
-                                                <g:if test="${course.students.find { it.id ==  studentInfo.id}  != null}">
-                                                    <li><g:link action="withdraw" params="[syllabusId: course.syllabusId]">${course.getCourseName()}</g:link></li>
-                                                </g:if>
-                                                <g:else>
-                                                    <li class="disabled"><a href="#">${course.getCourseName()}</a></li>
-                                                </g:else>
-                                            </g:each>
-                                        </ul>
+                                <div class="col-md-8">
+                                    <div class="btn-group">
+                                        <div class="btn-group">
+                                            <button class="btn btn-primary dropdow-toggle" type="button" data-toggle="dropdown">
+                                                Enroll
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <g:each var="course" in="${allCourses}">
+                                                    <g:if test="${course.students.find { it.id ==  studentInfo.id}  == null}">
+                                                        <li><g:link action="enroll" params="[syllabusId: course.syllabusId]">${course.getCourseName()}</g:link></li>
+                                                    </g:if>
+                                                    <g:else>
+                                                        <li class="disabled"><a href="#">${course.getCourseName()}</a></li>
+                                                    </g:else>
+                                                </g:each>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button class="btn btn-primary dropdow-toggle" type="button" data-toggle="dropdown">
+                                                Withdraw
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <g:each var="course" in="${allCourses}">
+                                                    <g:if test="${course.students.find { it.id ==  studentInfo.id}  != null}">
+                                                        <li><g:link action="withdraw" params="[syllabusId: course.syllabusId]">${course.getCourseName()}</g:link></li>
+                                                    </g:if>
+                                                    <g:else>
+                                                        <li class="disabled"><a href="#">${course.getCourseName()}</a></li>
+                                                    </g:else>
+                                                </g:each>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
