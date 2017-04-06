@@ -122,9 +122,9 @@
                         </g:each>
                     </div>
                 </g:each>
-                </table>
                 <security:authorize access="hasRole('ROLE_FACULTY')">
-                    <g:link role="button" class="btn btn-primary btn-lg" controller="lesson" action="lessonBuilder" params="[syllabusId: course.syllabusId, createNew: true]">New Lesson</g:link>
+                    <span><g:link role="button" class="btn btn-primary" controller="lesson" action="builderCreateEditHandler" params="[syllabusId: course.syllabusId, createNew: true]">New Lesson</g:link></span>
+                    <span><g:link role="button" class="btn btn-primary" controller="lesson" action="viewDrafts" params="[syllabusId: course.syllabusId]">View Drafts</g:link></span>
                 </security:authorize>
             </div>
         </div>

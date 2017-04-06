@@ -99,10 +99,12 @@
                 </div>
             </div>
         </g:if>-->
-        <div class="editable-filename" id="filename" contenteditable="true">untitled lesson</div>
+        <div class="editable-filename" id="filename" contenteditable="true">${filename}</div>
         <button id="save-exit-btn" class="btn btn-primary" onclick="saveAndExit()">Save and Exit</button>
         <button id="discard-exit-btn" class="btn btn-warning" onclick="discardAndExit()">Discard and Exit</button>
         <button id="save-btn" class="btn btn-primary" onclick="save()">Save</button>
+        <i><span style="visibility:hidden" id="successAlert">success message goes here</span></i>
+        <i><span style="visibility:hidden" id="failAlert">fail message goes here</span></i>
             <textarea id="editor" >
                 ${html}
             </textarea>
@@ -113,6 +115,7 @@
             var currentfilename = "untitled lesson"
             var preview = CKEDITOR.document.getById( 'preview' );
                 function saveAndExit() {
+                    syncFilename()
                     syncPreview()
                     jQuery.ajax({
                         type: "POST",
@@ -124,12 +127,17 @@
                     })
                 }
                 function save() {
+                    syncFilename()
                     syncPreview()
                     jQuery.ajax({
                         type: "POST",
                         url: "${createLink(action: 'saveLesson')}",
                         data: {discard: false, syllabusId: ${syllabusId}},
                         success: function (data) {
+                            successAlert('Successfully saved.');
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            failAlert('Error while saving');
                         }
                     })
                 }
@@ -151,12 +159,14 @@
                         data: {html: html, filename: currentfilename},
                         success: function (data) {
                             preview.setHtml(data);
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            preview.setHtml("<div class='alert alert-danger'>Connection lost.</div>");
                         }
                     });
                 }
                 function syncFilename() {
                     var filename_text = filename.getData().replace(/<(?:.|\n)*?>/gm, ''); //removes html since we just want the filename
-                    console.log("'" + filename_text + "'");
                     if (filename_text == '') {
                        filename_text = 'untitled lesson';
                     }
@@ -179,6 +189,26 @@
                                                 blur: syncFilename,
                                             }
                 });
+                function closeSuccessAlert() {
+                    document.getElementById("successAlert").style.visibility="hidden";
+                }
+                function closeFailAlert() {
+                    document.getElementById("failAlert").style.visibility="hidden";
+                }
+                function successAlert(text) {
+                    $( "#successAlert" ).show();
+                    var successAlert = document.getElementById("successAlert");
+                    successAlert.style.visibility="visible";
+                    successAlert.innerHTML = text;
+                    $( "#successAlert" ).stop(true, true).fadeOut(2000, closeSuccessAlert);
+                }
+                function failAlert(text) {
+                    $( "#failAlert" ).show();
+                    var failAlert = document.getElementById("failAlert");
+                    failAlert.style.visibility="visible";
+                    failAlert.innerHTML = text;
+                    $( "#failAlert" ).stop(true, true).fadeOut(2000, closeFailAlert);
+                }
         </script>
     </body>    
 </html>

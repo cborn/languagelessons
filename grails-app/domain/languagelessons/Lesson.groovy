@@ -7,8 +7,9 @@ class Lesson {
     Date openDate;
     Date dueDate;
     Course course;
-    Boolean isArchived = false;
     Boolean isDraft = true;
+    Boolean isArchived;
+    Lesson template = null;
     
     static hasMany = [assignments:Assignment]
     static belongsTo = Course
@@ -16,7 +17,10 @@ class Lesson {
         text sqlType: 'longText'
     }
     static constraints = {
+        template nullable: true
         text nullable: true
+        openDate nullable: true
+        dueDate nullable: true
         isArchived nullable: true
     }
     

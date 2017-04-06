@@ -10,42 +10,70 @@ class LessonController {
     def index() { 
         
     }
-    
     @Secured(["ROLE_FACULTY"])
-    def lessonBuilder() {
+    def viewDrafts() {
         def course = Course.findBySyllabusId(params.syllabusId)
-        Lesson lesson;
-        if (params.createNew) {
-            if (session['currentLesson']) {
-                Lesson oldLesson = Lesson.findById(session['currentLesson'].id)
-                if (!oldLesson) {
-                    oldLesson = session['currentLesson']
-                    course.addToLessons(oldLesson)
-                }
-                course.save(flush: true)
-            }
-            lesson = new Lesson(name: "untitled lesson", openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"))
-            session['currentLesson'] = lesson
-        } else if (params.edit) {
-            if (session['currentLesson']) {
-                Lesson oldLesson = Lesson.findById(session['currentLesson'].id)
-                if (!oldLesson) {
-                    oldLesson = session['currentLesson']
-                    course.addToLessons(oldLesson)
-                }
-                course.save(flush: true)
-            }
-            lesson = Lesson.findById(params.lessonId)
-            session['currentLesson'] = lesson
-        } else {
-            if (session['currentLesson']) {
-                lesson = session['currentLesson']
+        def lessonDrafts = []
+        def lessonPushed = []
+        for (lesson in course.lessons) {
+            if (lesson.isDraft) {
+                lessonDrafts.add(lesson)
             } else {
-                //This should never happen from a legitimate lessonBuilder call, so:
-                assert false
+                lessonPushed.add(lesson)
             }
         }
-        [html: lesson.text, user: getAuthenticatedUser(), lessonId: lesson.id, syllabusId: params.syllabusId]
+        [course: course, lessons: lessonDrafts, syllabusId: params.syllabusId, pushed: lessonPushed]
+    }
+    def pushLesson() {
+        Lesson template = Lesson.findById(params.lessonId);
+        Lesson outLesson = new Lesson(name: template.name, 
+                                      text: template.text, 
+                                      openDate: Date.parse('yyyy-mm-dd', params.openDate),
+                                      dueDate: Date.parse('yyyy-mm-dd', params.dueDate));
+        outLesson.isDraft = false;
+        outLesson.template = template;
+        Course course = Course.findBySyllabusId(params.syllabusId)
+        course.addToLessons(outLesson)
+        course.save(flush: true)
+        redirect(action: "viewDraftsTable", params: [syllabusId: course.syllabusId])
+    }
+    def deleteLesson() {
+        Lesson toDelete = Lesson.findById(params.lessonId)
+        toDelete.delete(flush: true)
+        redirect(action: "viewDraftsTable", params: [syllabusId: params.syllabusId])
+    }
+    def viewDraftsTable() {
+        Course course = Course.findBySyllabusId(params.syllabusId)
+        def lessonDrafts = []
+        def lessonPushed = []
+        for (lesson in course.lessons) {
+            if (lesson.isDraft) {
+                lessonDrafts.add(lesson)
+            } else {
+                lessonPushed.add(lesson)
+            }
+        }
+        render(template: "viewDrafts", model: [course: course, lessons: lessonDrafts, syllabusId: params.syllabusId, pushed: lessonPushed])
+    }
+    @Secured(["ROLE_FACULTY"])
+    def builderCreateEditHandler() {
+        //doesn't do anything other make sure that the right lesson is going into lessonBuilder
+        Lesson editLesson;
+        if (params.createNew) {
+            editLesson = new Lesson(name: 'untitled lesson')
+        } else if (params.edit) {
+            editLesson = Lesson.findById(params.lessonId)
+        } else {
+            //this should never occur through a legitimate call
+            assert false;
+        }
+        session['currentLesson'] = editLesson;
+        redirect(action: 'lessonBuilder', params: [syllabusId: params.syllabusId])
+    }
+    def lessonBuilder() {
+        def course = Course.findBySyllabusId(params.syllabusId)
+        Lesson lesson = session['currentLesson']
+        [html: lesson.text, filename: lesson.name, user: getAuthenticatedUser(), lessonId: lesson.id, syllabusId: params.syllabusId]
     }
     def syncPreview() {
         def currentLesson = session['currentLesson']
@@ -62,7 +90,6 @@ class LessonController {
             session['currentLesson'] = null;
         } else {
             def saveLesson = session['currentLesson']
-            saveLesson.isDraft = false
             if (Lesson.findById(saveLesson.id)) {
                 Lesson oldLesson = course.lessons.find{lesson ->  lesson.id == saveLesson.id};
                 oldLesson.text = saveLesson.text

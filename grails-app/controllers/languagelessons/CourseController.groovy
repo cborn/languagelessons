@@ -300,11 +300,13 @@ class CourseController {
         
         def days = [:]
         for (lesson in courseLessonList){
-            if (!(lesson.dueDate.format("dd-MM-yyyy") in days)) {
-                days[lesson.dueDate.format("dd-MM-yyyy")] = [lesson]
-            }
-            else {
-                days[lesson.dueDate.format("dd-MM-yyyy")].add(lesson)
+            if (!lesson.isDraft) {
+                if (!(lesson.dueDate.format("dd-MM-yyyy") in days)) {
+                    days[lesson.dueDate.format("dd-MM-yyyy")] = [lesson]
+                }
+                else {
+                    days[lesson.dueDate.format("dd-MM-yyyy")].add(lesson)
+                }
             }
         }
         
