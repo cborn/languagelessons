@@ -10,7 +10,20 @@
         <tr>
             <td>${assignment.name}</td>
             <td>
-                Lesson Dropdown Goes Here
+                <g:if test="${!assignment.lesson}">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Add to Lesson
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <g:each in="${course.lessons}" var="lesson">
+                                <li><button class="btn btn-link" onclick="add(${assignment.id}, ${lesson.id})">${lesson.name}</button></li>
+                            </g:each>
+                        </ul>
+                    </div>
+                </g:if>
+                <g:else>
+                    Belongs to <g:link controller="lesson" action="viewLesson" params="[lessonId: assignment.lesson.id, syllabusId: course.syllabusId]">Lesson "${assignment.lesson.name}"</g:link>
+                </g:else>
             </td>
             <td>
                 TBD

@@ -63,7 +63,6 @@ class BootStrap {
           
           //monty python style
           def assign1 = new Assignment(name:"Quiz 1",
-                                       assignmentId: 12,
                                        introText: "Please take this quiz for Monday.",
                                        openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), 
                                        dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"),
@@ -97,7 +96,6 @@ class BootStrap {
         // Create test recording assignment
 
         def recordingAssignment = new Assignment(name:"Quiz 2",
-                                                assignmentId: 13,
                                                 introText: "Please take this quiz for Monday.",
                                                 openDate: Date.parse("yyyy-mm-dd", "2016-01-01"),
                                                 dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"),

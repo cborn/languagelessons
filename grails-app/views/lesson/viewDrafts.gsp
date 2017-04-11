@@ -108,41 +108,7 @@
                 <g:link controller="course" action="show" params="[syllabusId: course.syllabusId]" class="btn btn-primary">Return to Course</g:link>
                 <span id='warning' style="visibility:hidden" class="alert alert-danger">One or more fields is not filled out!</span>
                 <div id="drafts">
-                    <table class="table">
-                        <tr>
-                            <th>Lesson Name</th>
-                            <th>Open Date</th>
-                            <th>Due Date</th>
-                            <th>Push to Calendar</th>
-                            <th>Duplicate</th>
-                            <th>Delete</th>
-                            <th>Edit</th>
-                        </tr>
-                        <g:each in="${lessons}" var="lesson">
-                            <tr>
-                                <td>${lesson.name}</td>
-                                <td id="oDateCell${lesson.id}"><input type="date" name="bday" min="2016-12-31" id="openDate${lesson.id}"><br></td>
-                                <td id="dDateCell${lesson.id}"><input type="date" name="bday" min="2016-12-31" id="dueDate${lesson.id}"></td>
-                                <td>
-                                    <g:if test="${!(pushed.find{pushedLesson -> pushedLesson.template.id == lesson.id})}">
-                                        <button class="btn btn-primary" onclick="sendToCalendar(${lesson.id})">Push to Calendar</button>
-                                    </g:if>
-                                    <g:else>
-                                        Lesson already in Calendar
-                                    </g:else>
-                                </td>
-                                <td>
-                                    TBD
-                                </td>
-                                <td>
-                                    <button class="btn btn-warning" onclick="destroy(${lesson.id})">Delete</button>
-                                </td>
-                                <td>
-                                    <g:link role="button" class="btn btn-primary" controller="lesson" action="builderCreateEditHandler" params="[syllabusId: course.syllabusId, edit: true, lessonId: lesson.id]">Edit Lesson</g:link>
-                                </td>
-                            </tr>
-                        </g:each>
-                    </table>
+                    <g:render template="viewDrafts" model="${pageScope.variables}"/>
                 </div>
             </div>
         </div>

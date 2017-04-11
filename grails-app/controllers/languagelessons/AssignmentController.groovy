@@ -19,6 +19,13 @@ class AssignmentController {
         session['current'] = editAssignment;
         redirect(action: 'assignmentBuilder', params: [syllabusId: params.syllabusId])
     }
+    def addAssignmentToLesson() {
+        Assignment assignment = Assignment.findById(params.assignId)
+        Lesson lesson = Lesson.findById(params.lessonId)
+        lesson.addToAssignments(assignment)
+        lesson.save(flush: true)
+        redirect(action: "viewDraftsTable", params: [syllabusId: params.syllabusId])
+    }
     def deleteAssignment() {
         Assignment toDelete = Assignment.findById(params.assignId)
         assert toDelete != null
@@ -28,6 +35,7 @@ class AssignmentController {
     @Secured(["ROLE_FACULTY"])
     def viewDrafts() {
         def course = Course.findBySyllabusId(params.syllabusId)
+        def lessons = course.lessons
         def assignmentDrafts = []
         def assignmentPushed = []
         for (assignment in course.assignments) {
@@ -64,10 +72,10 @@ class AssignmentController {
                 Assignment oldAssignment = course.assignments.find{assignment ->  assignment.id == saveAssignment.id};
                 oldAssignment.html = saveAssignment.html
                 oldAssignment.name = saveAssignment.name
-                course.save(flush: true)
+                course.save(flush: true, failOnError: true)
             } else {
                 course.addToAssignments(saveAssignment)
-                course.save(flush: true)
+                course.save(flush: true, failOnError: true)
             }
         }
         render("saving") //This doesn't actually do anything, but grails wants it anyway

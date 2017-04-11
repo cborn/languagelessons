@@ -131,13 +131,7 @@ class LessonController {
     
     def viewLesson(){
         Course course = Course.findBySyllabusId(params.syllabusId)
-        Lesson lesson;
-        for (each in course.lessons) {
-            if (each.name == params.lessonName) {
-                lesson = each;
-                break;
-            }
-        }
+        Lesson lesson = Lesson.findById(params.lessonId)
         assert (course != null)
         assert (lesson != null)
         [course: course, lesson: lesson]

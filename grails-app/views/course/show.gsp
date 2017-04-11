@@ -116,7 +116,7 @@
                         <g:each in="${day.value}" var="lesson">
                             <g:if test="${!lesson.isDraft}">
                                 ${lesson.dueDate.format("hh:MM:aa")}
-                                Lesson: <a href="${createLink(controller: "lesson", action: "viewLesson", params: [lessonName: lesson.name, syllabusId: course.syllabusId])}">${lesson.name}</a>
+                                Lesson: <a href="${createLink(controller: "lesson", action: "viewLesson", params: [lessonId: lesson.id, syllabusId: course.syllabusId])}">${lesson.name}</a>
                                 <br>
                             </g:if>
                         </g:each>

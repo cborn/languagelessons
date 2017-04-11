@@ -6,17 +6,17 @@ class Lesson {
     String text;
     Date openDate;
     Date dueDate;
-    Course course;
     Boolean isDraft = true;
     Boolean isArchived;
     Lesson template = null;
     
     static hasMany = [assignments:Assignment]
-    static belongsTo = Course
+    static belongsTo = [course: Course]
     static mapping = {
         text sqlType: 'longText'
     }
     static constraints = {
+        assignments nullable: true
         template nullable: true
         text nullable: true
         openDate nullable: true
