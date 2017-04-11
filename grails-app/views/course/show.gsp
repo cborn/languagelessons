@@ -124,7 +124,9 @@
                 </g:each>
                 <security:authorize access="hasRole('ROLE_FACULTY')">
                     <span><g:link role="button" class="btn btn-primary" controller="lesson" action="builderCreateEditHandler" params="[syllabusId: course.syllabusId, createNew: true]">New Lesson</g:link></span>
-                    <span><g:link role="button" class="btn btn-primary" controller="lesson" action="viewDrafts" params="[syllabusId: course.syllabusId]">View Drafts</g:link></span>
+                    <span><g:link role="button" class="btn btn-primary" controller="assignment" action="builderCreateEditHandler" params="[syllabusId: course.syllabusId, createNew: true]">New Assignment</g:link></span>
+                    <span><g:link role="button" class="btn btn-primary" controller="lesson" action="viewDrafts" params="[syllabusId: course.syllabusId]">View Lesson Drafts</g:link></span>
+                    <span><g:link role="button" class="btn btn-primary" controller="assignment" action="viewDrafts" params="[syllabusId: course.syllabusId]">View Assignment Drafts</g:link></span>
                 </security:authorize>
             </div>
         </div>

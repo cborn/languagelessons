@@ -4,6 +4,87 @@ class AssignmentController {
 
     def index() { }
     
+    @Secured(["ROLE_FACULTY"])
+    def builderCreateEditHandler() {
+        //doesn't do anything other make sure that the right assignment is going into assignmentBuilder
+        Assignment editAssignment;
+        if (params.createNew) {
+            editAssignment = new Assignment(name: 'untitled assignment')
+        } else if (params.edit) {
+            editAssignment = Assignment.findById(params.assignId)
+        } else {
+            //this should never occur through a legitimate call
+            assert false;
+        }
+        session['current'] = editAssignment;
+        redirect(action: 'assignmentBuilder', params: [syllabusId: params.syllabusId])
+    }
+    def deleteAssignment() {
+        Assignment toDelete = Assignment.findById(params.assignId)
+        assert toDelete != null
+        toDelete.delete(flush: true)
+        redirect(action: "viewDraftsTable", params: [syllabusId: params.syllabusId])
+    }
+    @Secured(["ROLE_FACULTY"])
+    def viewDrafts() {
+        def course = Course.findBySyllabusId(params.syllabusId)
+        def assignmentDrafts = []
+        def assignmentPushed = []
+        for (assignment in course.assignments) {
+            if (assignment.isDraft) {
+                assignmentDrafts.add(assignment)
+            } else {
+                assignmentPushed.add(assignment)
+            }
+        }
+        [course: course, assignments: assignmentDrafts, syllabusId: params.syllabusId, pushed: assignmentPushed]
+    }
+    def assignmentBuilder() {
+        def course = Course.findBySyllabusId(params.syllabusId)
+        Assignment assignment = session['current']
+        [html: assignment.html, filename: assignment.name, user: getAuthenticatedUser(), assignmentId: assignment.id, syllabusId: params.syllabusId]
+    }
+    def syncPreview() {
+        def currentAssignment = session['current']
+        //Decodes the html from the url with java.net.URLDecoder --HTML was previously encoded in javascript script
+        def html = java.net.URLDecoder.decode(params.html)
+        currentAssignment.html = html
+        currentAssignment.name = params.filename
+        session['current'] = currentAssignment
+        [html: html]
+    }
+    def saveAssignment() {
+        def course = Course.findBySyllabusId(params.syllabusId)
+        assert course != null
+        if (params.discard.trim() == 'true') {
+            session['current'] = null;
+        } else {
+            def saveAssignment = session['current']
+            if (Assignment.findById(saveAssignment.id)) {
+                Assignment oldAssignment = course.assignments.find{assignment ->  assignment.id == saveAssignment.id};
+                oldAssignment.html = saveAssignment.html
+                oldAssignment.name = saveAssignment.name
+                course.save(flush: true)
+            } else {
+                course.addToAssignments(saveAssignment)
+                course.save(flush: true)
+            }
+        }
+        render("saving") //This doesn't actually do anything, but grails wants it anyway
+    }
+    def viewDraftsTable() {
+        Course course = Course.findBySyllabusId(params.syllabusId)
+        def assignmentDrafts = []
+        def assignmentPushed = []
+        for (assignment in course.assignments) {
+            if (assignment.isDraft) {
+                assignmentDrafts.add(assignment)
+            } else {
+                assignmentPushed.add(assignment)
+            }
+        }
+        render(template: "viewDrafts", model: [course: course, assignments: assignmentDrafts, syllabusId: params.syllabusId, pushed: assignmentPushed])
+    }
     @Secured(["ROLE_STUDENT"])
     def viewAssignment(){
         def course = Course.findBySyllabusId(params.syllabusId)

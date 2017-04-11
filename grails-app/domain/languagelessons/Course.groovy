@@ -17,6 +17,7 @@ class Course {
 
 	
     static hasMany = [lessons:Lesson,
+                      assignments:Assignment,
                         faculty:Faculty,
                         students:Student]
                     
@@ -26,7 +27,7 @@ class Course {
             description maxSize: 1000, nullable: true
             lessons nullable: true
             students nullable: true
-            // assignments nullable: true
+            assignments nullable: true
             // faculty nullable: true
             syllabusId unique:true
     }

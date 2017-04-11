@@ -119,7 +119,7 @@
                     syncPreview()
                     jQuery.ajax({
                         type: "POST",
-                        url: "${createLink(action: 'saveLesson')}",
+                        url: "${createLink(action: 'saveAssignment')}",
                         data: {discard: false, syllabusId: ${syllabusId}},
                         success: function (data) {
                             window.location.href = "${createLink(controller: "course", action: "show", params: [syllabusId: syllabusId])}";
@@ -131,7 +131,7 @@
                     syncPreview()
                     jQuery.ajax({
                         type: "POST",
-                        url: "${createLink(action: 'saveLesson')}",
+                        url: "${createLink(action: 'saveAssignment')}",
                         data: {discard: false, syllabusId: ${syllabusId}},
                         success: function (data) {
                             successAlert('Successfully saved.');
@@ -144,7 +144,7 @@
                 function discardAndExit() {
                     jQuery.ajax({
                         type: "POST",
-                        url: "${createLink(action: 'saveLesson')}",
+                        url: "${createLink(action: 'saveAssignment')}",
                         data: {discard: true, syllabusId: ${syllabusId}},
                         success: function (data) {
                             window.location.href = "${createLink(controller: "course", action: "show", params: [syllabusId: syllabusId])}";
@@ -168,7 +168,7 @@
                 function syncFilename() {
                     var filename_text = filename.getData().replace(/<(?:.|\n)*?>/gm, ''); //removes html since we just want the filename
                     if (filename_text == '') {
-                       filename_text = 'untitled lesson';
+                       filename_text = 'untitled assignment';
                     }
                     filename.setData(filename_text);
                     currentfilename = filename_text
