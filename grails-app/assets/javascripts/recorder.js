@@ -74,7 +74,6 @@ DEALINGS IN THE SOFTWARE.
 
     this.getBuffers = function(cb) {
       currCallback = cb || config.callback;
-      console.log("get buffers command to worker");
       worker.postMessage({ command: 'getBuffers' })
     };
 
@@ -108,10 +107,12 @@ DEALINGS IN THE SOFTWARE.
   };
 
   Recorder.setupDownload = function(blob, filename){
-    var url = (window.URL || window.webkitURL).createObjectURL(blob);
+    //var url = (window.URL || window.webkitURL).createObjectURL(blob);
     var link = document.getElementById("save");
-    link.href = url;
-    link.download = filename || 'output.wav';
+    link.content = blob;
+    link.click();
+    //link.href = url;
+    //link.download = filename || 'output.wav';
   };
 
   window.Recorder = Recorder;
