@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"name="layout" content="main"/>
-        <title>New Lesson</title>
+        <title>New Assignment</title>
         <asset:javascript src="ckeditor/ckeditor.js"/>
         <asset:javascript src="application.js"/>
         <style type="text/css" media="screen">
@@ -103,6 +103,7 @@
         <button id="save-exit-btn" class="btn btn-primary" onclick="saveAndExit()">Save and Exit</button>
         <button id="discard-exit-btn" class="btn btn-warning" onclick="discardAndExit()">Discard and Exit</button>
         <button id="save-btn" class="btn btn-primary" onclick="save()">Save</button>
+        <button id="question-btn" class="btn btn-primary" onclick="questionBuilder()">Add Question</button>
         <i><span style="visibility:hidden" id="successAlert">success message goes here</span></i>
         <i><span style="visibility:hidden" id="failAlert">fail message goes here</span></i>
             <textarea id="editor" >
@@ -114,9 +115,19 @@
             CKEDITOR.disableAutoInline = true;
             var currentfilename = "untitled lesson"
             var preview = CKEDITOR.document.getById( 'preview' );
+                function resetBindings() {
+                    $(document).off();
+                    createBindings();
+                }
+                function createBindings() {
+                    $(document).on("click",".selector",function() {
+                        getQuestionBuild($( this )[0].id);
+                    });
+                }
+                createBindings();
                 function saveAndExit() {
-                    syncFilename()
-                    syncPreview()
+                    syncFilename();
+                    syncPreview();
                     jQuery.ajax({
                         type: "POST",
                         url: "${createLink(action: 'saveAssignment')}",
@@ -124,11 +135,11 @@
                         success: function (data) {
                             window.location.href = "${createLink(controller: "course", action: "show", params: [syllabusId: syllabusId])}";
                         }
-                    })
+                    });
                 }
                 function save() {
-                    syncFilename()
-                    syncPreview()
+                    syncFilename();
+                    syncPreview();
                     jQuery.ajax({
                         type: "POST",
                         url: "${createLink(action: 'saveAssignment')}",
@@ -139,7 +150,7 @@
                         error: function(XMLHttpRequest, textStatus, errorThrown) {
                             failAlert('Error while saving');
                         }
-                    })
+                    });
                 }
                 function discardAndExit() {
                     jQuery.ajax({
@@ -149,7 +160,7 @@
                         success: function (data) {
                             window.location.href = "${createLink(controller: "course", action: "show", params: [syllabusId: syllabusId])}";
                         }
-                    })
+                    });
                 }
                 function syncPreview() {
                     var html = encodeURIComponent(editor.getData());
@@ -171,7 +182,7 @@
                        filename_text = 'untitled assignment';
                     }
                     filename.setData(filename_text);
-                    currentfilename = filename_text
+                    currentfilename = filename_text;
                 }
                 var editor = CKEDITOR.replace( 'editor', {
                     on: {
@@ -208,6 +219,38 @@
                     failAlert.style.visibility="visible";
                     failAlert.innerHTML = text;
                     $( "#failAlert" ).stop(true, true).fadeOut(2000, closeFailAlert);
+                }
+                
+                function questionBuilder() {
+                    jQuery.ajax({
+                        type: "POST", 
+                        url: "${createLink(action: 'questionSelector')}",
+                        data: {select: "yes"},
+                        success: function (data) {
+                            preview.setHtml(data);
+                        },
+                    });
+                }
+                function getQuestionBuild(templateName) {
+                    jQuery.ajax({
+                        type: "POST", 
+                        url: "${createLink(action: 'getQuestionBuild')}",
+                        data: {templateName: templateName},
+                        success: function (data) {
+                            resetBindings();
+                            $( "#questionBuild" ).html(data);
+                        },
+                    });
+                }
+                function createQuestion(questionData) {
+                    jQuery.ajax({
+                        type: "POST", 
+                        url: "${createLink(action: 'createQuestion')}",
+                        data: {questionData: JSON.stringify(questionData)},
+                        success: function (data) {
+                            console.log("I'M ALIVE");
+                        },
+                    });
                 }
         </script>
     </body>    

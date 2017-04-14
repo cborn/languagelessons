@@ -1,5 +1,6 @@
 package languagelessons
 import grails.plugin.springsecurity.annotation.Secured
+import groovy.json.JsonSlurper
 class AssignmentController {
 
     def index() { }
@@ -18,6 +19,25 @@ class AssignmentController {
         }
         session['current'] = editAssignment;
         redirect(action: 'assignmentBuilder', params: [syllabusId: params.syllabusId])
+    }
+    def assignmentView(){
+        def assignment = Assignment.findById(params.id)
+        [assignment: assignment]
+    }
+    def getQuestionBuild() {
+        render(template: "question/" + params.templateName)
+    }
+    def createQuestion() {
+        def jsonSlurper = new JsonSlurper()
+        def questionData = jsonSlurper.parseText(params.questionData);
+        def constructor = Question.subtypes.find {subtype -> subtype.view == questionData.type}
+        Question question = constructor.construct(questionData);
+        System.out.println(question)
+        render("hello there")
+    }
+    def questionSelector() {
+        //returns the question selector to be put into the preview
+        render(template: "questionSelector", model: [options: Question.subtypes])
     }
     def addAssignmentToLesson() {
         Assignment assignment = Assignment.findById(params.assignId)

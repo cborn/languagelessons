@@ -5,6 +5,12 @@ import java.sql.Blob;
 class RecordingQuestion extends Question{
     
     // String[] answers;
+    static String view = "recordingQuestion";
+    static String displayName = "Recording";
+    static String buildView = "buildRecording";
+    static Question construct(params) {
+        //not finalized
+    }
     Blob audioAnswer;
     String audioType;
     

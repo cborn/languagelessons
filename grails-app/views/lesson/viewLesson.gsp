@@ -115,7 +115,7 @@
                 <g:if test="${lesson.assignments}">
                     This lesson has attached assignments to be completed online: <br>
                     <g:each in="${lesson.assignments}" var="assignment">
-                        Assignment: <a href="${createLink(controller: "assignment", action: "viewAssignment", params: [assignId: assignment.id, syllabusId: course.syllabusId])}">${assignment.name}</a><br>
+                        Assignment: <a href="${createLink(controller: "assignment", action: "assignmentView", params: [assignId: assignment.id, syllabusId: course.syllabusId])}">${assignment.name}</a><br>
                     </g:each>
                 </g:if>
                 <security:authorize access="hasRole('ROLE_FACULTY')">

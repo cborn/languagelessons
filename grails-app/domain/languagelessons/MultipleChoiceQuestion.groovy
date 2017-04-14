@@ -2,10 +2,20 @@ package languagelessons
 
 class MultipleChoiceQuestion extends Question{
     String[] answers;
-    int correctAnswer;
+    boolean[] correctAnswers;
+    static String view = "multipleChoice";
+    static String buildView = "buildMultipleChoice"
+    static String displayName = "Multiple Choice";
+    static Question construct(params) {
+        Question q = new MultipleChoiceQuestion(answers: params.answers, 
+                                                correctAnswers: params.correct,
+                                                question: params.question,
+                                                pointValue: params.pointValue)
+        return q
+    }
     static constraints = {
     }
     boolean grade(String answer) {
-        return Integer.parseInt(answer) == correctAnswer;
+        return correctAnswers[Integer.parseInt(answer)];
     }
 }

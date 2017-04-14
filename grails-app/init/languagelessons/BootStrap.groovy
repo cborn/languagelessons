@@ -73,19 +73,19 @@ class BootStrap {
                                               view: "multipleChoice",
                                               questionNum: 1,
                                               answers: ["Will", "Joe", "Todd"],
-                                              correctAnswer: 0)
+                                              correctAnswers: [true, false, false])
           def q2 = new MultipleChoiceQuestion(pointValue: 4,
                                               question: "What is your favorite color?",
                                               view: "multipleChoice",
                                               questionNum: 2,
                                               answers: ["Red", "Green", "Blue"],
-                                              correctAnswer: 2)
+                                              correctAnswers: [false, false, true])
           def q3 = new MultipleChoiceQuestion(pointValue: 4,
                                               question: "What is the airspeed of an unladen swallow?",
                                               view: "multipleChoice",
                                               questionNum: 3,
                                               answers: ["What? I don't know that.", "African or European?"],
-                                              correctAnswer: 1)
+                                              correctAnswers: [false, true])
           assign1
             .addToQuestions(q1)
             .addToQuestions(q2)

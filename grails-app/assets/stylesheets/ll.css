@@ -10,11 +10,6 @@
     margin-bottom: 10px;
 }
 
-tr :hover{
-    
-    cursor: pointer;
-    
-}
 
 select[multiple] {
 	
