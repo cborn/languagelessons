@@ -118,9 +118,11 @@ class BootStrap {
             //Setting up a lesson for the first course
             def lesson1 = new Lesson(name: "Read Chapter 5")
             lesson1.addToAssignments(assign1) //fixed assignment adding
+            lesson1.isDraft = false
 
             def lesson2 = new Lesson(name: "Do the thing")
             lesson2.addToAssignments(recordingAssignment)
+            lesson2.isDraft = false
             
         
             Date start = Date.parse("yyyy-MM-dd", "2016-01-01");

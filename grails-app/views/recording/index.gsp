@@ -2,7 +2,27 @@
 <html>
     <head>
         <meta name="layout" content="main"/>
-        <script>window.addEventListener('load', initAudio );</script>
+        <asset:javascript src="main.js"/>
+        <asset:javascript src="recorder.js"/>
+        <asset:javascript src="audiodisplay.js"/>
+        <script>
+            window.addEventListener('load', initAudio );
+            function callAjax(){
+                var audio = document.getElementById("save").getAttribute("content");
+                $.ajax({
+                    url: "test",
+                    type:"post",
+                    dataType: 'json',
+                    data: {audio:audio} //,
+//                    success: function(data) {
+//                        console.log(data); //<-----this logs the data in browser's console
+//                    },
+//                    error: function(xhr){
+//                        alert(xhr.responseText); //<----when no data alert the err msg
+//                    }
+                });
+            }
+        </script>
         <title>Welcome to Language Lessons</title>
         <style type="text/css" media="screen">
             #status {
@@ -144,7 +164,7 @@
 	</div>
 	<div id="controls">
 		<asset:image id="record" src="mic128.png" onclick="toggleRecording(this);"/>
-		<a id="save" href="#"><asset:image src="save.svg" /></a>
+		<a id="save" onclick="callAjax()" content=""><asset:image src="save.svg" /></a>
 	</div>
         
               <h3>Recordings</h3>
