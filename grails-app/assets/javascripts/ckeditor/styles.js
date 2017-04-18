@@ -109,7 +109,7 @@ CKEDITOR.stylesSet.add( 'default', [
 
 	{ name: 'Borderless Table',		element: 'table',	styles: { 'border-style': 'hidden', 'background-color': '#E6E6FA' } },
 	{ name: 'Square Bulleted List',	element: 'ul',		styles: { 'list-style-type': 'square' } },
-
+        { name: 'Question', element: 'div', styles: { 'background-color': 'lightgreen', 'outline': '4px solid green', 'padding': '2em', 'margin': '2em 0' } },
 	/* Widget styles */
 
 	{ name: 'Clean Image', type: 'widget', widget: 'image', attributes: { 'class': 'image-clean' } },

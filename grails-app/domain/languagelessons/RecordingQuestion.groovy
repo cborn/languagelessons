@@ -11,6 +11,9 @@ class RecordingQuestion extends Question{
     static Question construct(params) {
         //not finalized
     }
+    Question fromDraft() {
+        //also not finalized
+    }
     Blob audioAnswer;
     String audioType;
     

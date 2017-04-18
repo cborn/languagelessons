@@ -14,10 +14,29 @@ class Assignment {
     int maxAttempts;
     String gradeType = "points";
     
+    Assignment fromDraft(openDateNew, dueDateNew) {
+        Assignment newAssignment = new Assignment(
+            name: name,
+            introText: introText,
+            isArchived: isArchived,
+            isDraft: false,
+            openDate: openDateNew,
+            dueDate: dueDateNew,
+            html: html,
+            newFormat: newFormat,
+            orderedQuestions: orderedQuestions,
+            maxAttempts: maxAttempts,
+            gradeType: gradeType
+        )
+        for (question in questions) {
+            newAssignment.addToQuestions(question.fromDraft())
+        }
+        return newAssignment
+    }
     static hasMany = [questions:Question, results: AssignmentResult]; 
     static belongsTo = [course: Course, lesson:Lesson];
     static mapping = {
-        text sqlType: 'longText'
+        html sqlType: 'longText'
     }
     static constraints = {
         html nullable: true

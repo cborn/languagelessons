@@ -78,6 +78,12 @@
                 }
             }
             #preview { outline: 2px dashed red; padding: 2em; margin: 2em 0; }
+            .question { 
+                background-color: lightgreen; 
+                outline: 4px solid green;
+                padding: 2em;
+                margin: 2em 0;
+            }
         </style>
     </head>
     <body>
@@ -114,6 +120,14 @@
         <script>
             CKEDITOR.disableAutoInline = true;
             var currentfilename = "untitled lesson"
+            CKEDITOR.addCss(
+            ".question { " + 
+                "background-color: lightgreen; " +
+                "outline: 4px solid green; " +
+                "padding: 2em; " +
+                "margin: 2em 0; " +
+            "}"
+            );
             var preview = CKEDITOR.document.getById( 'preview' );
                 function resetBindings() {
                     $(document).off();
@@ -200,6 +214,7 @@
                                                 blur: syncFilename,
                                             }
                 });
+
                 function closeSuccessAlert() {
                     document.getElementById("successAlert").style.visibility="hidden";
                 }
@@ -248,8 +263,7 @@
                         url: "${createLink(action: 'createQuestion')}",
                         data: {questionData: JSON.stringify(questionData)},
                         success: function (data) {
-                            console.log('<div id="' + data + '">');
-                            CKEDITOR.instances.editor.insertText('<div id="' + data + '">');
+                            CKEDITOR.instances.editor.insertHtml('<div contenteditable="false" class="question" id="' + data + '">Question with id: ' + data + '</div>');
                         },
                     });
                 }

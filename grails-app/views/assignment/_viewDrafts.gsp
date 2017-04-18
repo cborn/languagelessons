@@ -16,7 +16,9 @@
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <g:each in="${course.lessons}" var="lesson">
-                                <li><button class="btn btn-link" onclick="add(${assignment.id}, ${lesson.id})">${lesson.name}</button></li>
+                                <g:if test="${lesson.isDraft}">
+                                    <li><button class="btn btn-link" onclick="add(${assignment.id}, ${lesson.id})">${lesson.name}</button></li>
+                                </g:if>
                             </g:each>
                         </ul>
                     </div>

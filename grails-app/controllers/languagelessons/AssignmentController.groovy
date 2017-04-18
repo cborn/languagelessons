@@ -21,19 +21,33 @@ class AssignmentController {
         redirect(action: 'assignmentBuilder', params: [syllabusId: params.syllabusId])
     }
     def assignmentView(){
-        def assignment = Assignment.findById(params.id)
+        def assignment = Assignment.findById(params.assignId)
         [assignment: assignment]
     }
     def getQuestionBuild() {
         render(template: "question/" + params.templateName)
     }
+    def loadQuestion() {
+        //qid, assignId
+        Assignment assignment = Assignment.findById(params.assignId)
+        Question question = assignment.questions.find{question -> question.oldId == Long.parseLong(params.qid) }
+        render(template: "question/" + question.view, model: [question: question])
+    }
     def createQuestion() {
         def jsonSlurper = new JsonSlurper()
+        def assignment = session['current']
         def questionData = jsonSlurper.parseText(params.questionData);
         def constructor = Question.subtypes.find {subtype -> subtype.view == questionData.type}
         Question question = constructor.construct(questionData);
-        session['current'].addToQuestions(question)
-        render(Integer.toString(question.id))
+        assert question != null;
+        assignment.addToQuestions(question)
+        session['current'] = assignment
+        if (!question.save(flush: true)) {
+            question.errors.allErrors.each {
+                println it
+            }
+        }
+        render(Long.toString(question.id))
     }
     def questionSelector() {
         //returns the question selector to be put into the preview
