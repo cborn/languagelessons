@@ -248,7 +248,8 @@
                         url: "${createLink(action: 'createQuestion')}",
                         data: {questionData: JSON.stringify(questionData)},
                         success: function (data) {
-                            console.log("I'M ALIVE");
+                            console.log('<div id="' + data + '">');
+                            CKEDITOR.instances.editor.insertText('<div id="' + data + '">');
                         },
                     });
                 }

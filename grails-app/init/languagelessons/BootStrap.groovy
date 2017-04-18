@@ -116,22 +116,27 @@ class BootStrap {
         
         // Create Test Course and add faculty memeber
             //Setting up a lesson for the first course
-            def lesson1 = new Lesson(name: "Read Chapter 5")
+            Date start = Date.parse("yyyy-MM-dd", "2016-01-01");
+            Date end = Date.parse("yyyy-MM-dd", "2017-01-01");
+            def lessonTemp1 = new Lesson(name: "Read Chapter 5") //Added new lesson templates to match new lesson functionality
+            def lessonTemp2 = new Lesson(name: "Do the thing")
+            def lesson1 = new Lesson(name: "Read Chapter 5", openDate: start, dueDate: end, template: lessonTemp1)
             lesson1.addToAssignments(assign1) //fixed assignment adding
             lesson1.isDraft = false
 
-            def lesson2 = new Lesson(name: "Do the thing")
+            def lesson2 = new Lesson(name: "Do the thing", openDate: start, dueDate: end, template: lessonTemp2)
             lesson2.addToAssignments(recordingAssignment)
             lesson2.isDraft = false
             
         
-            Date start = Date.parse("yyyy-MM-dd", "2016-01-01");
-            Date end = Date.parse("yyyy-MM-dd", "2017-01-01");
+            
             new Course(name: 'Arabic', syllabusId: '1111', applicantCap: 15, startDate: start, endDate: end)
                 .addToFaculty(f1)
                 .addToStudents(s1) //addTo___ also supports creating the object inline
                 .addToLessons(lesson1)
                 .addToLessons(lesson2)
+                .addToLessons(lessonTemp1)
+                .addToLessons(lessonTemp2)
                 .save(failOnError: true)
 
             new Course(name: 'Chinese', syllabusId: '2222', applicantCap: 20, startDate: start, endDate: end)

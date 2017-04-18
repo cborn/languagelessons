@@ -32,8 +32,8 @@ class AssignmentController {
         def questionData = jsonSlurper.parseText(params.questionData);
         def constructor = Question.subtypes.find {subtype -> subtype.view == questionData.type}
         Question question = constructor.construct(questionData);
-        System.out.println(question)
-        render("hello there")
+        session['current'].addToQuestions(question)
+        render(Integer.toString(question.id))
     }
     def questionSelector() {
         //returns the question selector to be put into the preview
