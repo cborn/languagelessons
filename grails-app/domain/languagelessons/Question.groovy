@@ -40,7 +40,7 @@ abstract class Question {
     static String view;
     static String displayName;
     static String buildView;
-    abstract static Question construct(params);
+    static Closure<Question> construct;
     int questionNum;
     static def subtypes = [RecordingQuestion, MultipleChoiceQuestion]
     boolean archived = false;
@@ -52,5 +52,6 @@ abstract class Question {
         oldId nullable: true
         question maxSize: 5000
         archived nullable: true
+        requiresReview nullable: true
     }
 }

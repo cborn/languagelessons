@@ -9,8 +9,9 @@ class RecordingQuestion extends Question{
     static String displayName = "Recording";
     static String buildView = "buildRecording";
     boolean requiresReview = true;
-    static Question construct(params) {
-        //not finalized
+    static Closure<Question> construct = {params ->
+        //placeholder
+        return new RecordingQuestion();
     }
     Question fromDraft() {
         //also not finalized
