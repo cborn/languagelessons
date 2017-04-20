@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat
 import grails.converters.JSON
 
 class BootStrap { 
-    
+    def lessonService
 
     def init = { servletContext ->
         
@@ -25,7 +25,6 @@ class BootStrap {
         def adminRole = new Role(authority: 'ROLE_ADMIN').save()
         def facultyRole = new Role(authority: 'ROLE_FACULTY').save()
         def studentRole = new Role(authority: 'ROLE_STUDENT').save()
-        
         
         
         // Test Admin User  %%%%%%%%%%%%%%%%%//
@@ -59,31 +58,61 @@ class BootStrap {
            studentUser.student = s1
            studentUser.save()
           //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
-          //Create Test Assignment
           
+          // Create Test Course and add faculty memer
+            //Setting up a lesson for the first course
+            Date start = Date.parse("yyyy-MM-dd", "2016-01-01");
+            Date end = Date.parse("yyyy-MM-dd", "2017-01-01");
+            
+            Course arabic = new Course(name: 'Arabic', syllabusId: '1111', applicantCap: 15, startDate: start, endDate: end)
+                .addToFaculty(f1)
+                .addToStudents(s1) 
+                .save(failOnError: true)
+
+            new Course(name: 'Chinese', syllabusId: '2222', applicantCap: 20, startDate: start, endDate: end)
+                .addToFaculty(f2)
+                .save(failOnError: true)
+            
+            new Course(name: 'French', syllabusId: '3333', applicantCap: 25, startDate: start, endDate: end)
+                .addToFaculty(f2)
+                .save(failOnError: true)
+                
+          //*******************************//
+          //Create Test Assignment
+          //Edited to fit new assignment creation style
           //monty python style
           def assign1 = new Assignment(name:"Quiz 1",
                                        introText: "Please take this quiz for Monday.",
                                        openDate: Date.parse("yyyy-mm-dd", "2016-01-01"), 
                                        dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"),
                                        maxAttempts: 4)
+          assign1.html = '''
+<p>You will now be assessed for knowledge of Monty Python. &nbsp;</p>
+
+<div class="question" contenteditable="false" id="1">Question with id: 1</div>
+
+<p>Seems pretty easy so far, doesn&#39;t it? Well let&#39;s step it up.</p>
+
+<div class="question" contenteditable="false" id="2">Question with id: 2</div>
+
+<p>&nbsp;How are you doing now? Ready for the next question?</p>
+
+<div class="question" contenteditable="false" id="3">Question with id: 3</div>
+
+<p>Well done! Now submit your answers and we&#39;ll see how you did.&nbsp;</p>
+        '''
           
           def q1 = new MultipleChoiceQuestion(pointValue: 4,
                                               question: "What is your name?",
                                               view: "multipleChoice",
-                                              questionNum: 1,
-                                              answers: ["Will", "Joe", "Todd"],
+                                              answers: ["King Arthur of the Britons", "Sir Lancelot", "Sir Robin"],
                                               correctAnswers: [true, false, false])
           def q2 = new MultipleChoiceQuestion(pointValue: 4,
                                               question: "What is your favorite color?",
-                                              view: "multipleChoice",
-                                              questionNum: 2,
-                                              answers: ["Red", "Green", "Blue"],
+                                              answers: ["Blue", "Blue wait no I mean red aaughhhhh!!!"],
                                               correctAnswers: [false, false, true])
           def q3 = new MultipleChoiceQuestion(pointValue: 4,
                                               question: "What is the airspeed of an unladen swallow?",
-                                              view: "multipleChoice",
-                                              questionNum: 3,
                                               answers: ["What? I don't know that.", "African or European?"],
                                               correctAnswers: [false, true])
           assign1
@@ -100,6 +129,12 @@ class BootStrap {
                                                 openDate: Date.parse("yyyy-mm-dd", "2016-01-01"),
                                                 dueDate: Date.parse("yyyy-mm-dd", "2016-01-05"),
                                                 maxAttempts: 4)
+        recordingAssignment.html = '''\n\
+<p>Record your voice using the question below. &nbsp;</p>
+
+<div class="question" contenteditable="false" id="7">Question with id: 7</div>
+
+'''
 
         def question = new RecordingQuestion(pointValue: 4,
                                             question: "Record something, dweeb.",
@@ -110,43 +145,38 @@ class BootStrap {
         recordingAssignment.addToQuestions(question)
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
-        
-        // Create Test Courses
-            
-        
-        // Create Test Course and add faculty memeber
-            //Setting up a lesson for the first course
-            Date start = Date.parse("yyyy-MM-dd", "2016-01-01");
-            Date end = Date.parse("yyyy-MM-dd", "2017-01-01");
-            def lessonTemp1 = new Lesson(name: "Read Chapter 5") //Added new lesson templates to match new lesson functionality
-            def lessonTemp2 = new Lesson(name: "Do the thing")
-            def lesson1 = new Lesson(name: "Read Chapter 5", openDate: start, dueDate: end, template: lessonTemp1)
-            lesson1.addToAssignments(assign1) //fixed assignment adding
-            lesson1.isDraft = false
 
-            def lesson2 = new Lesson(name: "Do the thing", openDate: start, dueDate: end, template: lessonTemp2)
-            lesson2.addToAssignments(recordingAssignment)
-            lesson2.isDraft = false
-            
+        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
+        // Create Lessons
+        // Edited to fit new lesson creation style
+        Lesson lessonTemplate1 = new Lesson(name: "Monty Python Lesson")
+        lessonTemplate1.text = '''
+<p>Please watch <a href="https://www.youtube.com/watch?v=AVs7QIRYsrc">Monty Python</a>\n\
+in preparation for the following quiz.</p>
+        '''
+        lessonTemplate1.addToAssignments(assign1)
+        arabic.addToLessons(lessonTemplate1)
+        arabic.save(flush: true)
+        def params = [lessonTemplate: lessonTemplate1,
+                  openDate: "2017-4-20",
+                  dueDate: "2017-6-9",
+                  syllabusId: arabic.syllabusId]
         
-            
-            new Course(name: 'Arabic', syllabusId: '1111', applicantCap: 15, startDate: start, endDate: end)
-                .addToFaculty(f1)
-                .addToStudents(s1) //addTo___ also supports creating the object inline
-                .addToLessons(lesson1)
-                .addToLessons(lesson2)
-                .addToLessons(lessonTemp1)
-                .addToLessons(lessonTemp2)
-                .save(failOnError: true)
-
-            new Course(name: 'Chinese', syllabusId: '2222', applicantCap: 20, startDate: start, endDate: end)
-                .addToFaculty(f2)
-                .save(failOnError: true)
-            
-            new Course(name: 'French', syllabusId: '3333', applicantCap: 25, startDate: start, endDate: end)
-                .addToFaculty(f2)
-                .save(failOnError: true)
+        lessonService.pushLesson(params)
         
+        Lesson lessonTemplate2 = new Lesson(name: "Recording Lesson")
+        lessonTemplate2.text = '''
+        <p>Please complete the attached recording assignment.</p>
+        '''
+        lessonTemplate2.addToAssignments(recordingAssignment)
+        arabic.addToLessons(lessonTemplate2)
+        arabic.save(flush:true)
+        params = [lessonTemplate: lessonTemplate2,
+                  openDate: "2017-4-20",
+                  dueDate: "2017-6-9",
+                  syllabusId: arabic.syllabusId]
+        lessonService.pushLesson(params)
+            
 
     UserRole.withSession {
          it.flush()

@@ -43,8 +43,9 @@ abstract class Question {
     abstract static Question construct(params);
     int questionNum;
     static def subtypes = [RecordingQuestion, MultipleChoiceQuestion]
-    Boolean archived = false;
-    Boolean isDraft = true;
+    boolean archived = false;
+    boolean isDraft = true;
+    boolean requiresReview;
     static belongsTo = Assignment;
     
     static constraints = {

@@ -22,7 +22,7 @@ class AssignmentController {
     }
     def assignmentView(){
         def assignment = Assignment.findById(params.assignId)
-        [assignment: assignment]
+        [assignment: assignment, syllabusId: params.syllabusId]
     }
     def getQuestionBuild() {
         render(template: "question/" + params.templateName)
@@ -140,6 +140,39 @@ class AssignmentController {
             }
         }
         [assignment:assignment, course: course, result: result]
+    }
+    def submitAssignment() {
+        def jsonSlurper = new JsonSlurper();
+        def data = jsonSlurper.parseText(params.data);
+        SecUser user = getAuthenticatedUser();
+        Student student = user.student;
+        Assignment assignment = Assignment.findById(data.assignment)
+        AssignmentResult assignResult = new AssignmentResult(student: student);
+        int maxScore = 0;
+        int score = 0;
+        int potentialPoints = 0;
+        data.out.each { id, answer ->
+            Question question = Question.findById(id)
+            QuestionResult qResult = new QuestionResult(answer: answer, pointsAwarded: 0, status: "awaitReview", question: question)
+            maxScore = maxScore + question.pointValue;
+            if (question.requiresReview) {
+                //question requires faculty review
+                potentialPoints = potentialPoints + question.pointValue;
+            } else {
+                boolean correct = question.grade(answer)
+                if (correct) {
+                    qResult.pointsAwarded = question.pointValue
+                    score = score + question.pointValue
+                }
+                qResult.status = "graded"
+            }
+            assignResult.addToResults(qResult)
+        }
+        assignResult.maxScore = maxScore
+        assignResult.score = score
+        assignment.addToResults(assignResult)
+        assignment.save(flush: true)
+        render("done")
     }
     @Secured(["ROLE_STUDENT"])
     def gradeAssignment() {

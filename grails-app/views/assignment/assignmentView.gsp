@@ -88,7 +88,12 @@
     </head>
     <body>
         ${raw(assignment.html)}
+        <security:authorize access="hasRole('ROLE_STUDENT')">
+        <button id="submit" class="btn btn-primary">Submit Assignment for Grading</button>
+        </security:authorize>
         <script>
+            var valueRegistry = {};
+            $( "#submit" ).on("click", processAndSubmit);
             $( ".question" ).each(function( index ) {
                 var id = $( this ).attr("id");
                 var assignId = ${assignment.id};
@@ -101,6 +106,25 @@
                     },
                 });
             });
+            function processAndSubmit() {
+                var out = {};
+                $( ".question" ).each(function( index ) {
+                    var id = $( this ).attr("id");
+                    var val = valueRegistry[id]();
+                    out[id] = val;
+                });
+                var data = {};
+                data['assignment'] = ${assignment.id};
+                data['contents'] = out;
+                jQuery.ajax({
+                    type: "POST", 
+                    url: "${createLink(action: 'submitAssignment')}",
+                    data: {data: JSON.stringify(data)},
+                    success: function (data) {
+                        window.location.href = "/lesson/viewLesson?syllabusId=${syllabusId}&lessonId=${assignment.lesson.id}";
+                    },
+                });
+            }
         </script>
     </body>
 </html>
