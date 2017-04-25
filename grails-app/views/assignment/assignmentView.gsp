@@ -10,8 +10,6 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"name="layout" content="main"/>
         <title>New Assignment</title>
-        <asset:javascript src="ckeditor/ckeditor.js"/>
-        <asset:javascript src="application.js"/>
         <style type="text/css" media="screen">
             #status {
                 background-color: #eee;
@@ -87,21 +85,28 @@
         </style>
     </head>
     <body>
-        <!--<g:if test="${faculty}">-->
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Add to Lesson
-                    <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><button class="btn btn-link">please work</button></li>
-                    </ul>
-                </div>
-        <!--</g:if>-->
+        <g:if test="${faculty}">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    View Student Results <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <g:each in="${assignment.results}" var="result">
+                        <li class="dropdown-item"><button class="btn btn-link" onclick="view(${result.id}, '${result.student.getName()}')">${result.student.getName()}</button></li>
+                    </g:each>
+                    <li class="divider"></li>
+                    <li class="dropdown-item"><button class="btn btn-link" onclick="clearValue()">No Selection</button></li>
+                </ul>
+            </div>
+        </g:if>
         ${raw(assignment.html)}
         <g:if test="${student}">
             <button id="submit" class="btn btn-primary">Submit Assignment for Grading</button>
         </g:if>
         <script>
             var valueRegistry = {};
+            var displayRegistry = {};
+            var clearRegistry = [];
             $( "#submit" ).on("click", processAndSubmit);
             $( ".question" ).each(function( index ) {
                 var id = $( this ).attr("id");
@@ -124,7 +129,7 @@
                 });
                 var data = {};
                 data['assignment'] = ${assignment.id};
-                data['contents'] = out;
+                data['out'] = out;
                 jQuery.ajax({
                     type: "POST", 
                     url: "${createLink(action: 'submitAssignment')}",
@@ -133,6 +138,34 @@
                         window.location.href = "/lesson/viewLesson?syllabusId=${syllabusId}&lessonId=${assignment.lesson.id}";
                     },
                 });
+            }
+            function view(resultId, name) {
+                jQuery.ajax({
+                    type: "POST",
+                    url: "${createLink(action: 'getResults')}",
+                    data: {resultId: resultId},
+                    success: function (data) {
+                        data = JSON.parse(data);
+                        keys = data.keys;
+                        values = data.values;
+                        var keysLength = keys.length;
+                        var key;
+                        for (var i = 0; i < keysLength; i++) {
+                            key = keys[i];
+                            displayRegistry[key](values.answers[key], values.points[key], values.stati[key]);
+                        }
+                        setSelectedValue(name);
+                    },
+                });
+            }
+            function clearValue() {
+                setSelectedValue("View Student Results");
+                for (var i = 0; i < clearRegistry.length; i++) {
+                    clearRegistry[i]();
+                }
+            }
+            function setSelectedValue(value) {
+                $( '#dropdownMenuButton' ).html(value + "<span class='caret'></span>");
             }
         </script>
     </body>

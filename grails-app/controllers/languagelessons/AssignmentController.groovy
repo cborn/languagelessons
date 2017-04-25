@@ -1,6 +1,7 @@
 package languagelessons
 import grails.plugin.springsecurity.annotation.Secured
 import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
 class AssignmentController {
 
     def index() { }
@@ -26,6 +27,28 @@ class AssignmentController {
         Faculty faculty = user.faculty
         def assignment = Assignment.findById(params.assignId)
         [assignment: assignment, syllabusId: params.syllabusId, student: student, faculty: faculty]
+    }
+    def getResults() {
+        AssignmentResult result = AssignmentResult.get(params.resultId)
+        def data = [:]
+        def keys = []
+        def values = [:]
+        def answers = [:]
+        def points = [:]
+        def stati = [:] //it's correct in latin
+        println(result.results)
+        for (qResult in result.results) {
+            answers[qResult.question.id] = qResult.answer;
+            points[qResult.question.id] = qResult.pointsAwarded;
+            stati[qResult.question.id] = qResult.status;
+            keys.add(qResult.question.id)
+        }
+        values['answers'] = answers
+        values['points'] = points
+        values['stati'] = stati
+        data['values'] = values
+        data['keys'] = keys
+        render(JsonOutput.toJson(data))
     }
     def getQuestionBuild() {
         render(template: "question/" + params.templateName)
@@ -146,6 +169,7 @@ class AssignmentController {
     }
     def submitAssignment() {
         def jsonSlurper = new JsonSlurper();
+        System.out.println(params.data)
         def data = jsonSlurper.parseText(params.data);
         SecUser user = getAuthenticatedUser();
         Student student = user.student;
@@ -154,9 +178,10 @@ class AssignmentController {
         int maxScore = 0;
         int score = 0;
         int potentialPoints = 0;
+        System.out.println(data.out.toString())
         data.out.each { id, answer ->
             Question question = Question.findById(id)
-            QuestionResult qResult = new QuestionResult(answer: answer, pointsAwarded: 0, status: "awaitReview", question: question)
+            QuestionResult qResult = question.resultType.newInstance(answer: answer, pointsAwarded: 0, status: "awaitReview", question: question)
             maxScore = maxScore + question.pointValue;
             if (question.requiresReview) {
                 //question requires faculty review
@@ -174,7 +199,12 @@ class AssignmentController {
         assignResult.maxScore = maxScore
         assignResult.score = score
         assignment.addToResults(assignResult)
-        assignment.save(flush: true)
+        if (assignment.course) {
+            assignment.course.save(flush:true)
+        }
+        if (assignment.lesson) {
+            assignment.lesson.save(flush:true)
+        }
         render("done")
     }
     @Secured(["ROLE_STUDENT"])

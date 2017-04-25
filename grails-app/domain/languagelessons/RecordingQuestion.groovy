@@ -8,6 +8,7 @@ class RecordingQuestion extends Question{
     static String view = "recordingQuestion";
     static String displayName = "Recording";
     static String buildView = "buildRecording";
+    static def resultType = RecordingResult;
     boolean requiresReview = true;
     static Closure<Question> construct = {params ->
         //placeholder

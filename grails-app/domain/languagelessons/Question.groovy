@@ -40,6 +40,7 @@ abstract class Question {
     static String view;
     static String displayName;
     static String buildView;
+    static def resultType;
     static Closure<Question> construct;
     int questionNum;
     static def subtypes = [RecordingQuestion, MultipleChoiceQuestion]

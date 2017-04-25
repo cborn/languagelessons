@@ -7,6 +7,7 @@ class MultipleChoiceQuestion extends Question{
     static String view = "multipleChoice";
     static String buildView = "buildMultipleChoice"
     static String displayName = "Multiple Choice";
+    static def resultType = MultipleChoiceResult;
     static Closure<Question> construct = {params ->
         Question q = new MultipleChoiceQuestion(answers: params.answers, 
                                                 correctAnswers: params.corrects,
