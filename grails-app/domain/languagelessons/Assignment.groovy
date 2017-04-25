@@ -8,7 +8,7 @@ class Assignment {
     Date openDate;
     Date dueDate;
     String html;
-    def audio
+    byte[] audio;
     
     Boolean newFormat = false;
     Boolean orderedQuestions = false;
@@ -41,6 +41,8 @@ class Assignment {
     }
     static constraints = {
         html nullable: true
+        audio nullable: true
+        audio maxSize: 1073741824
         course nullable: true
         introText nullable: true
         isArchived nullable: true

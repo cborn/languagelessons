@@ -2,21 +2,25 @@ package languagelessons
 
 class RecordingController {
 
+    /* TODO: fix hardcoded assignment id (params aren't passed with post request)
+     * TODO: get audio to play, not just download
+     * TODO: save audio in right place (not in assignment) */
+
     def index() { }
 
     def test() {
-        def assignment = Assignment.findById(2)
-        System.out.println(assignment)
-        System.out.println(params.audio)
-        assignment.setAudio(params.audio)
-        assignment.save()
-        System.out.println(Assignment.findById(2).getAudio())
+        Assignment assignment = Assignment.findById(4)
+        assignment.setAudio(params.audio.getBytes())
+        assignment.save(flush: true, failOnError: true)
         render "audio posted"
     }
 
     def play() {
-        // this is null, why??
-        System.out.println(Assignment.findById(2).getAudio())
-        [audio: Assignment.findById(2).getAudio()]
+
+    }
+
+    def playAudio() {
+        response.outputStream << Assignment.findById(4).getAudio()
+        response.outputStream.flush()
     }
 }
