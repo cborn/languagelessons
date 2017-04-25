@@ -133,7 +133,7 @@ class AssignmentController {
     @Secured(["ROLE_STUDENT"])
     def viewAssignment(){
         def course = Course.findBySyllabusId(params.syllabusId)
-        def assignment = Assignment.findByAssignmentId(params.assignId)
+        def assignment = Assignment.findById(params.assignId)
         SecUser user = getAuthenticatedUser()
         Student student = user.student
         def result;

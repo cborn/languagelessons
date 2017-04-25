@@ -8,19 +8,34 @@
         <script>
             window.addEventListener('load', initAudio );
             function callAjax(){
-                var audio = document.getElementById("save").getAttribute("content");
-                $.ajax({
-                    url: "test",
-                    type:"post",
-                    dataType: 'json',
-                    data: {audio:audio} //,
+                //var audio = document.getElementById("save").getAttribute("href");
+
+//                var fd = new FormData();
+//                fd.append('fname', 'test.wav');
+//                fd.append('data', soundBlob);
+//                jQuery.ajax({
+//                    type: 'POST',
+//                    url: 'test',
+//                    data: fd,
+//                    processData: false,
+//                    contentType: false
+//                }).done(function(data) {
+//                    console.log(data);
+//                });
+
+                //var player = new Audio(audio);
+                //player.play();
+//                jQuery.ajax({
+//                    url: "test",
+//                    type:"post",
+//                    data: {audio:audio},
 //                    success: function(data) {
 //                        console.log(data); //<-----this logs the data in browser's console
 //                    },
 //                    error: function(xhr){
 //                        alert(xhr.responseText); //<----when no data alert the err msg
 //                    }
-                });
+//                });
             }
         </script>
         <title>Welcome to Language Lessons</title>
@@ -164,7 +179,8 @@
 	</div>
 	<div id="controls">
 		<asset:image id="record" src="mic128.png" onclick="toggleRecording(this);"/>
-		<a id="save" onclick="callAjax()" content=""><asset:image src="save.svg" /></a>
+        <a onclick="callAjax()">test</a>
+		<a id="save" href=""><asset:image src="save.svg" /></a>
 	</div>
         
               <h3>Recordings</h3>

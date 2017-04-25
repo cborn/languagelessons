@@ -8,6 +8,7 @@ class Assignment {
     Date openDate;
     Date dueDate;
     String html;
+    def audio
     
     Boolean newFormat = false;
     Boolean orderedQuestions = false;

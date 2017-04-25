@@ -117,7 +117,7 @@
                 </g:if>
                 <g:else>
                     <g:form name="assign" action="gradeAssignment">
-                        <g:hiddenField name="assignmentId" value="${assignment.assignmentId}"/>
+                        <g:hiddenField name="assignmentId" value="${assignment.id}"/>
                         <g:each in="${assignment.questions.sort{it.questionNum}}" var="question">
                             <g:render template="question/${question.view}" model="${[question: question]}"/>
                         </g:each>
