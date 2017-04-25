@@ -20,8 +20,10 @@ DEALINGS IN THE SOFTWARE.
 (function(window){
 
   var WORKER_PATH = '/assets/recorderWorker.js';
+  var params;
 
-  var Recorder = function(source, cfg){
+  var Recorder = function(source, parameters, cfg){
+    params = parameters;
     var config = cfg || {};
     var bufferLen = config.bufferLen || 4096;
     this.context = source.context;

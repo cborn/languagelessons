@@ -1,5 +1,7 @@
 package languagelessons
 
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest
+
 class Assignment {
     String name;
     String introText;
@@ -8,7 +10,7 @@ class Assignment {
     Date openDate;
     Date dueDate;
     String html;
-    def audio
+    StandardMultipartHttpServletRequest audio;
     
     Boolean newFormat = false;
     Boolean orderedQuestions = false;
@@ -41,6 +43,7 @@ class Assignment {
     }
     static constraints = {
         html nullable: true
+        audio nullable: true
         course nullable: true
         introText nullable: true
         isArchived nullable: true

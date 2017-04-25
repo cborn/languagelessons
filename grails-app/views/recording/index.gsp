@@ -6,7 +6,7 @@
         <asset:javascript src="recorder.js"/>
         <asset:javascript src="audiodisplay.js"/>
         <script>
-            window.addEventListener('load', initAudio );
+            window.addEventListener('load', initAudio("${params}") );
             function callAjax(){
                 //var audio = document.getElementById("save").getAttribute("href");
 
