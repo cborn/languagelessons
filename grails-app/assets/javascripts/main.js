@@ -24,6 +24,7 @@ var rafID = null;
 var analyserContext = null;
 var canvasWidth, canvasHeight;
 var recIndex = 0;
+var params;
 
 /* TODO:
 
@@ -149,7 +150,7 @@ function gotStream(stream) {
     analyserNode.fftSize = 2048;
     inputPoint.connect( analyserNode );
 
-    audioRecorder = new Recorder( inputPoint );
+    audioRecorder = new Recorder( inputPoint, params );
 
     zeroGain = audioContext.createGain();
     zeroGain.gain.value = 0.0;
@@ -158,7 +159,8 @@ function gotStream(stream) {
     updateAnalysers();
 }
 
-function initAudio() {
+function initAudio(parameters) {
+        params = parameters;
         if (!navigator.getUserMedia)
             navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
         if (!navigator.cancelAnimationFrame)

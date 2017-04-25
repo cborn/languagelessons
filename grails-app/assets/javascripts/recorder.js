@@ -20,8 +20,10 @@ DEALINGS IN THE SOFTWARE.
 (function(window){
 
   var WORKER_PATH = '/assets/recorderWorker.js';
+  var params;
 
-  var Recorder = function(source, cfg){
+  var Recorder = function(source, parameters, cfg){
+    params = parameters;
     var config = cfg || {};
     var bufferLen = config.bufferLen || 4096;
     this.context = source.context;
@@ -107,24 +109,6 @@ DEALINGS IN THE SOFTWARE.
   };
 
   Recorder.setupDownload = function(blob, filename){
-    var url = (window.URL || window.webkitURL).createObjectURL(blob);
-    var link = document.getElementById("save");
-    link.href = url;
-
-     //  jQuery.ajax({
-     //     url: "test",
-     //     type:"post",
-     //     data: {audio:blob},
-     //     success: function(data) {
-     //         console.log(data); //<-----this logs the data in browser's console
-     //     },
-     //     error: function(xhr){
-     //         alert(xhr.responseText); //<----when no data alert the err msg
-     //     }
-     // });
-
-      //http://stackoverflow.com/questions/13333378/how-can-javascript-upload-a-blob
-      //http://docs.spring.io/spring/docs/3.0.6.RELEASE_to_3.1.0.BUILD-SNAPSHOT/3.1.0.BUILD-SNAPSHOT/org/springframework/web/multipart/support/StandardMultipartHttpServletRequest.StandardMultipartFile.html
       var fd = new FormData();
       fd.append('audio', blob);
       jQuery.ajax({
@@ -136,17 +120,6 @@ DEALINGS IN THE SOFTWARE.
       }).done(function(data) {
           console.log(data);
       });
-
-      // var reader = new FileReader();
-      // reader.addEventListener("loadend", function() {
-      //     // reader.result contains the contents of blob as a typed array
-      //     alert(reader.result);
-      // });
-      // //deprecated
-      // reader.readAsBinaryString(blob);
-    //link.click();
-    //link.href = url;
-    //link.download = filename || 'output.wav';
   };
 
   window.Recorder = Recorder;
