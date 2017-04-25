@@ -21,19 +21,33 @@ class AssignmentController {
         redirect(action: 'assignmentBuilder', params: [syllabusId: params.syllabusId])
     }
     def assignmentView(){
-        def assignment = Assignment.findById(params.id)
-        [assignment: assignment]
+        def assignment = Assignment.findById(params.assignId)
+        [assignment: assignment, syllabusId: params.syllabusId]
     }
     def getQuestionBuild() {
         render(template: "question/" + params.templateName)
     }
+    def loadQuestion() {
+        //qid, assignId
+        Assignment assignment = Assignment.findById(params.assignId)
+        Question question = assignment.questions.find{question -> question.oldId == Long.parseLong(params.qid) }
+        render(template: "question/" + question.view, model: [question: question])
+    }
     def createQuestion() {
         def jsonSlurper = new JsonSlurper()
+        def assignment = session['current']
         def questionData = jsonSlurper.parseText(params.questionData);
         def constructor = Question.subtypes.find {subtype -> subtype.view == questionData.type}
         Question question = constructor.construct(questionData);
-        session['current'].addToQuestions(question)
-        render(Integer.toString(question.id))
+        assert question != null;
+        assignment.addToQuestions(question)
+        session['current'] = assignment
+        if (!question.save(flush: true)) {
+            question.errors.allErrors.each {
+                println it
+            }
+        }
+        render(Long.toString(question.id))
     }
     def questionSelector() {
         //returns the question selector to be put into the preview
@@ -126,6 +140,39 @@ class AssignmentController {
             }
         }
         [assignment:assignment, course: course, result: result]
+    }
+    def submitAssignment() {
+        def jsonSlurper = new JsonSlurper();
+        def data = jsonSlurper.parseText(params.data);
+        SecUser user = getAuthenticatedUser();
+        Student student = user.student;
+        Assignment assignment = Assignment.findById(data.assignment)
+        AssignmentResult assignResult = new AssignmentResult(student: student);
+        int maxScore = 0;
+        int score = 0;
+        int potentialPoints = 0;
+        data.out.each { id, answer ->
+            Question question = Question.findById(id)
+            QuestionResult qResult = new QuestionResult(answer: answer, pointsAwarded: 0, status: "awaitReview", question: question)
+            maxScore = maxScore + question.pointValue;
+            if (question.requiresReview) {
+                //question requires faculty review
+                potentialPoints = potentialPoints + question.pointValue;
+            } else {
+                boolean correct = question.grade(answer)
+                if (correct) {
+                    qResult.pointsAwarded = question.pointValue
+                    score = score + question.pointValue
+                }
+                qResult.status = "graded"
+            }
+            assignResult.addToResults(qResult)
+        }
+        assignResult.maxScore = maxScore
+        assignResult.score = score
+        assignment.addToResults(assignResult)
+        assignment.save(flush: true)
+        render("done")
     }
     @Secured(["ROLE_STUDENT"])
     def gradeAssignment() {

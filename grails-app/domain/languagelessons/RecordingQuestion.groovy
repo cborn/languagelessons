@@ -8,8 +8,22 @@ class RecordingQuestion extends Question{
     static String view = "recordingQuestion";
     static String displayName = "Recording";
     static String buildView = "buildRecording";
-    static Question construct(params) {
-        //not finalized
+    boolean requiresReview = true;
+    static Closure<Question> construct = {params ->
+        //placeholder
+        return new RecordingQuestion();
+    }
+    Question fromDraft() {
+        //also not finalized
+        //quick hack to get bootstrap working
+        Question copy = new RecordingQuestion(
+            question: question,
+            pointValue: pointValue,
+            audioType: audioType,
+        )
+        copy.isDraft = false;
+        copy.oldId = id;
+        return copy;
     }
     Blob audioAnswer;
     String audioType;

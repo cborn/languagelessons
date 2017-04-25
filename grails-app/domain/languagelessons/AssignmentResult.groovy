@@ -1,14 +1,12 @@
 package languagelessons
 
 class AssignmentResult {
-    int studentId
     int score
     int maxScore
-    Map<String, String> results = [:]
+    int potentialPoints
+    Student student
+    static hasMany = [results: QuestionResult]
+    static belongsTo = [assignment: Assignment]
     static constraints = {
-    }
-    def getAnswer(int questNum) {
-        assert results[Integer.toString(questNum)] != null
-        return results[Integer.toString(questNum)]
     }
 }

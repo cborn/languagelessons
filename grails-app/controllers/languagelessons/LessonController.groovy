@@ -6,6 +6,7 @@ import java.net.URLDecoder
 
 class LessonController {
     def groovyPagesTemplateEngine
+    LessonService lessonService
     @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
     def index() { 
         
@@ -25,16 +26,22 @@ class LessonController {
         [course: course, lessons: lessonDrafts, syllabusId: params.syllabusId, pushed: lessonPushed]
     }
     def pushLesson() {
-        Lesson template = Lesson.findById(params.lessonId);
+        Lesson template = Lesson.findById(params.lessonId)
+        params.lessonTemplate = template;
+        lessonService.pushLesson(params)
+        /*Lesson template = Lesson.findById(params.lessonId);
         Lesson outLesson = new Lesson(name: template.name, 
                                       text: template.text, 
                                       openDate: Date.parse('yyyy-mm-dd', params.openDate),
                                       dueDate: Date.parse('yyyy-mm-dd', params.dueDate));
         outLesson.isDraft = false;
         outLesson.template = template;
+        for (assignment in template.assignments) {
+            outLesson.addToAssignments(assignment.fromDraft(outLesson.openDate, outLesson.dueDate))
+        }
         Course course = Course.findBySyllabusId(params.syllabusId)
         course.addToLessons(outLesson)
-        course.save(flush: true)
+        course.save(flush: true)*/
         redirect(action: "viewDraftsTable", params: [syllabusId: course.syllabusId])
     }
     def deleteLesson() {
