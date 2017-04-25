@@ -87,10 +87,19 @@
         </style>
     </head>
     <body>
+        <!--<g:if test="${faculty}">-->
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Add to Lesson
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><button class="btn btn-link">please work</button></li>
+                    </ul>
+                </div>
+        <!--</g:if>-->
         ${raw(assignment.html)}
-        <security:authorize access="hasRole('ROLE_STUDENT')">
-        <button id="submit" class="btn btn-primary">Submit Assignment for Grading</button>
-        </security:authorize>
+        <g:if test="${student}">
+            <button id="submit" class="btn btn-primary">Submit Assignment for Grading</button>
+        </g:if>
         <script>
             var valueRegistry = {};
             $( "#submit" ).on("click", processAndSubmit);

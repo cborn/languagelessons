@@ -21,8 +21,11 @@ class AssignmentController {
         redirect(action: 'assignmentBuilder', params: [syllabusId: params.syllabusId])
     }
     def assignmentView(){
+        def user = getAuthenticatedUser()
+        Student student = user.student
+        Faculty faculty = user.faculty
         def assignment = Assignment.findById(params.assignId)
-        [assignment: assignment, syllabusId: params.syllabusId]
+        [assignment: assignment, syllabusId: params.syllabusId, student: student, faculty: faculty]
     }
     def getQuestionBuild() {
         render(template: "question/" + params.templateName)
