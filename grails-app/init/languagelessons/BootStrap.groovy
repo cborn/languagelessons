@@ -110,7 +110,7 @@ class BootStrap {
           def q2 = new MultipleChoiceQuestion(pointValue: 4,
                                               question: "What is your favorite color?",
                                               answers: ["Blue", "Blue wait no I mean red aaughhhhh!!!"],
-                                              correctAnswers: [false, false, true])
+                                              correctAnswers: [true, false])
           def q3 = new MultipleChoiceQuestion(pointValue: 4,
                                               question: "What is the airspeed of an unladen swallow?",
                                               answers: ["What? I don't know that.", "African or European?"],

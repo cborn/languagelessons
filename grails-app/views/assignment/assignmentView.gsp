@@ -107,6 +107,7 @@
             var valueRegistry = {};
             var displayRegistry = {};
             var clearRegistry = [];
+            var currentResultId = -1;
             $( "#submit" ).on("click", processAndSubmit);
             $( ".question" ).each(function( index ) {
                 var id = $( this ).attr("id");
@@ -140,6 +141,7 @@
                 });
             }
             function view(resultId, name) {
+                currentResultId = resultId;
                 jQuery.ajax({
                     type: "POST",
                     url: "${createLink(action: 'getResults')}",
@@ -160,12 +162,35 @@
             }
             function clearValue() {
                 setSelectedValue("View Student Results");
+                currentResultId = -1;
+                clear()
+            }
+            function clear() {
                 for (var i = 0; i < clearRegistry.length; i++) {
                     clearRegistry[i]();
                 }
             }
             function setSelectedValue(value) {
                 $( '#dropdownMenuButton' ).html(value + "<span class='caret'></span>");
+            }
+            function changeGrade(id, amount) {
+                jQuery.ajax({
+                    type: "POST",
+                    url: "${createLink(action: 'changeGrade')}",
+                    data: {resultId: currentResultId, questionId: id, amount: amount},
+                    success: function (data) {
+                        clear();
+                        data = JSON.parse(data);
+                        keys = data.keys;
+                        values = data.values;
+                        var keysLength = keys.length;
+                        var key;
+                        for (var i = 0; i < keysLength; i++) {
+                            key = keys[i];
+                            displayRegistry[key](values.answers[key], values.points[key], values.stati[key]);
+                        }
+                    },
+                });
             }
         </script>
     </body>

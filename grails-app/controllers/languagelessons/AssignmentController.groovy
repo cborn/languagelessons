@@ -28,6 +28,14 @@ class AssignmentController {
         def assignment = Assignment.findById(params.assignId)
         [assignment: assignment, syllabusId: params.syllabusId, student: student, faculty: faculty]
     }
+    def changeGrade() {
+        AssignmentResult result = AssignmentResult.get(params.resultId)
+        Question question = Question.get(params.questionId)
+        QuestionResult questionResult = result.results.find {it.question.id == question.oldId}
+        questionResult.pointsAwarded = Integer.parseInt(params.amount);
+        questionResult.save(flush: true)
+        redirect(action: "getResults", params: params)
+    }
     def getResults() {
         AssignmentResult result = AssignmentResult.get(params.resultId)
         def data = [:]
@@ -36,7 +44,6 @@ class AssignmentController {
         def answers = [:]
         def points = [:]
         def stati = [:] //it's correct in latin
-        println(result.results)
         for (qResult in result.results) {
             answers[qResult.question.id] = qResult.answer;
             points[qResult.question.id] = qResult.pointsAwarded;
