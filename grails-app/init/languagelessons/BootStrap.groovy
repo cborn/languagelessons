@@ -97,7 +97,11 @@ class BootStrap {
 
 <p>&nbsp;How are you doing now? Ready for the next question?</p>
 
-<div class="question" contenteditable="false" id="3">Question with id: 3</div>
+<div class="question" contenteditable="false" id="3">Question with id: 3</div>\n\
+
+<p>Let's get into some short answer.</p>\n\
+
+<div class="question" contenteditable="false" id="4">Question with id: 4</div>\n\
 
 <p>Well done! Now submit your answers and we&#39;ll see how you did.&nbsp;</p>
         '''
@@ -115,10 +119,13 @@ class BootStrap {
                                               question: "What is the airspeed of an unladen swallow?",
                                               answers: ["What? I don't know that.", "African or European?"],
                                               correctAnswers: [false, true])
+          def q4 = new ShortAnswerQuestion(pointValue: 20,
+                                           question: "Are you suggesting that coconuts migrate?")
           assign1
             .addToQuestions(q1)
             .addToQuestions(q2)
             .addToQuestions(q3)
+            .addToQuestions(q4) //added short answer question
 //        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%//
