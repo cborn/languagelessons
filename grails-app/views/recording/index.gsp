@@ -140,7 +140,7 @@
                 </div>
             </div>
         </g:if>
-        <div class="col-xs-12">
+    <div class="col-xs-12">
         <div id="viz">
 		<canvas id="analyser" width="1024" height="500"></canvas>
 		<canvas id="wavedisplay" width="1024" height="500"></canvas>
@@ -151,7 +151,7 @@
 	</div>
         
               <h3>Recordings</h3>
-      <div id="recording-list"></div>
+        <div id="recording-list"></div>
     </div>
     <div id="modal-loading" class="modal fade">
       <div class="modal-dialog modal-sm">

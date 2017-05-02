@@ -37,11 +37,14 @@ abstract class Question {
     int oldId;
     String question;
     abstract Question fromDraft();
+    /*
+    YOU MUST DECLARE THESE THINGS IN YOUR SUBCLASS
+    because I hate java and it won't let me make them static and abstract
     static String view;
     static String displayName;
     static String buildView;
     static def resultType;
-    static Closure<Question> construct;
+    static Closure<Question> construct;*/
     int questionNum;
     static def subtypes = [RecordingQuestion, MultipleChoiceQuestion, ShortAnswerResult]
     boolean archived = false;

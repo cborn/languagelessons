@@ -45,7 +45,7 @@ class AssignmentController {
         def points = [:]
         def stati = [:] //it's correct in latin
         for (qResult in result.results) {
-            answers[qResult.question.id] = qResult.answer;
+            answers[qResult.question.id] = qResult.getAnswer();
             points[qResult.question.id] = qResult.pointsAwarded;
             stati[qResult.question.id] = qResult.status;
             keys.add(qResult.question.id)
@@ -188,7 +188,8 @@ class AssignmentController {
         System.out.println(data.out.toString())
         data.out.each { id, answer ->
             Question question = Question.findById(id)
-            QuestionResult qResult = question.resultType.newInstance(answer: answer, pointsAwarded: 0, status: "awaitReview", question: question)
+            QuestionResult qResult = question.resultType.newInstance(pointsAwarded: 0, status: "awaitReview", question: question)
+            qResult.putAnswer(answer)
             maxScore = maxScore + question.pointValue;
             if (question.requiresReview) {
                 //question requires faculty review

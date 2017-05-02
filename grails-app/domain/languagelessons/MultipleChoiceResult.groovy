@@ -1,7 +1,13 @@
 package languagelessons
 
 class MultipleChoiceResult extends QuestionResult {
-    int answer;
+    def getAnswer() {
+        return intAnswer
+    }
+    def putAnswer(answer) {
+        answer = Integer.parseInt(answer)
+        intAnswer = answer
+    }
     static constraints = {
     }
 }

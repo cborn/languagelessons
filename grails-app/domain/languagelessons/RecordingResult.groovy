@@ -1,11 +1,13 @@
 package languagelessons
 
 class RecordingResult extends QuestionResult{
-    def answer
-    static constraints = {
-        
+    def getAnswer() {
+        return audioAnswer
     }
-    static mapping = {
-        answer sqlType: 'blob'
+    def putAnswer(answer) {
+        
+        audioAnswer = answer
+    }
+    static constraints = {
     }
 }

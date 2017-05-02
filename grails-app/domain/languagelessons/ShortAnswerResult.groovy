@@ -1,7 +1,12 @@
 package languagelessons
 
 class ShortAnswerResult extends QuestionResult{
-    String answer;
+    def getAnswer() {
+        return stringAnswer
+    }
+    def putAnswer(answer) {
+        stringAnswer = answer
+    }
     static constraints = {
     }
 }
