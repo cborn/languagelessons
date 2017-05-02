@@ -12,7 +12,7 @@
         </tr>
         <tr class="entry" id="0">
             <td>
-                <input type="text" class="form-control" id="answer" placeholder="Answer."></input>
+                <input type="text" class="form-control" id="answer" placeholder="Answer."/>
             </td>
             <td>
                 <label class="custom-control custom-checkbox">
@@ -22,7 +22,7 @@
                 </label>
             </td>
             <td>
-                <button class="btn btn-danger delete" id="0">Delete Answer</delete>
+                <button class="btn btn-danger delete" id="0">Delete Answer</button>
             </td>
         </tr>
         <tfoot>
@@ -45,7 +45,7 @@
                 </label>
             </td>
             <td>
-                <button class="btn btn-danger delete" id="{row-id}">Delete Answer</delete>
+                <button class="btn btn-danger delete" id="{row-id}">Delete Answer</button>
             </td>
         </tr>
     </script>
