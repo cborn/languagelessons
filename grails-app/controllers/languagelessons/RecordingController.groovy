@@ -9,7 +9,7 @@ class RecordingController {
     def index() { }
 
     def test() {
-        Assignment assignment = Assignment.findById(4)
+        Assignment assignment = Assignment.findById(params.assignId)
         assignment.setAudio(params.audio.getBytes())
         assignment.save(flush: true, failOnError: true)
         render "audio posted"
@@ -20,7 +20,7 @@ class RecordingController {
     }
 
     def playAudio() {
-        response.outputStream << Assignment.findById(4).getAudio()
+        response.outputStream << Assignment.findById(params.assignId).getAudio()
         response.outputStream.flush()
     }
 }

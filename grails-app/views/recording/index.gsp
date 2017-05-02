@@ -5,7 +5,7 @@
         <asset:javascript src="main.js"/>
         <asset:javascript src="recorder.js"/>
         <asset:javascript src="audiodisplay.js"/>
-        <script> window.addEventListener('load', initAudio("${params}") ); </script>
+        <script> window.addEventListener('load', initAudio ); </script>
         <title>Welcome to Language Lessons</title>
         <style type="text/css" media="screen">
             #status {
@@ -147,7 +147,8 @@
 	</div>
 	<div id="controls">
 		<asset:image id="record" src="mic128.png" onclick="toggleRecording(this);"/>
-        <g:link role="button" controller="recording" action="play">Play Audio</g:link>
+        <g:link role="button" controller="recording" action="play" params="${params}">Play Audio</g:link>
+        <div id="assignId" href="${params.assignId}"></div>
 	</div>
         
               <h3>Recordings</h3>
