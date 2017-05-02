@@ -20,10 +20,8 @@ DEALINGS IN THE SOFTWARE.
 (function(window){
 
   var WORKER_PATH = '/assets/recorderWorker.js';
-  var params;
 
-  var Recorder = function(source, parameters, cfg){
-    params = parameters;
+  var Recorder = function(source, cfg){
     var config = cfg || {};
     var bufferLen = config.bufferLen || 4096;
     this.context = source.context;
@@ -109,8 +107,10 @@ DEALINGS IN THE SOFTWARE.
   };
 
   Recorder.setupDownload = function(blob, filename){
+      var assignId = document.getElementById("assignId").getAttribute("href");
       var fd = new FormData();
       fd.append('audio', blob);
+      fd.append('assignId', assignId);
       jQuery.ajax({
           type: 'POST',
           url: 'test',
