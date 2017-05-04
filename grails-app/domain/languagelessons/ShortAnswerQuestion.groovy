@@ -8,7 +8,7 @@ class ShortAnswerQuestion extends Question{
     static def resultType = ShortAnswerResult;
     static Closure<Question> construct = {params ->
         Question q = new ShortAnswerQuestion(question: params.question, 
-                                             pointValue: params.pointValue)
+                                             pointVal: params.pointValue)
         return q;
     }
     Question fromDraft() {

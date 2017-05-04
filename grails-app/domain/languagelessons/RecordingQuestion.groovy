@@ -1,19 +1,17 @@
 package languagelessons
 
-import java.sql.Blob;
-
 class RecordingQuestion extends Question{
-    
-    // String[] answers;
+
     static String view = "recordingQuestion";
     static String displayName = "Recording";
     static String buildView = "buildRecording";
     static def resultType = RecordingResult;
     boolean requiresReview = true;
     static Closure<Question> construct = {params ->
-        //placeholder
-        return new RecordingQuestion();
+        Question q = new RecordingQuestion(question: params.question, pointVal: params.pointValue)
+        return q
     }
+
     Question fromDraft() {
         //also not finalized
         //quick hack to get bootstrap working
@@ -26,10 +24,9 @@ class RecordingQuestion extends Question{
         copy.oldId = id;
         return copy;
     }
-    Blob audioAnswer;
+
     String audioType;
-    
+
     static constraints = {
-        audioAnswer nullable:true
     }
 }
