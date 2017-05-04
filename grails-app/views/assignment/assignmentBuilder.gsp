@@ -105,168 +105,175 @@
                 </div>
             </div>
         </g:if>-->
-        <div class="editable-filename" id="filename" contenteditable="true">${filename}</div>
-        <button id="save-exit-btn" class="btn btn-primary" onclick="saveAndExit()">Save and Exit</button>
-        <button id="discard-exit-btn" class="btn btn-warning" onclick="discardAndExit()">Discard and Exit</button>
-        <button id="save-btn" class="btn btn-primary" onclick="save()">Save</button>
-        <button id="question-btn" class="btn btn-primary" onclick="questionBuilder()">Add Question</button>
-        <i><span style="visibility:hidden" id="successAlert">success message goes here</span></i>
-        <i><span style="visibility:hidden" id="failAlert">fail message goes here</span></i>
-            <textarea id="editor" >
-                ${html}
-            </textarea>
-            <p>Live Preview:</p>
-            <div id="preview"></div> 
-        <script>
-            CKEDITOR.disableAutoInline = true;
-            var currentfilename = "untitled lesson"
-            CKEDITOR.addCss(
-            ".question { " + 
-                "background-color: lightgreen; " +
-                "outline: 4px solid green; " +
-                "padding: 2em; " +
-                "margin: 2em 0; " +
-            "}"
-            );
-            var preview = CKEDITOR.document.getById( 'preview' );
-                function resetBindings() {
-                    $(document).off();
+        <div class="container container-fluid">
+            <div class="editable-filename" id="filename" contenteditable="true">${filename}</div>
+            <button id="save-exit-btn" class="btn btn-primary" onclick="saveAndExit()">Save and Exit</button>
+            <button id="discard-exit-btn" class="btn btn-warning" onclick="discardAndExit()">Discard and Exit</button>
+            <button id="save-btn" class="btn btn-primary" onclick="save()">Save</button>
+            <button id="question-btn" class="btn btn-primary" onclick="questionBuilder()">Add Question</button>
+            <i><span style="visibility:hidden" id="successAlert">success message goes here</span></i>
+            <i><span style="visibility:hidden" id="failAlert">fail message goes here</span></i>
+                <textarea id="editor" >
+                    ${html}
+                </textarea>
+                <p>Live Preview:</p>
+                <div id="preview"></div> 
+            <script>
+                CKEDITOR.disableAutoInline = true;
+                var currentfilename = "untitled lesson"
+                CKEDITOR.addCss(
+                ".question { " + 
+                    "background-color: lightgreen; " +
+                    "outline: 4px solid green; " +
+                    "padding: 2em; " +
+                    "margin: 2em 0; " +
+                "}"
+                );
+                var preview = CKEDITOR.document.getById( 'preview' );
+                    function resetBindings() {
+                        $(document).off();
+                        createBindings();
+                    }
+                    function createBindings() {
+                        $(document).on("click",".selector",function() {
+                            getQuestionBuild($( this )[0].id);
+                        });
+                    }
                     createBindings();
-                }
-                function createBindings() {
-                    $(document).on("click",".selector",function() {
-                        getQuestionBuild($( this )[0].id);
-                    });
-                }
-                createBindings();
-                function saveAndExit() {
-                    syncFilename();
-                    syncPreview();
-                    jQuery.ajax({
-                        type: "POST",
-                        url: "${createLink(action: 'saveAssignment')}",
-                        data: {discard: false, syllabusId: ${syllabusId}},
-                        success: function (data) {
-                            window.location.href = "${createLink(controller: "course", action: "show", params: [syllabusId: syllabusId])}";
-                        }
-                    });
-                }
-                function save() {
-                    syncFilename();
-                    syncPreview();
-                    jQuery.ajax({
-                        type: "POST",
-                        url: "${createLink(action: 'saveAssignment')}",
-                        data: {discard: false, syllabusId: ${syllabusId}},
-                        success: function (data) {
-                            successAlert('Successfully saved.');
-                        },
-                        error: function(XMLHttpRequest, textStatus, errorThrown) {
-                            failAlert('Error while saving');
-                        }
-                    });
-                }
-                function discardAndExit() {
-                    jQuery.ajax({
-                        type: "POST",
-                        url: "${createLink(action: 'saveAssignment')}",
-                        data: {discard: true, syllabusId: ${syllabusId}},
-                        success: function (data) {
-                            window.location.href = "${createLink(controller: "course", action: "show", params: [syllabusId: syllabusId])}";
-                        }
-                    });
-                }
-                function syncPreview() {
-                    var html = encodeURIComponent(editor.getData());
-                    jQuery.ajax({
-                        type: "POST", 
-                        url: "${createLink(action: 'syncPreview')}",
-                        data: {html: html, filename: currentfilename},
-                        success: function (data) {
-                            preview.setHtml(data);
-                        },
-                        error: function(XMLHttpRequest, textStatus, errorThrown) {
-                            preview.setHtml("<div class='alert alert-danger'>Connection lost.</div>");
-                        }
-                    });
-                }
-                function syncFilename() {
-                    var filename_text = filename.getData().replace(/<(?:.|\n)*?>/gm, ''); //removes html since we just want the filename
-                    if (filename_text == '') {
-                       filename_text = 'untitled assignment';
+                    function saveAndExit() {
+                        syncFilename();
+                        syncPreview();
+                        jQuery.ajax({
+                            type: "POST",
+                            url: "${createLink(action: 'saveAssignment')}",
+                            data: {discard: false, syllabusId: ${syllabusId}},
+                            success: function (data) {
+                                window.location.href = "${createLink(controller: "course", action: "show", params: [syllabusId: syllabusId])}";
+                            }
+                        });
                     }
-                    filename.setData(filename_text);
-                    currentfilename = filename_text;
-                }
-                var editor = CKEDITOR.replace( 'editor', {
-                    on: {
-                        // Synchronize the preview on user action that changes the content.
-                        change: syncPreview,
-
-                        // Synchronize the preview when the new data is set.
-                        contentDom: syncPreview
+                    function save() {
+                        syncFilename();
+                        syncPreview();
+                        jQuery.ajax({
+                            type: "POST",
+                            url: "${createLink(action: 'saveAssignment')}",
+                            data: {discard: false, syllabusId: ${syllabusId}},
+                            success: function (data) {
+                                successAlert('Successfully saved.');
+                            },
+                            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                failAlert('Error while saving');
+                            }
+                        });
                     }
-                } );
-                var filename = CKEDITOR.inline( 'filename', {
-                                            removePlugins: 'toolbar',
-                                            allowedContent: '',
-                                            on: {
-                                                blur: syncFilename,
-                                            }
-                });
+                    function discardAndExit() {
+                        jQuery.ajax({
+                            type: "POST",
+                            url: "${createLink(action: 'saveAssignment')}",
+                            data: {discard: true, syllabusId: ${syllabusId}},
+                            success: function (data) {
+                                window.location.href = "${createLink(controller: "course", action: "show", params: [syllabusId: syllabusId])}";
+                            }
+                        });
+                    }
+                    function syncPreview() {
+                        var html = encodeURIComponent(editor.getData());
+                        jQuery.ajax({
+                            type: "POST", 
+                            url: "${createLink(action: 'syncPreview')}",
+                            data: {html: html, filename: currentfilename},
+                            success: function (data) {
+                                preview.setHtml(data);
+                            },
+                            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                preview.setHtml("<div class='alert alert-danger'>Connection lost.</div>");
+                            }
+                        });
+                    }
+                    function syncFilename() {
+                        var filename_text = filename.getData().replace(/<(?:.|\n)*?>/gm, ''); //removes html since we just want the filename
+                        if (filename_text == '') {
+                           filename_text = 'untitled assignment';
+                        }
+                        filename.setData(filename_text);
+                        currentfilename = filename_text;
+                    }
+                    var editor = CKEDITOR.replace( 'editor', {
+                        on: {
+                            // Synchronize the preview on user action that changes the content.
+                            change: syncPreview,
 
-                function closeSuccessAlert() {
-                    document.getElementById("successAlert").style.visibility="hidden";
-                }
-                function closeFailAlert() {
-                    document.getElementById("failAlert").style.visibility="hidden";
-                }
-                function successAlert(text) {
-                    $( "#successAlert" ).show();
-                    var successAlert = document.getElementById("successAlert");
-                    successAlert.style.visibility="visible";
-                    successAlert.innerHTML = text;
-                    $( "#successAlert" ).stop(true, true).fadeOut(2000, closeSuccessAlert);
-                }
-                function failAlert(text) {
-                    $( "#failAlert" ).show();
-                    var failAlert = document.getElementById("failAlert");
-                    failAlert.style.visibility="visible";
-                    failAlert.innerHTML = text;
-                    $( "#failAlert" ).stop(true, true).fadeOut(2000, closeFailAlert);
-                }
-                
-                function questionBuilder() {
-                    jQuery.ajax({
-                        type: "POST", 
-                        url: "${createLink(action: 'questionSelector')}",
-                        data: {select: "yes"},
-                        success: function (data) {
-                            preview.setHtml(data);
-                        },
+                            // Synchronize the preview when the new data is set.
+                            contentDom: syncPreview
+                        }
+                    } );
+                    var filename = CKEDITOR.inline( 'filename', {
+                                                removePlugins: 'toolbar',
+                                                allowedContent: '',
+                                                on: {
+                                                    blur: syncFilename,
+                                                }
                     });
-                }
-                function getQuestionBuild(templateName) {
-                    jQuery.ajax({
-                        type: "POST", 
-                        url: "${createLink(action: 'getQuestionBuild')}",
-                        data: {templateName: templateName},
-                        success: function (data) {
-                            resetBindings();
-                            $( "#questionBuild" ).html(data);
-                        },
+
+                    function closeSuccessAlert() {
+                        document.getElementById("successAlert").style.visibility="hidden";
+                    }
+                    function closeFailAlert() {
+                        document.getElementById("failAlert").style.visibility="hidden";
+                    }
+                    function successAlert(text) {
+                        $( "#successAlert" ).show();
+                        var successAlert = document.getElementById("successAlert");
+                        successAlert.style.visibility="visible";
+                        successAlert.innerHTML = text;
+                        $( "#successAlert" ).stop(true, true).fadeOut(2000, closeSuccessAlert);
+                    }
+                    function failAlert(text) {
+                        $( "#failAlert" ).show();
+                        var failAlert = document.getElementById("failAlert");
+                        failAlert.style.visibility="visible";
+                        failAlert.innerHTML = text;
+                        $( "#failAlert" ).stop(true, true).fadeOut(2000, closeFailAlert);
+                    }
+
+                    function questionBuilder() {
+                        jQuery.ajax({
+                            type: "POST", 
+                            url: "${createLink(action: 'questionSelector')}",
+                            data: {select: "yes"},
+                            success: function (data) {
+                                preview.setHtml(data);
+                            },
+                        });
+                    }
+                    function getQuestionBuild(templateName) {
+                        jQuery.ajax({
+                            type: "POST", 
+                            url: "${createLink(action: 'getQuestionBuild')}",
+                            data: {templateName: templateName},
+                            success: function (data) {
+                                resetBindings();
+                                $( "#questionBuild" ).html(data);
+                            },
+                        });
+                    }
+                    function createQuestion(questionData) {
+                        jQuery.ajax({
+                            type: "POST", 
+                            url: "${createLink(action: 'createQuestion')}",
+                            data: {questionData: JSON.stringify(questionData)},
+                            success: function (data) {
+                                CKEDITOR.instances.editor.insertHtml('<p></p><div contenteditable="false" class="question" id="' + data + '">Placeholder for Question with id: ' + data + '. This will be replaced with the proper question when rendering the assignment.</div><p></p>');
+                            },
+                        });
+                    }
+                    $(window).scroll(function(e) {   
+                        if ($(window).scrollTop() >=0) {
+                            $(window).scrollTop(0);
+                        }
                     });
-                }
-                function createQuestion(questionData) {
-                    jQuery.ajax({
-                        type: "POST", 
-                        url: "${createLink(action: 'createQuestion')}",
-                        data: {questionData: JSON.stringify(questionData)},
-                        success: function (data) {
-                            CKEDITOR.instances.editor.insertHtml('<div contenteditable="false" class="question" id="' + data + '">Question with id: ' + data + '</div>');
-                        },
-                    });
-                }
-        </script>
+            </script>
+        </div>
     </body>    
 </html>

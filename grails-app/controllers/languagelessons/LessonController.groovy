@@ -42,7 +42,7 @@ class LessonController {
         Course course = Course.findBySyllabusId(params.syllabusId)
         course.addToLessons(outLesson)
         course.save(flush: true)*/
-        redirect(action: "viewDraftsTable", params: [syllabusId: course.syllabusId])
+        redirect(action: "viewDraftsTable", params: [syllabusId: params.syllabusId])
     }
     def deleteLesson() {
         Lesson toDelete = Lesson.findById(params.lessonId)
