@@ -23,6 +23,7 @@ class SecUser implements Serializable {
     Faculty faculty
     boolean isStudent = true;
     boolean isFaculty = false;
+    boolean fromMoodle = false;
     Date lastLoginTime;
 
         // Added some methods for easy name retrieval - just ask the User!
