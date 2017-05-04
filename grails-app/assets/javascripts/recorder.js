@@ -16,7 +16,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
 CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 DEALINGS IN THE SOFTWARE.
 */
-
+var recorderData;
 (function(window){
 
   var WORKER_PATH = '/assets/recorderWorker.js';
@@ -107,11 +107,14 @@ DEALINGS IN THE SOFTWARE.
   };
 
   Recorder.setupDownload = function(blob, filename){
-      var assignId = document.getElementById("assignId").getAttribute("href");
-      var fd = new FormData();
-      fd.append('audio', blob);
-      fd.append('assignId', assignId);
-      jQuery.ajax({
+      var reader = new window.FileReader();
+      reader.readAsDataURL(blob);
+      var base64data;
+      reader.onloadend = function() {
+          recorderData = reader.result;
+          console.log(recorderData);
+      };
+      /*jQuery.ajax({
           type: 'POST',
           url: 'test',
           data: fd,
@@ -119,7 +122,7 @@ DEALINGS IN THE SOFTWARE.
           contentType: false
       }).done(function(data) {
           console.log(data);
-      });
+      });*/
   };
 
   window.Recorder = Recorder;

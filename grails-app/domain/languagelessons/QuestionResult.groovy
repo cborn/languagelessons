@@ -12,6 +12,7 @@ abstract class QuestionResult {
     Question question;
     static belongsTo = [result: AssignmentResult]
     static constraints = {
+        audioAnswer maxSize: 1073741824
         audioAnswer nullable: true;
         intAnswer nullable: true;
         stringAnswer nullable: true;

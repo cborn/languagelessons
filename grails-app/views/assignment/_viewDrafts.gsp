@@ -34,7 +34,7 @@
                 <button class="btn btn-warning" onclick="destroy(${assignment.id})">Delete</button>
             </td>
             <td>
-                <g:link role="button" class="btn btn-primary" controller="assignment" action="builderCreateEditHandler" params="[syllabusId: course.syllabusId, edit: true, assignId: assignment.id]">Edit Lesson</g:link>
+                <g:link role="button" class="btn btn-primary" controller="assignment" action="builderCreateEditHandler" params="[syllabusId: course.syllabusId, edit: true, assignId: assignment.id]">Edit Assignment</g:link>
             </td>
         </tr>
     </g:each>

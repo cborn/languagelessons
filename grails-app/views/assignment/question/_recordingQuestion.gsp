@@ -46,6 +46,12 @@
         <script id="${question.id}reqReviewSource" type="text/html">
             <span class="alert alert-warning">Requires Review</span>
         </script>
+        <script id="${question.id}studentAnswerSource" type="text/html">
+            <audio controls>
+                <!---<source src="${createLink(controller: 'assignment', params: [questionId: question.id, resultId: "RESULT_ID_HERE"], action: 'playAudio')}"/>-->
+                <source src="AUDIO_HERE"/>
+            </audio>
+        </script>
         <asset:javascript src="main.js"/>
         <asset:javascript src="recorder.js"/>
         <asset:javascript src="audiodisplay.js"/>
@@ -58,8 +64,7 @@
                 changeGrade(${question.id}, newPoints);
             }
             function getValue() {
-                var answer = $( "#${question.id}answer" ).val();
-                return answer;
+                return recorderData;
             }
             valueRegistry[${question.oldId}] = getValue
             function clearResult() {
@@ -86,9 +91,8 @@
                     $( "#${question.id}panel" ).addClass("panel-warning");
                     $( "#${question.id}reqReview" ).html( $( "#${question.id}reqReviewSource" ).html());
                 }
-                var text = "Student answered " + (answer);
-                var text = text + ", was rewarded " + points + " points";
-                $( "#${question.id}studentAnswer" ).html(text);
+                var html = $( "#${question.id}studentAnswerSource" ).html().replace('AUDIO_HERE', answer);
+                $( "#${question.id}studentAnswer" ).html(html);
                 var changeGradeSource = $( "#${question.id}changeGradeSource" ).html();
                 $( "#${question.id}changeGrade" ).html(changeGradeSource);
             }

@@ -28,6 +28,11 @@ class AssignmentController {
         def assignment = Assignment.findById(params.assignId)
         [assignment: assignment, syllabusId: params.syllabusId, student: student, faculty: faculty]
     }
+    def playAudio() {
+        AssignmentResult result = AssignmentResult.get(params.resultId)
+        RecordingResult recording = result.results.find {it.id == Long.parseLong(params.questionId)}
+        render("data:audio/wav;base64," + recording.encodeBase64())
+    }
     def changeGrade() {
         AssignmentResult result = AssignmentResult.get(params.resultId)
         Question question = Question.get(params.questionId)
