@@ -17,21 +17,24 @@ class LtiService {
     
     public static String generateOAuthSignature(String method, String url, String consumerSecret, Map parameters) {
         
-        TreeMap<String,String> encodeParams = new TreeMap<String,String>();
+        TreeMap<String, String> encodeParams = new TreeMap<String, String>();
         
-        // Each key and value needs to be encoded before being sorted and concatanated
         for(String key: parameters.keySet()) {
-            encodeParams.put(encode(key), encode(parameters.get(key)));
+            for(String value: parameters.get(key)) {
+               encodeParams.put(encode(key), encode(value))
+            }
         }
         
-        // Sort oAuth params & additional params alphabetically
+        encodeParams.remove("oauth_signature")
+        
+        // Sort oAuth params alphabetically
         def sortedParameters = encodeParams.sort { it.key }
         
         def signatureParameters = ''
         sortedParameters.each {
                 signatureParameters += "${it.key}=${it.value}&"
         }
-
+        
         // Remove trailing ampersand left from loop
         signatureParameters = signatureParameters.substring(0, signatureParameters.length() - 1)
 

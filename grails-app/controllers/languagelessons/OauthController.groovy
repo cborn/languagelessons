@@ -7,22 +7,12 @@ class OauthController {
     def ltiService
     
     def authorize() {
+        println params.oauth_signature
         
-        TreeMap<String, String> fullMap = new TreeMap<String, String>();
-        def xmlMap = request.getParameterMap()
-        
-        for(String key: xmlMap.keySet()) {
-            for(String value: xmlMap.get(key)) {
-               fullMap.put(key, value)
-            }
-        }
-        
-        fullMap.remove("oauth_signature")
-        
-        String sig = LtiService.generateOAuthSignature("POST", request.getRequestURL().toString(), "my-secret", fullMap)
+        String sig = LtiService.generateOAuthSignature("POST", request.getRequestURL().toString(), "my-secret", request.getParameterMap())
         
         if(sig.equals(params.oauth_signature))
-            render "Sig"
+            render "Siggy"
         else
             render sig + "\n" + params.oauth_signature
     }
