@@ -445,9 +445,13 @@ th.desc a {
     background: #ffffff;
 }
 
+/*
+I HATE THIS STYLE. IT HID FROM ME AND MADE ME SUFFER.
+
 th:hover, tr:hover {
     background: #79b94c;
 }
+*/
 
 /* PAGINATION */
 
