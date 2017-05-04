@@ -3,7 +3,7 @@
         <th>
             <div class="page-header">
                 <h3>Question Editor</h3>
-                <small><h3>Begin typing in the editor window to cancel question creation and return to preview mode.</h3></small>
+                <small><h3>Begin typing in the main editor window to cancel question creation and return to preview mode.</h3></small>
             </div>
             <center>
                 <div class="btn-group btn-toolbar" role="group" aria-label="toolbar">

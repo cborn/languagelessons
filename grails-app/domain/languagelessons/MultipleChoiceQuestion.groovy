@@ -9,10 +9,11 @@ class MultipleChoiceQuestion extends Question{
     static String displayName = "Multiple Choice";
     static def resultType = MultipleChoiceResult;
     static Closure<Question> construct = {params ->
+        int pointValue = Integer.parseInt(params.pointVal);
         Question q = new MultipleChoiceQuestion(answers: params.answers, 
                                                 correctAnswers: params.corrects,
                                                 question: params.question,
-                                                pointValue: params.pointVal)
+                                                pointValue: pointValue)
         return q
     }
     Question fromDraft() {

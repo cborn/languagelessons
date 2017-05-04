@@ -193,6 +193,25 @@
                     },
                 });
             }
+            function flagForReview(id) {
+                jQuery.ajax({
+                    type: "POST",
+                    url: "${createLink(action: 'flagForReview')}",
+                    data: {resultId: currentResultId, questionId: id},
+                    success: function (data) {
+                        clear();
+                        data = JSON.parse(data);
+                        keys = data.keys;
+                        values = data.values;
+                        var keysLength = keys.length;
+                        var key;
+                        for (var i = 0; i < keysLength; i++) {
+                            key = keys[i];
+                            displayRegistry[key](values.answers[key], values.points[key], values.stati[key]);
+                        }
+                    },
+                });
+            }
         </script>
     </body>
 </html>

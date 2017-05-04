@@ -74,19 +74,46 @@
             var pointVal = $( "#pointval" ).val();
             var answers = [];
             var corrects = [];
+            var fail = false;
             $( ".entry" ).each(function(index, obj) {
                 //needs to go through each element
                 var answer = $( this ).find(" #answer ").val();
                 var correct = $( this ).find(" #correct ").is(':checked');
+                if (!answer) {
+                    alert("Please ensure all answers are filled in.");
+                    fail = true;
+                    return;
+                }
                 answers.push(answer);
                 corrects.push(correct);
             });
+            if (fail) {
+                return;
+            }
             questionData.type = "multipleChoice";
+            //validate entries:
+            if (!question) {
+                alert("Please fill out the 'question' field");
+                fail = true;
+                return;
+            }
+            if (!pointVal) {
+                alert("Please fill out the 'point value' field");
+                fail = true;
+                return;
+            }
+            if (!answers) {
+                alert("Please ensure your question has at least one answer.");
+                fail = true;
+                return;
+            }
             questionData.question = question;
             questionData.pointVal = pointVal;
             questionData.answers = answers;
             questionData.corrects = corrects;
-            createQuestion(questionData);
+            if (!fail) {
+                createQuestion(questionData);
+            }
         }
     </script>
 

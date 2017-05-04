@@ -144,10 +144,7 @@ class BootStrap {
 '''
 
         def question = new RecordingQuestion(pointValue: 4,
-                                            question: "Record something, dweeb.",
-                                            view: "recordingQuestion",
-                                            questionNum: 1,
-                                            audioType: "wav")
+                                            question: "Record something, dweeb.",)
 
         recordingAssignment.addToQuestions(question)
 

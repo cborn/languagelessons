@@ -38,6 +38,15 @@ class AssignmentController {
         Question question = Question.get(params.questionId)
         QuestionResult questionResult = result.results.find {it.question.id == question.oldId}
         questionResult.pointsAwarded = Integer.parseInt(params.amount);
+        questionResult.status = "graded"
+        questionResult.save(flush: true)
+        redirect(action: "getResults", params: params)
+    }
+    def flagForReview() {
+        AssignmentResult result = AssignmentResult.get(params.resultId)
+        Question question = Question.get(params.questionId)
+        QuestionResult questionResult = result.results.find {it.question.id == question.oldId}
+        questionResult.status = "awaitReview"
         questionResult.save(flush: true)
         redirect(action: "getResults", params: params)
     }

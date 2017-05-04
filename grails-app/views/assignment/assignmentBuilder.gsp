@@ -266,6 +266,9 @@
                             success: function (data) {
                                 CKEDITOR.instances.editor.insertHtml('<p></p><div contenteditable="false" class="question" id="' + data + '">Placeholder for Question with id: ' + data + '. This will be replaced with the proper question when rendering the assignment.</div><p></p>');
                             },
+                            error: function (xhr, status, error) {
+                                alert('Something went wrong, please check all your fields and try again.');
+                            },
                         });
                     }
                     $(window).scroll(function(e) {   

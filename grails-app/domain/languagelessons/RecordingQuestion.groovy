@@ -8,7 +8,9 @@ class RecordingQuestion extends Question{
     static def resultType = RecordingResult;
     boolean requiresReview = true;
     static Closure<Question> construct = {params ->
-        Question q = new RecordingQuestion(question: params.question, pointVal: params.pointValue)
+        println(params.pointVal)
+        int pointValue = Integer.parseInt(params.pointVal)
+        Question q = new RecordingQuestion(question: params.question, pointValue: pointValue)
         return q
     }
 
@@ -18,15 +20,15 @@ class RecordingQuestion extends Question{
         Question copy = new RecordingQuestion(
             question: question,
             pointValue: pointValue,
-            audioType: audioType,
         )
         copy.isDraft = false;
         copy.oldId = id;
         return copy;
     }
 
-    String audioType;
-
+    boolean grade(String answer) {
+        return false;
+    }
     static constraints = {
     }
 }

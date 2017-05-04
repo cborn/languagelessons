@@ -7,8 +7,9 @@ class ShortAnswerQuestion extends Question{
     static String displayName = "Short Answer"
     static def resultType = ShortAnswerResult;
     static Closure<Question> construct = {params ->
+        int pointValue = Integer.parseInt(params.pointVal)
         Question q = new ShortAnswerQuestion(question: params.question, 
-                                             pointVal: params.pointValue)
+                                             pointValue: pointValue)
         return q;
     }
     Question fromDraft() {

@@ -16,7 +16,10 @@
             <div class="input-group">
                 <input type="text" class="form-control" id="${question.id}newPoints" placeholder="0 - ${question.pointValue}" aria-describedby="basic-addon1"></input>
                 <span class="input-group-btn">
-                    <button class="btn btn-secondary" type="button" onclick="prepChangeGrade${question.id}()">Change Grade</button>
+                    <button class="btn btn-primary" type="button" onclick="prepChangeGrade${question.id}()">Change Grade</button>
+                </span>
+                <span class="input-group-btn">
+                    <button class="btn btn-warning" type="button" onclick="flagForReview(${question.id})">Flag For Review</button>
                 </span>
             </div>
         </script>
@@ -25,7 +28,6 @@
         </script>
         <script>
             function prepChangeGrade${question.id}() {
-                console.log("#${question.id}newPoints");
                 var newPoints = $( "#${question.id}newPoints" ).val();
                 console.log(newPoints);
                 changeGrade(${question.id}, newPoints);

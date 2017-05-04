@@ -22,6 +22,19 @@
         questionData.type = "shortAnswer";
         questionData.question = question;
         questionData.pointVal = pointVal;
-        createQuestion(questionData);
+        var fail;
+        if (!question) {
+            alert("Please fill out the 'question' field");
+            fail = true;
+            return;
+        }
+        if (!pointVal) {
+            alert("Please fill out the 'point value' field");
+            fail = true;
+            return;
+        }
+        if (!fail) {
+            createQuestion(questionData);
+        }
     }
 </script>
