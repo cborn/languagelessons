@@ -46,7 +46,7 @@ abstract class Question {
     static def resultType;
     static Closure<Question> construct;*/
     int questionNum;
-    static def subtypes = [RecordingQuestion, MultipleChoiceQuestion, ShortAnswerResult]
+    static def subtypes = [RecordingQuestion, MultipleChoiceQuestion, ShortAnswerQuestion]
     boolean archived = false;
     boolean isDraft = true;
     boolean requiresReview;

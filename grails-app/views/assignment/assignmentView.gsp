@@ -131,6 +131,7 @@
                 var data = {};
                 data['assignment'] = ${assignment.id};
                 data['out'] = out;
+                console.log(JSON.stringify(data));
                 jQuery.ajax({
                     type: "POST", 
                     url: "${createLink(action: 'submitAssignment')}",
