@@ -18,6 +18,8 @@ class LtiService {
     public static void createMoodleUser (Map parameters) {
         String pw = generateMoodlePassword(parameters.get("lis_person_contact_email_primary"), parameters.get("lis_person_name_full"))
         
+        decideUserRole(parameters.get("roles"))
+        
         def studentUser = new SecUser(username: parameters.get("lis_person_contact_email_primary"), password:pw, fromMoodle:true, enabled: 'true').save(failOnError:true)
         Student s1 = new Student(firstName:parameters.get("lis_person_name_given"),surname:parameters.get("lis_person_name_family"),studentId: (int)(Math.random()*1000), email:parameters.get("lis_person_contact_email_primary"),institution:"Second Rate University").save(failOnError:true);
         UserRole.create studentUser, Role.findByAuthority('ROLE_STUDENT')
@@ -29,6 +31,37 @@ class LtiService {
         String pwString = email + name
         Integer hash = new Integer(pwString.hashCode())
         return hash.toString()
+    }
+    
+    public static String decideUserRole(String roleListStr) {
+        String[] roleList = roleListStr.split(",");
+        ArrayList<String> SysRole = new ArrayList<String>();
+        ArrayList<String> InstRole = new ArrayList<String>();
+        ArrayList<String> ConRole = new ArrayList<String>();
+        
+        for(String role: roleList) {
+            if(role.startsWith("urn:lti:sysrole:ims/lis/")) {
+                SysRole.add(role.substring(24));
+            }
+            else if(role.startsWith("urn:lti:instrole:ims/lis/")) {
+                InstRole.add(role.substring(26));
+            }
+            else {
+                ConRole.add(role);
+            }
+        }
+        
+        println "\n" + SysRole
+        println "\nSysRole:"
+        for (String r: SysRole)
+            println "     " + r
+        println "InstRole:"
+        for (String r: InstRole)
+            println "     " + r
+        println "ConRole:"
+        for (String r: ConRole)
+            println "     " + r
+        
     }
     
     public static String generateOAuthSignature(String method, String url, String consumerSecret, Map parameters) {

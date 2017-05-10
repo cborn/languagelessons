@@ -3,6 +3,7 @@
     <head>
         <meta name="layout" content="main"/>
         <title>Welcome to Language Lessons</title>
+        <asset:javascript src="application.js"/>
         <style type="text/css" media="screen">
             #status {
                 background-color: #eee;
@@ -100,7 +101,7 @@
                 <img src="" class="img-responsive"/>
                 <p>Welcome to Language Lessons. Please login or signup to begin.</p>
                 <p>
-                    <g:link role="button" controller="student" class="btn btn-primary btn-lg" action="index">Login</g:link>
+                    <g:link role="button" controller="student" class="btn btn-primary btn-lg" id="loginBtn" action="index">Login</g:link>
                     <g:link role="button" controller="user" class="btn btn-success btn-lg" action="index">Apply Now</g:link>
                     <g:link role="button" class="btn btn-success btn-lg" uri="/faq" >FAQ</g:link>
                 
@@ -110,5 +111,12 @@
                 </small>
             </div>
         </div>
+        
+        <script>
+            <sec:ifLoggedIn>
+                $('body').html(" ")
+                window.location.replace("${createLink(controller: "student", action:"index")}");
+            </sec:ifLoggedIn>
+        </script>
     </body>
 </html>
