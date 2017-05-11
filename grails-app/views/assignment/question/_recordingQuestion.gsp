@@ -51,7 +51,6 @@
         </script>
         <script id="${question.id}studentAnswerSource" type="text/html">
             <audio controls>
-                <!---<source src="${createLink(controller: 'assignment', params: [questionId: question.id, resultId: "RESULT_ID_HERE"], action: 'playAudio')}"/>-->
                 <source src="AUDIO_HERE"/>
             </audio>
         </script>

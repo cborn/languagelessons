@@ -2,6 +2,7 @@ package languagelessons
 import grails.plugin.springsecurity.annotation.Secured
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
+import java.util.Date
 class AssignmentController {
 
     def index() { }
@@ -78,7 +79,7 @@ class AssignmentController {
         //qid, assignId
         Assignment assignment = Assignment.findById(params.assignId)
         Question question = assignment.questions.find{question -> question.oldId == Long.parseLong(params.qid) }
-        render(template: "question/" + question.view, model: [question: question])
+        render(template: "question/questionDisplayTemplate", model: [question: question])
     }
     def createQuestion() {
         def jsonSlurper = new JsonSlurper()
@@ -187,6 +188,30 @@ class AssignmentController {
             }
         }
         [assignment:assignment, course: course, result: result]
+    }
+    def getComments() {
+        AssignmentResult result = AssignmentResult.get(params.resultId)
+        QuestionResult questionResult = result.results.find{res -> res.question.id == Long.parseLong(params.questionId)}
+        assert questionResult != null
+        render(template: "comment/commentThread", model: [qResult: questionResult, comments: questionResult.comments, Comment: Comment])
+    }
+    def postComment() {
+        def type = Comment.types.find{it.view == params.type}
+        Comment comment = type.newInstance(author: getAuthenticatedUser(), posted: new Date())
+        comment.putComment(params.comment)
+        QuestionResult qResult = QuestionResult.get(Long.parseLong(params.resultId));
+        Comment parent;
+        if (params.commentId != "thread") {
+            parent = Comment.get(Long.parseLong(params.commentId))
+            parent.addToReplies(comment)
+            comment.save(flush: true)
+            parent.save(flush: true)
+        } else {
+            qResult.addToComments(comment)
+            comment.save(flush: true)
+            qResult.save(flush: true)
+        }
+        render(template: "comment/commentThread", model: [qResult: qResult, comments: qResult.comments, Comment: Comment])
     }
     def submitAssignment() {
         def jsonSlurper = new JsonSlurper();

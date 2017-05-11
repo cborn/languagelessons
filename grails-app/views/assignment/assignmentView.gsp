@@ -82,9 +82,18 @@
                 }
             }
             #preview { outline: 2px dashed red; padding: 2em; margin: 2em 0; }
+            .progress {
+                display: block;
+                text-align: center;
+                width: 0;
+                height: 3px;
+                background: red;
+                transition: width .3s;
+            }
         </style>
     </head>
     <body>
+        <div class="progress"></div>
         <g:if test="${faculty}">
             <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -107,6 +116,8 @@
             var valueRegistry = {};
             var displayRegistry = {};
             var clearRegistry = [];
+            var refreshCommentsRegistry = {}
+            var commentsOpen = {}
             var currentResultId = -1;
             $( "#submit" ).on("click", processAndSubmit);
             $( ".question" ).each(function( index ) {
@@ -134,6 +145,29 @@
                 console.log(JSON.stringify(data));
                 jQuery.ajax({
                     type: "POST", 
+                    xhr: function () {
+                        var xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress", function (evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = evt.loaded / evt.total;
+                                $('.progress').css({
+                                    width: percentComplete * 100 + '%'
+                                });
+                                if (percentComplete === 1) {
+                                    $('.progress').addClass('hide');
+                                }
+                            }
+                        }, false);
+                        xhr.addEventListener("progress", function (evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = evt.loaded / evt.total;
+                                $('.progress').css({
+                                    width: percentComplete * 100 + '%'
+                                });
+                            }
+                        }, false);
+                        return xhr;
+                    },
                     url: "${createLink(action: 'submitAssignment')}",
                     data: {data: JSON.stringify(data)},
                     success: function (data) {
@@ -211,6 +245,15 @@
                         }
                     },
                 });
+            }
+            function refreshComments() {
+                for (var key in refreshCommentsRegistry) {
+                    // skip loop if the property is from prototype
+                    if (!refreshCommentsRegistry.hasOwnProperty(key)) continue;
+                    if (commentsOpen[key]) {
+                        refreshCommentsRegistry[key]();
+                    }
+                }
             }
         </script>
     </body>
