@@ -19,13 +19,11 @@ class OauthController {
         for(String key: xmlMap.keySet()) {
             for(String value: xmlMap.get(key)) {
                fullMap.put(key, value)
-//               println key + ": " + value
+//               println key  + ": " + value
             }
         }
         
-        println fullMap.get("roles")
-        
-        ltiService.decideUserRole(fullMap.get("roles"))
+        ltiService.decideUserRole(params.roles)
         
         String sig = LtiService.generateOAuthSignature("POST", request.getRequestURL().toString(), "my-secret", fullMap)
                 
@@ -38,6 +36,8 @@ class OauthController {
             String password = ltiService.generateMoodlePassword(params.lis_person_contact_email_primary, params.lis_person_name_full)
             
             SecUser userInfo = getAuthenticatedUser();
+            
+            println "success"
             
             redirect(action:"login", params:[user:username, pword:password])
 
