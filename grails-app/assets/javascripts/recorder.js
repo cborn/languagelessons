@@ -20,7 +20,8 @@ var currentRecordEntity;
 var recorderDataRegistry = {};
 
 var wavesurfer = WaveSurfer.create({
-    container: '#waveform'
+    container: '#waveform',
+    interact: true
 });
 (function(window){
 
