@@ -3,7 +3,7 @@
     <canvas id="wavedisplay" width="1024" height="500"></canvas>
 </div>
 <div id="controls">
-    <asset:image id="record" src="mic128.png" onclick="toggleRecording(this);"/>
+    <asset:image id="record" src="mic128.png" onclick="toggleRecording(this, ${question.id});"/>
     <!--<g:link role="button" controller="recording" action="play">Play Audio</g:link>-->
 </div>
 
@@ -38,7 +38,7 @@
 <script>
     initAudio()
     function getValue() {
-        return recorderData;
+        return recorderData[${question.id}];
     }
     valueRegistry[${question.oldId}] = getValue
     function finishDisplay${question.id}(answer, points) {

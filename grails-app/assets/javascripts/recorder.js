@@ -16,7 +16,8 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
 CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 DEALINGS IN THE SOFTWARE.
 */
-var recorderData;
+var currentRecordEntity;
+var recorderDataRegistry = {};
 (function(window){
 
   var WORKER_PATH = '/assets/recorderWorker.js';
@@ -111,18 +112,8 @@ var recorderData;
       reader.readAsDataURL(blob);
       var base64data;
       reader.onloadend = function() {
-          recorderData = reader.result;
-          console.log(recorderData);
+          recorderDataRegistry[currentRecordEntity] = reader.result;
       };
-      /*jQuery.ajax({
-          type: 'POST',
-          url: 'test',
-          data: fd,
-          processData: false,
-          contentType: false
-      }).done(function(data) {
-          console.log(data);
-      });*/
   };
 
   window.Recorder = Recorder;

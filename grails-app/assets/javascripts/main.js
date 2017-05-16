@@ -52,7 +52,8 @@ function doneEncoding( blob ) {
     recIndex++;
 }
 
-function toggleRecording( e ) {
+function toggleRecording( e, elementId ) {
+    currentRecordEntity = elementId;
     if (e.classList.contains("recording")) {
         // stop recording
         audioRecorder.stop();

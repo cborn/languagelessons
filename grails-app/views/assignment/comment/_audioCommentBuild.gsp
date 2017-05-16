@@ -4,7 +4,7 @@
   and open the template in the editor.
 -->
 <div id="controls">
-    <asset:image id="record" src="mic128.png" onclick="toggleRecording(this);"/>
+    <asset:image id="record" src="mic128.png" onclick="toggleRecording(this,{COMMENT_ID});"/>
 </div>
 {ASSET_OPEN}/assets/main.js{ASSET_CLOSE}
 {ASSET_OPEN}/assets/recorder.js{ASSET_CLOSE}
