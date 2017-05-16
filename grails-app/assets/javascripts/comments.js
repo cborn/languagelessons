@@ -33,12 +33,13 @@ function substitute(html, resultId, commentId) {
     html = html.replaceAll("{RESULT_ID}", resultId)
                .replaceAll("{COMMENT_ID}", commentId)
                .replaceAll("{SCRIPT_OPEN}", "<script>")
-               .replaceAll("{SCRIPT_CLOSE}","</script>");
+               .replaceAll("{SCRIPT_CLOSE}","</script>")
+               .replaceAll("{ASSET_OPEN}","<script src='")
+               .replaceAll("{ASSET_CLOSE}","' type='text/javascript'>");
     return html;
 }
 function post(resultId, commentId) {
     var type = selectedType[getUid(resultId, commentId,"view")];
-    console.log(type);
     var comment = commentEntryRegistry[getUid(resultId,commentId,'comment')]();
     jQuery.ajax({
         type: "POST", 

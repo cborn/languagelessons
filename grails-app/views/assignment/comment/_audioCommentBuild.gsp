@@ -3,12 +3,15 @@
   To change this template file, choose Tools | Templates
   and open the template in the editor.
 -->
-
-<span>
-    Placeholder
-</span>
+<div id="controls">
+    <asset:image id="record" src="mic128.png" onclick="toggleRecording(this);"/>
+</div>
+{ASSET_OPEN}/assets/main.js{ASSET_CLOSE}
+{ASSET_OPEN}/assets/recorder.js{ASSET_CLOSE}
+{ASSET_OPEN}/assets/audiodisplay.js{ASSET_CLOSE}
 {SCRIPT_OPEN}
+    initAudio()
     commentEntryRegistry[getUid('{RESULT_ID}','{COMMENT_ID}','comment')] = function() {
-        return "yes this is definitely audio yes totally";
+        return recorderData;
     }
 {SCRIPT_CLOSE}
