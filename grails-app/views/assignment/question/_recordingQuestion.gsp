@@ -1,6 +1,6 @@
 <div id="viz">
     <canvas id="analyser" width="1024" height="500"></canvas>
-    <div id="waveform"></div>
+    <div id="waveform${question.id}"></div>
 </div>
 <div id="controls">
     <asset:image id="record" src="mic128.png" onclick="toggleRecording(this, ${question.id});"/>
@@ -38,11 +38,15 @@
 <script>
     initAudio()
     function getValue() {
-        return recorderData[${question.id}];
+        return recorderDataRegistry[${question.id}];
     }
     valueRegistry[${question.oldId}] = getValue
     function finishDisplay${question.id}(answer, points) {
         var html = $( "#${question.id}studentAnswerSource" ).html().replace('AUDIO_HERE', answer);
         $( "#${question.id}studentAnswer" ).html(html);
     }
+    var wavesurfer = WaveSurfer.create({
+        container: '#waveform${question.id}',
+    });
+    waveSurferRegistry[${question.id}] = wavesurfer;
 </script>

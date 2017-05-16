@@ -18,10 +18,8 @@ DEALINGS IN THE SOFTWARE.
 */
 var currentRecordEntity;
 var recorderDataRegistry = {};
+var waveSurferRegistry = {};
 
-var wavesurfer = WaveSurfer.create({
-    container: '#waveform'
-});
 (function(window){
 
   var WORKER_PATH = '/assets/recorderWorker.js';
@@ -116,8 +114,7 @@ var wavesurfer = WaveSurfer.create({
       reader.readAsDataURL(blob);
       reader.onloadend = function() {
           recorderDataRegistry[currentRecordEntity] = reader.result;
-          recorderData = reader.result;
-          wavesurfer.load(recorderDataRegistry[currentRecordEntity]);
+          waveSurferRegistry[currentRecordEntity].load(recorderDataRegistry[currentRecordEntity]);
       };
   };
 

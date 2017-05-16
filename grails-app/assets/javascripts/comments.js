@@ -35,7 +35,7 @@ function substitute(html, resultId, commentId) {
                .replaceAll("{SCRIPT_OPEN}", "<script>")
                .replaceAll("{SCRIPT_CLOSE}","</script>")
                .replaceAll("{ASSET_OPEN}","<script src='")
-               .replaceAll("{ASSET_CLOSE}","' type='text/javascript'>");
+               .replaceAll("{ASSET_CLOSE}","' type='text/javascript'/>");
     return html;
 }
 function post(resultId, commentId) {
