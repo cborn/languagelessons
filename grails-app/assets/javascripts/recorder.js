@@ -16,15 +16,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
 CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 DEALINGS IN THE SOFTWARE.
 */
-<<<<<<< HEAD
 var currentRecordEntity;
 var recorderDataRegistry = {};
-=======
-var recorderData;
+
 var wavesurfer = WaveSurfer.create({
     container: '#waveform'
 });
->>>>>>> 3dd9172d5e02ab8c95aa452391efd64a2bc3a9d7
 (function(window){
 
   var WORKER_PATH = '/assets/recorderWorker.js';
