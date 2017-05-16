@@ -41,7 +41,7 @@
 	<ul class="nav nav-tabs">
 		<li class="nav"><sec:access expression="hasRole('ROLE_STUDENT')">
 				<a class="ll-home-tab"
-					href="${createLink(controller:'applicant', action:'index')}">
+					href="${createLink(controller:'student', action:'index')}">
 			</sec:access> <sec:access expression="hasRole('ROLE_ADMIN')">
 				<a class="ll-home-tab"
 					href="${createLink(controller:'admin', action:'index')}">
