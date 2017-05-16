@@ -20,6 +20,7 @@ var currentRecordEntity;
 var recorderDataRegistry = {};
 var waveSurferRegistry = {};
 
+
 (function(window){
 
   var WORKER_PATH = '/assets/recorderWorker.js';

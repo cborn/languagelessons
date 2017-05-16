@@ -1,6 +1,9 @@
 <div id="viz">
     <canvas id="analyser" width="1024" height="500"></canvas>
     <div id="waveform${question.id}"></div>
+    <div id="waveform"></div>
+    <a onclick="waveSurferRegistry[${question.id}].play()">Play</a>
+    <a onclick="waveSurferRegistry[${question.id}].pause()">Pause</a>
 </div>
 <div id="controls">
     <asset:image id="record" src="mic128.png" onclick="toggleRecording(this, ${question.id});"/>
@@ -47,6 +50,7 @@
     }
     var wavesurfer = WaveSurfer.create({
         container: '#waveform${question.id}',
+        interact: true
     });
     waveSurferRegistry[${question.id}] = wavesurfer;
 </script>
