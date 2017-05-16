@@ -1,6 +1,6 @@
 <div id="viz">
     <canvas id="analyser" width="1024" height="500"></canvas>
-    <canvas id="wavedisplay" width="1024" height="500"></canvas>
+    <div id="waveform"></div>
 </div>
 <div id="controls">
     <asset:image id="record" src="mic128.png" onclick="toggleRecording(this);"/>
@@ -32,9 +32,9 @@
         <source src="AUDIO_HERE"/>
     </audio>
 </script>
+<asset:javascript src="wavesurfer.js"/>
 <asset:javascript src="main.js"/>
 <asset:javascript src="recorder.js"/>
-<asset:javascript src="audiodisplay.js"/>
 <script>
     initAudio()
     function getValue() {

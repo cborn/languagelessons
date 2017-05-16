@@ -17,6 +17,9 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 DEALINGS IN THE SOFTWARE.
 */
 var recorderData;
+var wavesurfer = WaveSurfer.create({
+    container: '#waveform'
+});
 (function(window){
 
   var WORKER_PATH = '/assets/recorderWorker.js';
@@ -109,20 +112,10 @@ var recorderData;
   Recorder.setupDownload = function(blob, filename){
       var reader = new window.FileReader();
       reader.readAsDataURL(blob);
-      var base64data;
       reader.onloadend = function() {
           recorderData = reader.result;
-          console.log(recorderData);
+          wavesurfer.load(recorderData);
       };
-      /*jQuery.ajax({
-          type: 'POST',
-          url: 'test',
-          data: fd,
-          processData: false,
-          contentType: false
-      }).done(function(data) {
-          console.log(data);
-      });*/
   };
 
   window.Recorder = Recorder;
