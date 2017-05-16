@@ -519,6 +519,35 @@ class CourseController {
             redirect(action:"editSingle",id:params.id);
         }
     }
+    
+    def studentGradebook() {
+        def course = Course.findBySyllabusId(params.syllabusId)
+        SecUser userInfo = getAuthenticatedUser();
+        
+        def assignmentList = []
+        
+        for(Lesson l: course.lessons) {
+            for(Assignment a: l?.assignments) {
+                assignmentList.add(a)
+            }
+        }
+        
+        def studentInfo;
+        
+        if(userInfo.isStudent) {
+            studentInfo = userInfo.student
+        }
+        // ToDo: figure out how faculty will view individual students
+        else {
+            studentInfo = Student.findById(1)
+        }
+        
+        for(Assignment a: assignmentList)
+            println a.results.student.getClass().toString()
+        
+        [assignments: assignmentList, student: studentInfo]
+    }
+    
 }
 
 // how each course must be updated

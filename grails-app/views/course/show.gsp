@@ -106,6 +106,7 @@
             <div class="jumbotron">
                 <img src="" class="img-responsive"/>
                 <p>${course.name}<p>
+                <g:link role="button" class="btn btn-primary" action="studentGradebook" params="[syllabusId: course.syllabusId]">Gradebook</g:link>
                 <g:if test="${!course.lessons}">
                     <h3>No lessons found at the moment, sorry!</h3>
                 </g:if>

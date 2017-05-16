@@ -215,21 +215,22 @@ class AssignmentController {
     }
     def submitAssignment() {
         def jsonSlurper = new JsonSlurper();
-        System.out.println(params.data)
         def data = jsonSlurper.parseText(params.data);
         SecUser user = getAuthenticatedUser();
         Student student = user.student;
         Assignment assignment = Assignment.findById(data.assignment)
         AssignmentResult assignResult = new AssignmentResult(student: student);
+        
         int maxScore = 0;
         int score = 0;
         int potentialPoints = 0;
-        System.out.println(data.out.toString())
+        
         data.out.each { id, answer ->
             Question question = Question.findById(id)
             QuestionResult qResult = question.resultType.newInstance(pointsAwarded: 0, status: "awaitReview", question: question)
             qResult.putAnswer(answer)
             maxScore = maxScore + question.pointValue;
+            
             if (question.requiresReview) {
                 //question requires faculty review
                 potentialPoints = potentialPoints + question.pointValue;
@@ -241,11 +242,13 @@ class AssignmentController {
                 }
                 qResult.status = "graded"
             }
+            
             assignResult.addToResults(qResult)
         }
         assignResult.maxScore = maxScore
         assignResult.score = score
         assignment.addToResults(assignResult)
+        
         if (assignment.course) {
             assignment.course.save(flush:true)
         }

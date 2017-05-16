@@ -110,6 +110,7 @@
         <div class="col-xs-12">
             <div class="jumbotron">
                 <img src="" class="img-responsive"/>
+                <g:link controller="course" action="show" params="[syllabusId: course.syllabusId]" class="btn btn-primary">Return to Course</g:link>
                 <p>${course.name}: ${lesson.name}</p>
                 <p>Due: <g:formatDate date="${lesson.dueDate}" type="datetime" style="SHORT"/></p>
                 <g:if test="${lesson.assignments}">
@@ -118,10 +119,9 @@
                         Assignment: <a href="${createLink(controller: "assignment", action: "assignmentView", params: [assignId: assignment.id, syllabusId: course.syllabusId])}">${assignment.name}</a><br>
                     </g:each>
                 </g:if>
-                <security:authorize access="hasRole('ROLE_FACULTY')">
+                <sec:ifAnyGranted roles='ROLE_FACULTY'>
                     <g:link role="button" class="btn btn-primary" controller="lesson" action="lessonBuilder" params="[syllabusId: course.syllabusId, edit: true, lessonId: lesson.id]">Edit Lesson</g:link>
-                </security:authorize>
-                <g:link controller="course" action="show" params="[syllabusId: course.syllabusId]" class="btn btn-primary">Return to Course</g:link>
+                </sec:ifAnyGranted>
             </div>
         </div>
         <div id="lessonText" class="col-xs-offset-1">${raw(lesson.text)}</div>

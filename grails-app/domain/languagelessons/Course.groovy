@@ -4,22 +4,23 @@ import static java.util.Calendar.*
 
 class Course {
 	
-	String name;
-        String syllabusId;
-        String description; 
-        
-        Boolean isArchived = false;
-        
-        Date startDate;
-        Date endDate;
-        
-        Integer applicantCap;
+    String name;
+    String syllabusId;
+    String description; 
 
+    Boolean isArchived = false;
+
+    Date startDate;
+    Date endDate;
+
+    Integer applicantCap;
 	
     static hasMany = [lessons:Lesson,
-                      assignments:Assignment,
+        // Don't ever use assignments, assignments should be attached to lessons
+                        assignments:Assignment,
                         faculty:Faculty,
-                        students:Student]
+                        students:Student,
+                        category: GradingCategory]
                     
     static belongsTo = [Faculty, Student];
                     
