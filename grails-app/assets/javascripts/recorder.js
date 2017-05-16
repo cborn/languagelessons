@@ -116,7 +116,6 @@ var wavesurfer = WaveSurfer.create({
       reader.readAsDataURL(blob);
       reader.onloadend = function() {
           recorderDataRegistry[currentRecordEntity] = reader.result;
-          recorderData = reader.result;
           wavesurfer.load(recorderDataRegistry[currentRecordEntity]);
       };
   };
