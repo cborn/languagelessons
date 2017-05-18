@@ -270,7 +270,7 @@ class CourseController {
         SecUser userInfo = getAuthenticatedUser();
         
         def facultyList = SecUser.findAllByFacultyIsNotNull();
-        def lessonList =  Lesson.findAllByIsArchivedOrIsArchived(null,false);
+        def lessonList =  Lesson.findAllByIsArchived(false);
         
         def thisCourse = Course.findBySyllabusId(params.syllabusId);
         def thisDir = SecUser.findByFaculty(thisCourse.faculty);
@@ -524,14 +524,6 @@ class CourseController {
         def course = Course.findBySyllabusId(params.syllabusId)
         SecUser userInfo = getAuthenticatedUser();
         
-        def assignmentList = []
-        
-        for(Lesson l: course.lessons) {
-            for(Assignment a: l?.assignments) {
-                assignmentList.add(a)
-            }
-        }
-        
         def studentInfo;
         
         if(userInfo.isStudent) {
@@ -539,13 +531,78 @@ class CourseController {
         }
         // ToDo: figure out how faculty will view individual students
         else {
-            studentInfo = Student.findById(1)
+            studentInfo = Student.findByStudentId(params.studentId)
         }
         
-        for(Assignment a: assignmentList)
-            println a.results.student.getClass().toString()
+        def assignments = []
+       
+        for(Lesson l: course.lessons) {
+            for(Assignment a: l?.assignments) {
+                if(!a.isDraft) {
+                    def result = a.getStudentResults(studentInfo)
+                    def resultList = []
+                    
+                    if(a.category) {
+                        resultList.add(assignment.category.name)
+                    }
+                    else {
+                        resultList.add(" ")
+                    }
+                    
+                    resultList.add(a.getGradebookName())
+                    resultList.add(a.id)
+                    resultList.add(course.syllabusId)
+                    
+                    if(result) {
+                        resultList.add(result.score)
+                        resultList.add(result.maxScore - result.potentialPoints)
+                        resultList.add((result.score/(result.maxScore - result.potentialPoints)* 100) + "%")
+                    }
+                    else {
+                        resultList.add("---")
+                        resultList.add("---")
+                        resultList.add("---")
+                    }
+                    
+                    resultList.add(g.formatDate(date:a.dueDate, format: 'MM/dd/yyyy'))
+                    
+                    assignments.add(resultList)
+                }
+            }
+        }
         
-        [assignments: assignmentList, student: studentInfo]
+        // assignment mappings are as follows:
+        // 0 = category, 1 = assignment name, 2 = assignment id, 3 = course id
+        // 4 = score earned, 5 = max score, 6 = percentage, 7 = assignment due date
+        
+        [assignments: assignments, student: studentInfo]
+    }
+    
+    def facultyGradebook () {
+        def course = Course.findBySyllabusId(params.syllabusId)
+        def grades = []
+        
+        for(Student s: course.students) {
+            def studentInfo = []
+            studentInfo.add(s.getName())
+            studentInfo.add(s.studentId)
+            studentInfo.add(course.syllabusId)
+            
+            def studentGrade = course.getStudentGrade(s)
+            studentInfo.add(studentGrade[0])
+            studentInfo.add(studentGrade[1])
+            
+            if(studentGrade[1] == 0) {
+                studentInfo.add(0)
+            }
+            else {
+                studentInfo.add(((Double)studentGrade[0]/(Double)studentGrade[1]*100) + "%")
+            }
+            
+            grades.add(studentInfo)
+        }
+        
+        [grades: grades]
     }
     
 }

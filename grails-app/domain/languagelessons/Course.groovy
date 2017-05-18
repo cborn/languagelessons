@@ -102,4 +102,21 @@ class Course {
     String getCapacity() {
         return students.size() + "/" + applicantCap
     }
+    
+    def getStudentGrade(Student stu) {
+        def grade = [0,0]
+        for(Lesson l: lessons) {
+            for(Assignment a: l.assignments) {
+                def result = a.getStudentResults(stu)
+
+                if(result) {
+
+                    grade[0] += result.score
+                    grade[1] += (result.maxScore - result.potentialPoints)
+                }
+            }
+        }
+        
+        return grade
+    }
 }

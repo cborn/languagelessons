@@ -120,17 +120,14 @@
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            <g:each var="assignment" in="${assignments}">
+                            <g:each var="results" in="${assignments}">
                                 <tr>
-                                    <g:if test="${assignment.category == null}">
-                                        <td> </td>
-                                    </g:if>
-                                    <g:else>
-                                        <td>${assignment.category}</td>
-                                    </g:else>
-                                    <td><g:link controller="assignment" action="assignmentView" params="[assignId: assignment.id, syllabusId: assignment.lesson.course.syllabusId]">${assignment.getGradebookName()}</g:link></td>
-                                    
-                                    <td><g:formatDate format="MM/dd/yyyy" date="${assignment.dueDate}"/></td>
+                                    <td>${results[0]}</td>
+                                    <td><g:link controller="assignment" action="assignmentView" params="[assignId: results[2], syllabusId: results[3]]">${results[1]}</g:link></td>
+                                    <td>${results[4]}</td>
+                                    <td>${results[5]}</td>
+                                    <td>${results[6]}</td>
+                                    <td>${results[7]}</td>
                                 </tr>
                             </g:each>
                             <g:unless test="${assignments}">

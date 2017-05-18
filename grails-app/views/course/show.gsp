@@ -106,7 +106,12 @@
             <div class="jumbotron">
                 <img src="" class="img-responsive"/>
                 <p>${course.name}<p>
-                <g:link role="button" class="btn btn-primary" action="studentGradebook" params="[syllabusId: course.syllabusId]">Gradebook</g:link>
+                <sec:ifAnyGranted roles="ROLE_FACULTY, ROLE_ADMIN">
+                    <g:link role="button" class="btn btn-primary" action="facultyGradebook" params="[syllabusId: course.syllabusId]">Gradebook</g:link>
+                </sec:ifAnyGranted>
+                <sec:ifAnyGranted roles="ROLE_STUDENT">
+                    <g:link role="button" class="btn btn-primary" action="studentGradebook" params="[syllabusId: course.syllabusId]">Gradebook</g:link>
+                </sec:ifAnyGranted>
                 <g:if test="${!course.lessons}">
                     <h3>No lessons found at the moment, sorry!</h3>
                 </g:if>

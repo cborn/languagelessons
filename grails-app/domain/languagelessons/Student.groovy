@@ -20,4 +20,11 @@ class Student {
     String getName() {
         firstName + " " + surname ?: "-"
     }
+    
+    def equals(Student otherStu) {
+        if(otherStu.studentId == studentId) {
+            return true
+        }
+        return false
+    }
 }

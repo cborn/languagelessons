@@ -64,6 +64,15 @@ class Assignment {
         return now.after(openDate)
     }
     
+    def getStudentResults(Student stu) {
+        for(AssignmentResult a: results) {
+            if (stu.equals(a.student)) {
+                return a
+            }
+        }
+        return null
+    }
+    
     def getGradebookName() {
         if(gradebookName == null) {
             return lesson.name + ": " + name
