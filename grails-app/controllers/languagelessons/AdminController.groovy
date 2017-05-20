@@ -14,8 +14,8 @@ class AdminController {
     @Secured(["ROLE_FACULTY","ROLE_ADMIN"])
     def index() { 
         
-            if (isLoggedIn()) {
-                SecUser userInfo = getAuthenticatedUser()
+        if (isLoggedIn()) {
+            SecUser userInfo = getAuthenticatedUser()
 
             // modify this to change how many are shown in index pages
             def maxShownOnIndex = 10;
@@ -43,16 +43,16 @@ class AdminController {
             }
 
 
-        // All Users
-        def allUsers = SecUser.list(max:params.max, offset:params.offset);
-           
-        // All faculty
-        def allFaculty = SecUser.findAllByFacultyIsNotNull();
+            // All Users
+            def allUsers = SecUser.list(max:params.max, offset:params.offset);
 
-        // All courses
-        def allCourses = Course.list(max:params.max, offset:params.offset);
+            // All faculty
+            def allFaculty = SecUser.findAllByFacultyIsNotNull();
 
-        render(view:"index", model:[userInfo:userInfo, allUsers:allUsers, allFaculty:allFaculty, allCourses:allCourses])
+            // All courses
+            def allCourses = Course.list(max:params.max, offset:params.offset);
+
+            render(view:"index", model:[userInfo:userInfo, allUsers:allUsers, allFaculty:allFaculty, allCourses:allCourses])
         }
     }
 }

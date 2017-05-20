@@ -28,34 +28,24 @@
             }
             <g:tabSave />
         </script>
-        
         <style>
-        
+            
         .new a { 
-
             color: green !important;
         }
-
         .new.active a{
-
-
             border-color: green !important;
             border-bottom-color: transparent !important;
         }
-
         .new a:before {
-               font-size: 9px;
-    content: "NEW";
-    position: absolute;
-    top: 4px;
-    right: 2px;
-    color: #921F1F;
+            font-size: 9px;
+            content: "NEW";
+            position: absolute;
+            top: 4px;
+            right: 2px;
+            color: #921F1F;
         }
-        
-        
-        
         </style>
-        
     </head>
     <body>
         <div class="col-xs-12 text-center">
@@ -68,7 +58,7 @@
         </div>
         <ul class="nav nav-tabs">
             <li class="nav active"><a class="ll-home-tab" href="#overview" data-toggle="tab"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a></li>
-            <li class="nav"><a href="#fieldSchool" data-toggle="tab">Courses</a></li>
+            <li class="nav"><a href="#courses" data-toggle="tab">Courses</a></li>
         </ul>
         <div class="tab-content">
             <g:if test="${flash.message}">
@@ -155,6 +145,43 @@
                                 </div>
                             </div>
                         </sec:access>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="courses">
+                <br />
+                <div class="col-md-12">
+                    <h3>Your Courses</h3>
+                    <div class="panel panel-green-border">
+                        <div class="panel-body">
+                            <g:each var="course" in="${allCourses}">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="col-md-12">
+                                            <dl class="dl-horizontal course-info-wide">
+                                                <dt>Course Name</dt>
+                                                <dd>${course.name}</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="col-md-12">
+                                            <dl class="dl-horizontal course-info">
+                                                <dt>Faculty</dt>
+                                                <g:each var="faculty" in="${course.faculty}">
+                                                    <dd>${faculty.getName()}</dd>
+                                                </g:each>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="col-md-12">
+                                            <g:link role="button" class="btn btn-primary" controller="course" action="show" params="[syllabusId: course.syllabusId]">View Course</g:link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </g:each>
+                        </div>
                     </div>
                 </div>
             </div>
