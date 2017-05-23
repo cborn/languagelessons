@@ -4,22 +4,23 @@ import static java.util.Calendar.*
 
 class Course {
 	
-	String name;
-        String syllabusId;
-        String description; 
-        
-        Boolean isArchived = false;
-        
-        Date startDate;
-        Date endDate;
-        
-        Integer applicantCap;
+    String name;
+    String syllabusId;
+    String description; 
 
+    Boolean isArchived = false;
+
+    Date startDate;
+    Date endDate;
+
+    Integer applicantCap;
 	
     static hasMany = [lessons:Lesson,
-                      assignments:Assignment,
+        // Don't ever use assignments, assignments should be attached to lessons
+                        assignments:Assignment,
                         faculty:Faculty,
-                        students:Student]
+                        students:Student,
+                        category: GradingCategory]
                     
     static belongsTo = [Faculty, Student];
                     
@@ -100,5 +101,22 @@ class Course {
     }
     String getCapacity() {
         return students.size() + "/" + applicantCap
+    }
+    
+    def getStudentGrade(Student stu) {
+        def grade = [0,0]
+        for(Lesson l: lessons) {
+            for(Assignment a: l.assignments) {
+                def result = a.getStudentResults(stu)
+
+                if(result) {
+
+                    grade[0] += result.score
+                    grade[1] += (result.maxScore - result.potentialPoints)
+                }
+            }
+        }
+        
+        return grade
     }
 }

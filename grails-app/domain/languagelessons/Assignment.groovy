@@ -17,12 +17,42 @@ class Assignment {
     Date dueDate;
     /*The assignment's appearance is dictated by its html*/
     String html;
+    String gradebookName;
     byte[] audio;
     
     Boolean newFormat = false;
     Boolean orderedQuestions = false;
     int maxAttempts;
     String gradeType = "points";
+    
+
+    /* Assignments have many questions, which are unique to that assignment.
+     * They also have many AssignmentResults, which are unique to students.
+     * AssignmentResults have many QuestionResults, which are unique to students
+     * and to their parent questions and contain the answers of the students.
+     **/
+    static hasMany = [questions:Question, results: AssignmentResult]; 
+    static belongsTo = [course: Course, lesson:Lesson, category: GradingCategory];
+    static mapping = {
+        html sqlType: 'longText'
+    }
+    static constraints = {
+        html nullable: true
+        audio nullable: true
+        audio maxSize: 1073741824
+        category nullable: true
+        course nullable: true
+        gradebookName nullable: true
+        introText nullable: true
+        isArchived nullable: true
+        lesson nullable: true
+        openDate nullable: true
+        dueDate nullable: true
+        orderedQuestions nullable: true
+        questions nullable: true
+        gradeType nullable: true
+        results nullable: true
+    }
     
     Assignment fromDraft(openDateNew, dueDateNew) {
         Assignment newAssignment = new Assignment(
@@ -43,34 +73,31 @@ class Assignment {
         }
         return newAssignment
     }
-    /* Assignments have many questions, which are unique to that assignment.
-     * They also have many AssignmentResults, which are unique to students.
-     * AssignmentResults have many QuestionResults, which are unique to students
-     * and to their parent questions and contain the answers of the students.
-     **/
-    static hasMany = [questions:Question, results: AssignmentResult]; 
-    static belongsTo = [course: Course, lesson:Lesson];
-    static mapping = {
-        html sqlType: 'longText'
-    }
-    static constraints = {
-        html nullable: true
-        audio nullable: true
-        audio maxSize: 1073741824
-        course nullable: true
-        introText nullable: true
-        isArchived nullable: true
-        lesson nullable: true
-        openDate nullable: true
-        dueDate nullable: true
-        orderedQuestions nullable: true
-        questions nullable: true
-        gradeType nullable: true
-        results nullable: true
-    }
     
     boolean isOpen(){
         Date now = new Date()
         return now.after(openDate)
+    }
+    
+    def getStudentResults(Student stu) {
+        for(AssignmentResult a: results) {
+            if (stu.equals(a.student)) {
+                return a
+            }
+        }
+        return null
+    }
+    
+    def getGradebookName() {
+        if(gradebookName == null) {
+            return lesson.name + ": " + name
+        }
+        else {
+            return gradebookName;
+        }
+    }
+    
+    def setGradebookName(String name) {
+        gradebookName = name;
     }
 }

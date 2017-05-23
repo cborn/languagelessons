@@ -24,6 +24,7 @@ var rafID = null;
 var analyserContext = null;
 var canvasWidth, canvasHeight;
 var recIndex = 0;
+var isRecording = false;
 
 /* TODO:
 
@@ -52,6 +53,7 @@ function toggleRecording( e, elementId ) {
     currentRecordEntity = elementId;
     if (e.classList.contains("recording")) {
         // stop recording
+        isRecording = false;
         audioRecorder.stop();
         e.classList.remove("recording");
         audioRecorder.getBuffers( gotBuffers );
@@ -59,6 +61,8 @@ function toggleRecording( e, elementId ) {
         // start recording
         if (!audioRecorder)
             return;
+        isRecording = true;
+        updateAnalysers();
         e.classList.add("recording");
         audioRecorder.clear();
         audioRecorder.record();
@@ -116,7 +120,8 @@ function updateAnalysers(time) {
         }
     }
     
-    rafID = window.requestAnimationFrame( updateAnalysers );
+    if(isRecording) rafID = window.requestAnimationFrame( updateAnalysers );
+    else analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
 }
 
 function toggleMono() {

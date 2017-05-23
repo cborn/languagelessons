@@ -11,8 +11,10 @@ abstract class QuestionResult {
     int pointsAwarded;
     String status;
     Question question;
+    
     static belongsTo = [result: AssignmentResult]
     static hasMany = [comments: Comment]
+    
     static constraints = {
         audioAnswer maxSize: 1073741824
         audioAnswer nullable: true;

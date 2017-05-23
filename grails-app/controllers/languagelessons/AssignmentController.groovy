@@ -227,6 +227,7 @@ class AssignmentController {
         Student student = user.student;
         Assignment assignment = Assignment.findById(data.assignment)
         AssignmentResult assignResult = new AssignmentResult(student: student);
+        
         int maxScore = 0;
         int score = 0;
         int potentialPoints = 0;
@@ -238,6 +239,7 @@ class AssignmentController {
             }
             qResult.putAnswer(answer)
             maxScore = maxScore + question.pointValue;
+            
             if (question.requiresReview) {
                 //question requires faculty review
                 potentialPoints = potentialPoints + question.pointValue;
@@ -249,11 +251,13 @@ class AssignmentController {
                 }
                 qResult.status = "graded"
             }
+            
             assignResult.addToResults(qResult)
         }
         assignResult.maxScore = maxScore
         assignResult.score = score
         assignment.addToResults(assignResult)
+        
         if (assignment.course) {
             assignment.course.save(flush:true)
         }

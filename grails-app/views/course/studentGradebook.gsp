@@ -8,7 +8,7 @@
 
 <html>
     <head>
-        <title>${course.name}</title>
+        <title>My Courses</title>
         <meta name="layout" content="main"/>
         <style type="text/css" media="screen">
             #status {
@@ -104,36 +104,40 @@
         </g:if>
         <div class="col-xs-12">
             <div class="jumbotron">
-                <img src="" class="img-responsive"/>
-                <p>${course.name}<p>
-                <sec:ifAnyGranted roles="ROLE_FACULTY, ROLE_ADMIN">
-                    <g:link role="button" class="btn btn-primary" action="facultyGradebook" params="[syllabusId: course.syllabusId]">Gradebook</g:link>
-                </sec:ifAnyGranted>
-                <sec:ifAnyGranted roles="ROLE_STUDENT">
-                    <g:link role="button" class="btn btn-primary" action="studentGradebook" params="[syllabusId: course.syllabusId]">Gradebook</g:link>
-                </sec:ifAnyGranted>
-                <g:if test="${!course.lessons}">
-                    <h3>No lessons found at the moment, sorry!</h3>
-                </g:if>
-                <g:each in="${days}" var="day">
-                    <div class="img-responsive">
-                        ${day.key}
-                        <hr>
-                        <g:each in="${day.value}" var="lesson">
-                            <g:if test="${!lesson.isDraft}">
-                                ${lesson.dueDate.format("hh:MM:aa")}
-                                Lesson: <a href="${createLink(controller: "lesson", action: "viewLesson", params: [lessonId: lesson.id, syllabusId: course.syllabusId])}">${lesson.name}</a>
-                                <br>
-                            </g:if>
-                        </g:each>
-                    </div>
-                </g:each>
-                <sec:ifAnyGranted roles="ROLE_FACULTY">
-                    <span><g:link role="button" class="btn btn-primary" controller="lesson" action="builderCreateEditHandler" params="[syllabusId: course.syllabusId, createNew: true]">New Lesson</g:link></span>
-                    <span><g:link role="button" class="btn btn-primary" controller="assignment" action="builderCreateEditHandler" params="[syllabusId: course.syllabusId, createNew: true]">New Assignment</g:link></span>
-                    <span><g:link role="button" class="btn btn-primary" controller="lesson" action="viewDrafts" params="[syllabusId: course.syllabusId]">View Lesson Drafts</g:link></span>
-                    <span><g:link role="button" class="btn btn-primary" controller="assignment" action="viewDrafts" params="[syllabusId: course.syllabusId]">View Assignment Drafts</g:link></span>
-                </sec:ifAnyGranted>
+                <div class="col-xs-12">
+                    <table id="sortableTable">
+                        <thead class="th-green">
+                            <tr>
+                                <th class="text-center" rowspan="2">Category</th>
+                                <th class="text-center" rowspan="2">Assignment</th>
+                                <th class="text-center {sorter: false}" colspan="3">Grade</th>
+                                <th class="text-center" rowspan="2">Due Date</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center">Earned</th>
+                                <th class="text-center">Total</th>
+                                <th class="text-center">Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <g:each var="results" in="${assignments}">
+                                <tr>
+                                    <td>${results[0]}</td>
+                                    <td><g:link controller="assignment" action="assignmentView" params="[assignId: results[2], syllabusId: results[3]]">${results[1]}</g:link></td>
+                                    <td>${results[4]}</td>
+                                    <td>${results[5]}</td>
+                                    <td>${results[6]}</td>
+                                    <td>${results[7]}</td>
+                                </tr>
+                            </g:each>
+                            <g:unless test="${assignments}">
+                                <tr>
+                                    <td colspan="15">No Assignments found</td>
+                                </tr>
+                            </g:unless>
+                        </tbody>
+                    </table>         
+                </div>
             </div>
         </div>
     </body>

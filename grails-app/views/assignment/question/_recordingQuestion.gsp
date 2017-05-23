@@ -1,13 +1,13 @@
 <div id="viz">
-    <canvas id="analyser" width="1024" height="500"></canvas>
+    <canvas id="analyser" width="500" height="250" style="background: #000;"></canvas>
+    <div id="controls">
+        <asset:image id="record" src="recordingButton.png" onclick="toggleRecording(this, ${question.id});"/>
+    </div>
     <div id="waveform${question.id}"></div>
-    <div id="waveform"></div>
-    <a onclick="waveSurferRegistry[${question.id}].play()">Play</a>
-    <a onclick="waveSurferRegistry[${question.id}].pause()">Pause</a>
-</div>
-<div id="controls">
-    <asset:image id="record" src="mic128.png" onclick="toggleRecording(this, ${question.id});"/>
-    <!--<g:link role="button" controller="recording" action="play">Play Audio</g:link>-->
+    <div style="align-content: center">
+        <asset:image onclick="waveSurferRegistry[${question.id}].play()" src="playButton.jpg"/>
+        <asset:image onclick="waveSurferRegistry[${question.id}].pause()" src="pauseButton.jpg"/>
+    </div>
 </div>
 
 <h3>Recordings</h3>
