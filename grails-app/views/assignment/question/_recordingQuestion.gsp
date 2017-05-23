@@ -38,6 +38,7 @@
 <asset:javascript src="wavesurfer.js"/>
 <asset:javascript src="main.js"/>
 <asset:javascript src="recorder.js"/>
+<asset:javascript src="lame.min.js"/>
 <script>
     initAudio()
     function getValue() {

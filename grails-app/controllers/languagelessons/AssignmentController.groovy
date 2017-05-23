@@ -4,7 +4,7 @@ import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 import java.util.Date
 class AssignmentController {
-
+    def asyncUploadService
     def index() { }
     
     @Secured(["ROLE_FACULTY"])
@@ -23,6 +23,7 @@ class AssignmentController {
         redirect(action: 'assignmentBuilder', params: [syllabusId: params.syllabusId])
     }
     def assignmentView(){
+        session['uploads'] = [:]
         def user = getAuthenticatedUser()
         Student student = user.student
         Faculty faculty = user.faculty
@@ -213,9 +214,14 @@ class AssignmentController {
         }
         render(template: "comment/commentThread", model: [qResult: qResult, comments: qResult.comments, Comment: Comment])
     }
+    @Secured(["ROLE_STUDENT"])
+    def asyncUploadHandler() {
+        asyncUploadService.put(params.id, Integer.parseInt(params.index), params.element)
+        render(params.index)
+    }
+    @Secured(["ROLE_STUDENT"])
     def submitAssignment() {
         def jsonSlurper = new JsonSlurper();
-        System.out.println(params.data)
         def data = jsonSlurper.parseText(params.data);
         SecUser user = getAuthenticatedUser();
         Student student = user.student;
@@ -224,10 +230,12 @@ class AssignmentController {
         int maxScore = 0;
         int score = 0;
         int potentialPoints = 0;
-        System.out.println(data.out.toString())
         data.out.each { id, answer ->
             Question question = Question.findById(id)
             QuestionResult qResult = question.resultType.newInstance(pointsAwarded: 0, status: "awaitReview", question: question)
+            if (qResult.asyncUpload) {
+                answer = asyncUploadService.get(answer.toString())
+            }
             qResult.putAnswer(answer)
             maxScore = maxScore + question.pointValue;
             if (question.requiresReview) {
