@@ -1,6 +1,7 @@
 package languagelessons
 
 class MultipleChoiceResult extends QuestionResult {
+    boolean asyncUpload = false;
     def getAnswer() {
         return intAnswer
     }

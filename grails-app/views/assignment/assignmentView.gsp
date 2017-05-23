@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"name="layout" content="main"/>
-        <title>New Assignment</title>
+        <title>Assignment</title>
         <style type="text/css" media="screen">
             #status {
                 background-color: #eee;
@@ -112,6 +112,7 @@
         <g:if test="${student}">
             <button id="submit" class="btn btn-primary">Submit Assignment for Grading</button>
         </g:if>
+        <asset:javascript src="asyncUpload.js"/>
         <script>
             var valueRegistry = {};
             var displayRegistry = {};
@@ -143,35 +144,12 @@
                 data['assignment'] = ${assignment.id};
                 data['out'] = out;
                 jQuery.ajax({
-                    type: "POST", 
-                    xhr: function () {
-                        var xhr = new window.XMLHttpRequest();
-                        xhr.upload.addEventListener("progress", function (evt) {
-                            if (evt.lengthComputable) {
-                                var percentComplete = evt.loaded / evt.total;
-                                $('.progress').css({
-                                    width: percentComplete * 100 + '%'
-                                });
-                                if (percentComplete === 1) {
-                                    $('.progress').addClass('hide');
-                                }
-                            }
-                        }, false);
-                        xhr.addEventListener("progress", function (evt) {
-                            if (evt.lengthComputable) {
-                                var percentComplete = evt.loaded / evt.total;
-                                $('.progress').css({
-                                    width: percentComplete * 100 + '%'
-                                });
-                            }
-                        }, false);
-                        return xhr;
-                    },
-                    url: "${createLink(action: 'submitAssignment')}",
-                    data: {data: JSON.stringify(data)},
-                    success: function (data) {
-                        window.location.href = "/lesson/viewLesson?syllabusId=${syllabusId}&lessonId=${assignment.lesson.id}";
-                    },
+                        type: "POST",
+                        url: "${createLink(action: 'submitAssignment')}",
+                        data: {data: JSON.stringify(data)},
+                        success: function (data) {
+                            window.location.href = "/lesson/viewLesson?syllabusId=${syllabusId}&lessonId=${assignment.lesson.id}";
+                        }
                 });
             }
             function view(resultId, name) {

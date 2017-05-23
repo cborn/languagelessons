@@ -110,14 +110,36 @@ var waveSurferRegistry = {};
     this.node.connect(this.context.destination);   // if the script node is not connected to an output the "onaudioprocess" event is not triggered in chrome.
   };
 
-  Recorder.setupDownload = function(blob, filename){
-      var reader = new window.FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = function() {
-          recorderDataRegistry[currentRecordEntity] = reader.result;
-          waveSurferRegistry[currentRecordEntity].load(recorderDataRegistry[currentRecordEntity]);
-      };
-  };
+Recorder.setupDownload = function(blob, filename){
+    var fr = new FileReader();
+    fr.readAsArrayBuffer(blob);
+    fr.onloadend = function() {
+        var samples = new Int16Array(fr.result);
+        var mp3encoder = new lamejs.Mp3Encoder(1, 96000, 128);
+        var mp3Data = [];
+        sampleBlockSize = 576;
+        for (var i = 0; i < samples.length; i += sampleBlockSize) {
+            sampleChunk = samples.subarray(i, i + sampleBlockSize);
+            var mp3buf = mp3encoder.encodeBuffer(sampleChunk);
+            if (mp3buf.length > 0) {
+                mp3Data.push(mp3buf);
+            }
+        }
+        var mp3buf = mp3encoder.flush();   //finish writing mp3
+
+        if (mp3buf.length > 0) {
+            mp3Data.push(new Int8Array(mp3buf));
+        }
+        blob = new Blob(mp3Data, {type: 'audio/mp3'});
+        var reader = new window.FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = function() {
+            recorderDataRegistry[currentRecordEntity] = currentRecordEntity;
+            asyncUpload(reader.result, currentRecordEntity);
+            waveSurferRegistry[currentRecordEntity].load(reader.result);
+        };
+    };
+};
 
   window.Recorder = Recorder;
 

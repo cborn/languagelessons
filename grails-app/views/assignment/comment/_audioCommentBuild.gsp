@@ -9,6 +9,7 @@
 {ASSET_OPEN}/assets/main.js{ASSET_CLOSE}
 {ASSET_OPEN}/assets/recorder.js{ASSET_CLOSE}
 {ASSET_OPEN}/assets/audiodisplay.js{ASSET_CLOSE}
+{ASSET_OPEN}/assets/lame.min.js{ASSET_CLOSE}
 {SCRIPT_OPEN}
     console.log("I work");
     initAudio()

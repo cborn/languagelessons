@@ -3,10 +3,19 @@ package languagelessons
 class Assignment {
     String name;
     String introText;
+    /*All assignments begin as drafts attached to the overarching course,
+     * until they are attached to a lesson and their associated lessons is
+     * pushed to the course. At this point, a duplicate assignment (using 
+     * the fromDraft() method) is created, which is no longer a draft and
+     * is given the openDate and dueDate of its parent lesson.*/
     Boolean isArchived = false;
     Boolean isDraft = true;
+    /* Assignment openDate and closeDate are the same as their associated lesson dates,
+     * or null if the assignment is not currently attached to a Lesson
+     */
     Date openDate;
     Date dueDate;
+    /*The assignment's appearance is dictated by its html*/
     String html;
     String gradebookName;
     byte[] audio;
@@ -16,6 +25,12 @@ class Assignment {
     int maxAttempts;
     String gradeType = "points";
     
+
+    /* Assignments have many questions, which are unique to that assignment.
+     * They also have many AssignmentResults, which are unique to students.
+     * AssignmentResults have many QuestionResults, which are unique to students
+     * and to their parent questions and contain the answers of the students.
+     **/
     static hasMany = [questions:Question, results: AssignmentResult]; 
     static belongsTo = [course: Course, lesson:Lesson, category: GradingCategory];
     static mapping = {
