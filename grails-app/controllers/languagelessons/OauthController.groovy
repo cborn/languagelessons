@@ -37,11 +37,7 @@ class OauthController {
             
             SecUser userInfo = getAuthenticatedUser();
             
-            println "success"
-            
             redirect(action:"login", params:[user:username, pword:password])
-
-//            render "sick"
         }
         else{
             render sig + "\n" + params.oauth_signature

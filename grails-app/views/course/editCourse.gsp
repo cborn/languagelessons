@@ -102,41 +102,59 @@
                 </div>
             </div>
         </g:if>
+        <g:set var="x" value="100" />
+        <g:javascript>
+            var rowNum = 1;
+            function update() {
+                rowNum += 1;
+                
+                document.getElementById("updatebutton").innerHTML =
+                    document.getElementById("courseEditor").innerHTML;
+            }
+        </g:javascript>
         <div class="col-xs-12">
             <div class="jumbotron">
-                <img src="" class="img-responsive"/>
-                <p>${course.name}<p>
-                <sec:ifAnyGranted roles="ROLE_FACULTY, ROLE_ADMIN">
-                    <g:link role="button" class="btn btn-primary" action="facultyGradebook" params="[syllabusId: course.syllabusId]">Gradebook</g:link>
-                </sec:ifAnyGranted>
-                <sec:ifAnyGranted roles="ROLE_FACULTY">
-                    <g:link role="button" class="btn btn-primary" action="editCourse" params="[syllabusId: course.syllabusId]">Edit Course</g:link>
-                </sec:ifAnyGranted>
-                <sec:ifAnyGranted roles="ROLE_STUDENT">
-                    <g:link role="button" class="btn btn-primary" action="studentGradebook" params="[syllabusId: course.syllabusId]">Gradebook</g:link>
-                </sec:ifAnyGranted>
-                <g:if test="${!course.lessons}">
-                    <h3>No lessons found at the moment, sorry!</h3>
-                </g:if>
-                <g:each in="${days}" var="day">
-                    <div class="img-responsive">
-                        ${day.key}
-                        <hr>
-                        <g:each in="${day.value}" var="lesson">
-                            <g:if test="${!lesson.isDraft}">
-                                ${lesson.dueDate.format("hh:MM:aa")}
-                                Lesson: <a href="${createLink(controller: "lesson", action: "viewLesson", params: [lessonId: lesson.id, syllabusId: course.syllabusId])}">${lesson.name}</a>
-                                <br>
-                            </g:if>
-                        </g:each>
+                <h4>Edit Course: ${course.name}</h4>
+                <br/>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p id="updatebutton">${x}</p>
                     </div>
-                </g:each>
-                <sec:ifAnyGranted roles="ROLE_FACULTY">
-                    <span><g:link role="button" class="btn btn-primary" controller="lesson" action="builderCreateEditHandler" params="[syllabusId: course.syllabusId, createNew: true]">New Lesson</g:link></span>
-                    <span><g:link role="button" class="btn btn-primary" controller="assignment" action="builderCreateEditHandler" params="[syllabusId: course.syllabusId, createNew: true]">New Assignment</g:link></span>
-                    <span><g:link role="button" class="btn btn-primary" controller="lesson" action="viewDrafts" params="[syllabusId: course.syllabusId]">View Lesson Drafts</g:link></span>
-                    <span><g:link role="button" class="btn btn-primary" controller="assignment" action="viewDrafts" params="[syllabusId: course.syllabusId]">View Assignment Drafts</g:link></span>
-                </sec:ifAnyGranted>
+                    <div class="col-md-6">
+                        <table id="categoryTable">
+                            <thead class="th-green">
+                                <tr>
+                                    <th class="text-center" rowspan="2">Category Name</th>
+                                    <th class="text-center" rowspan="2">Percentage of Grade</th>
+                                    <th class="text-center" rowspan="2"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center" id="categoryBody">
+                                <g:each var="category" in="${categoryList}">
+                                    <g:form name="courseEditor" action="courseEditor">
+                                        <tr>
+                                            <g:hiddenField name="syllabusId" value="${course.syllabusId}" />
+                                            <td><g:textField name="categoryName" style="box-sizing: border-box; width: 100%" /></td>
+                                            <td><g:textField name="categoryPercentage" style="box-sizing: border-box; width: 100%" /></td>
+                                            <td><g:actionSubmit action="courseEditor" value="Edit" style="box-sizing: border-box; width: 100px" /></td>
+                                        </tr>
+                                    </g:form>
+                                </g:each>
+                                <g:form name="courseEditor" action="courseEditor">
+                                    <tr>
+                                        <g:hiddenField name="syllabusId" value="${course.syllabusId}" />
+                                        <td><g:textField name="categoryName" style="box-sizing: border-box; width: 100%" /></td>
+                                        <td><g:textField name="categoryPercentage" style="box-sizing: border-box; width: 100%" /></td>
+                                        <td><g:actionSubmit action="courseEditor" value="Edit" style="box-sizing: border-box; width: 100px" /></td>
+                                    </tr>
+                                </g:form>
+                                <tr>
+                                    <td colspan="3"><button onClick="update()" style="width: 100%">Add a Row!</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </body>

@@ -6,15 +6,7 @@ import java.text.SimpleDateFormat
 import static java.util.Calendar.*
 import org.springframework.dao.DataIntegrityViolationException
 
-// This class should have as much code as possible removed from it
-// Business logic should be moved to services where possible
-// Do all of these pages belong in the course controller? 
-
 class CourseController {
-    
- //   def courseService
-    
-  //  static scaffold = Course
     
     @Secured(["ROLE_FACULTY","ROLE_ADMIN"])
     def index() {
@@ -98,17 +90,6 @@ class CourseController {
         SecUser userInfo = getAuthenticatedUser()
         [courses:Course.list(), userInfo:userInfo, faculty:userInfo.faculty, student:userInfo.student]
     }
-//    
-//    @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
-//    def newCourse() {
-//        
-//    }
-    
-//    @Secured(["ROLE_FACULTY", "ROLE_ADMIN"])
-//    def create() {
-//        courseService.createCourse(params)
-//        redirect(action:"facultyCourseView")
-//    }
     
     @Secured(["ROLE_ADMIN"])
     def create() {
@@ -605,6 +586,15 @@ class CourseController {
         [grades: grades]
     }
     
+    def editCourse () {
+        def curCourse = Course.findBySyllabusId(params.syllabusId)
+        
+        [course: curCourse, categoryList: curCourse.category]
+    }
+    
+    def courseEditor () {
+        redirect(action: "show", params: [syllabusId: params.syllabusId])
+    }
 }
 
 // how each course must be updated
